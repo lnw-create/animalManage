@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: spring-boot-rent
+  ai:
+    base-url: 
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/animal_management
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: "041115"
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+    map-underscore-to-camel-case: true
