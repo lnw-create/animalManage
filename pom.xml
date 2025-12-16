@@ -11,6 +11,7 @@
     <groupId>com.hutb</groupId>
     <artifactId>animalManage</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>animalManage</name>
     <description>animalManage</description>
     <url/>
@@ -20,6 +21,10 @@
     <developers>
         <developer/>
     </developers>
+    <modules>
+        <module>user-service</module>
+        <module>common-utils</module>
+    </modules>
     <scm>
         <connection/>
         <developerConnection/>
