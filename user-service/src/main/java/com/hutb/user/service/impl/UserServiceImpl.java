@@ -1,17 +1,26 @@
 package com.hutb.user.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.hutb.commonUtils.utils.CommonUtils;
+import com.hutb.user.constant.UserCommonConstant;
 import com.hutb.user.mapper.userMapper;
 import com.hutb.user.model.DTO.PageQueryListDTO;
 import com.hutb.user.model.DTO.UserDTO;
 import com.hutb.user.model.pojo.PageInfo;
+import com.hutb.user.model.pojo.User;
 import com.hutb.user.service.UserService;
+import com.hutb.user.utils.CommonValidate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.zip.DataFormatException;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -23,9 +32,12 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void addUser(UserDTO userDTO) {
+        log.info("添加用户:{}",userDTO);
         //1.todo 权限校验
         CommonUtils.permissionValidate(1L);
+
         //2. 参数校验
+        CommonValidate.userValidate(userDTO);
 
         //3.todo 新增
         userDTO.setCreateUser("1");
@@ -33,6 +45,7 @@ public class UserServiceImpl implements UserService {
         userDTO.setCreateTime(new Date());
         userDTO.setUpdateTime(new Date());
         userMapper.addUser(userDTO);
+        log.info("添加用户成功");
     }
 
     /**
@@ -40,8 +53,18 @@ public class UserServiceImpl implements UserService {
      * @param id 用户id
      */
     @Override
-    public void removeUser(Long id) {
-
+    public void removeUser(Long id) throws DataFormatException {
+        log.info("删除用户:id-{}",id);
+        //1.参数校验
+        if (id == null || id <= 0){
+            throw new DataFormatException("删除用户id不能为空");
+        }
+        //2.删除
+        long remove = userMapper.removeUser(id, UserCommonConstant.USER_STATUS_DELETE);
+        if (remove == 0){
+            throw new DataFormatException("删除用户失败");
+        }
+        log.info("删除用户成功");
     }
 
     /**
@@ -49,8 +72,28 @@ public class UserServiceImpl implements UserService {
      * @param userDTO 用户信息
      */
     @Override
-    public void updateUser(UserDTO userDTO) {
+    public void updateUser(UserDTO userDTO) throws DataFormatException {
+        log.info("更新用户信息:{}",userDTO);
+        //1.参数校验
+        Long id = userDTO.getId();
+        if (id == null || id <= 0){
+            throw new DataFormatException("更新用户id不能为空");
+        }
 
+        //2.查询用户信息
+        User user = userMapper.queryUserById(id);
+        if (user == null){
+            throw new DataFormatException("用户信息不存在");
+        }
+
+        //3.todo 更新用户
+        userDTO.setModifiedUser("1");
+        userDTO.setUpdateTime(new Date());
+        long update = userMapper.updateUser(userDTO);
+        if (update == 0){
+            throw new DataFormatException("更新用户信息失败");
+        }
+        log.info("更新用户信息成功");
     }
 
     /**
@@ -60,6 +103,12 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public PageInfo queryUserList(PageQueryListDTO pageQueryListDTO) {
-        return null;
+        log.info("查询用户列表:{}",pageQueryListDTO);
+        //分页查询
+        Page<Object> page = PageHelper.startPage(pageQueryListDTO.getPageNum(), pageQueryListDTO.getPageSize());
+        List<User> users = userMapper.queryUserList(pageQueryListDTO);
+        com.github.pagehelper.PageInfo<User> pageInfo = new com.github.pagehelper.PageInfo<>(users);
+        log.info("查询用户列表成功");
+        return new PageInfo(pageInfo.getTotal(), pageInfo.getList());
     }
 }

@@ -4,6 +4,8 @@ import com.hutb.user.model.DTO.PageQueryListDTO;
 import com.hutb.user.model.DTO.UserDTO;
 import com.hutb.user.model.pojo.PageInfo;
 
+import java.util.zip.DataFormatException;
+
 public interface UserService {
     /**
      * 新增用户
@@ -15,13 +17,13 @@ public interface UserService {
      * 删除用户
      * @param id 用户id
      */
-    void removeUser(Long id);
+    void removeUser(Long id) throws DataFormatException;
 
     /**
      * 更新用户
      * @param userDTO 用户信息
      */
-    void updateUser(UserDTO userDTO);
+    void updateUser(UserDTO userDTO) throws DataFormatException;
 
     /**
      * 查询用户列表

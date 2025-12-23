@@ -2,13 +2,13 @@ package com.hutb.user.service.impl;
 
 import com.hutb.commonUtils.exception.CommonException;
 import com.hutb.commonUtils.utils.CommonUtils;
-import com.hutb.user.constant.AdminConstant;
+import com.hutb.user.constant.UserCommonConstant;
 import com.hutb.user.model.DTO.AdminDTO;
 import com.hutb.user.model.DTO.PageQueryListDTO;
 import com.hutb.user.model.pojo.PageInfo;
 import com.hutb.user.model.VO.QueryAdminListVO;
 import com.hutb.user.service.EmployeeService;
-import com.hutb.user.utils.AdminCommonValidate;
+import com.hutb.user.utils.CommonValidate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,7 +22,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         //1.todo 权限校验
         CommonUtils.permissionValidate(1L);
         //2. 参数校验
-        AdminCommonValidate.validate(adminDTO);
+        CommonValidate.adminValidate(adminDTO);
 
         //3.todo 新增
 
@@ -57,7 +57,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         CommonUtils.permissionValidate(1L);
 
         //2. 参数校验
-        AdminCommonValidate.validate(adminDTO);
+        CommonValidate.adminValidate(adminDTO);
         //其他参数校验
         if (CommonUtils.stringIsBlank(adminDTO.getRole()) || CommonUtils.stringIsBlank(adminDTO.getStatus())){
             throw new CommonException("更新管理员的角色或状态不能为空");
@@ -78,7 +78,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         //2. 参数校验
 
         //不能查询已删除的管理员
-        if (AdminConstant.ADMIN_STATUS_DELETE.equals(queryAdminListDTO.getStatus())){
+        if (UserCommonConstant.ADMIN_STATUS_DELETE.equals(queryAdminListDTO.getStatus())){
             throw new CommonException("不能查询已删除的管理员");
         }
 
