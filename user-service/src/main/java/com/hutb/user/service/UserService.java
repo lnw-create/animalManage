@@ -11,7 +11,7 @@ public interface UserService {
      * 新增用户
      * @param userDTO 用户信息
      */
-    void addUser(UserDTO userDTO);
+    void addUser(UserDTO userDTO) throws DataFormatException;
 
     /**
      * 删除用户

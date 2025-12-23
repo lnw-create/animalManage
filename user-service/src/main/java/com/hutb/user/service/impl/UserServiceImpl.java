@@ -2,6 +2,7 @@ package com.hutb.user.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.hutb.commonUtils.exception.CommonException;
 import com.hutb.commonUtils.utils.CommonUtils;
 import com.hutb.user.constant.UserCommonConstant;
 import com.hutb.user.mapper.userMapper;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.zip.DataFormatException;
 
 @Service
 @Slf4j
@@ -31,13 +31,13 @@ public class UserServiceImpl implements UserService {
      * @param userDTO 用户信息
      */
     @Override
-    public void addUser(UserDTO userDTO) {
+    public void addUser(UserDTO userDTO) throws CommonException {
         log.info("添加用户:{}",userDTO);
-        //1.todo 权限校验
-        CommonUtils.permissionValidate(1L);
-
-        //2. 参数校验
+        //1. 参数校验
         CommonValidate.userValidate(userDTO);
+
+        //2. 判断用户是否存在
+        queryUserByUsernameAndPhone(userDTO);
 
         //3.todo 新增
         userDTO.setCreateUser("1");
@@ -53,16 +53,21 @@ public class UserServiceImpl implements UserService {
      * @param id 用户id
      */
     @Override
-    public void removeUser(Long id) throws DataFormatException {
+    public void removeUser(Long id) throws CommonException {
         log.info("删除用户:id-{}",id);
         //1.参数校验
         if (id == null || id <= 0){
-            throw new DataFormatException("删除用户id不能为空");
+            throw new CommonException("删除用户id不能为空");
         }
-        //2.删除
-        long remove = userMapper.removeUser(id, UserCommonConstant.USER_STATUS_DELETE);
+        //2.判断用户是否存在
+        User user = userMapper.queryUserById(id);
+        if (user == null){
+            throw new CommonException("用户不存在");
+        }
+        //3.删除 todo设置修改人
+        long remove = userMapper.removeUser(id, "1", UserCommonConstant.USER_STATUS_DELETE);
         if (remove == 0){
-            throw new DataFormatException("删除用户失败");
+            throw new CommonException("删除用户失败");
         }
         log.info("删除用户成功");
     }
@@ -72,26 +77,30 @@ public class UserServiceImpl implements UserService {
      * @param userDTO 用户信息
      */
     @Override
-    public void updateUser(UserDTO userDTO) throws DataFormatException {
+    public void updateUser(UserDTO userDTO) throws CommonException {
         log.info("更新用户信息:{}",userDTO);
         //1.参数校验
         Long id = userDTO.getId();
         if (id == null || id <= 0){
-            throw new DataFormatException("更新用户id不能为空");
+            throw new CommonException("更新用户id不能为空");
         }
+        CommonValidate.userValidate(userDTO);
 
         //2.查询用户信息
-        User user = userMapper.queryUserById(id);
+            User user = userMapper.queryUserById(id);
         if (user == null){
-            throw new DataFormatException("用户信息不存在");
+            throw new CommonException("用户信息不存在");
         }
 
-        //3.todo 更新用户
+        //3.查询更新的用户信息是否存在
+        queryUserByUsernameAndPhone(userDTO);
+
+        //4.todo 更新用户
         userDTO.setModifiedUser("1");
         userDTO.setUpdateTime(new Date());
         long update = userMapper.updateUser(userDTO);
         if (update == 0){
-            throw new DataFormatException("更新用户信息失败");
+            throw new CommonException("更新用户信息失败");
         }
         log.info("更新用户信息成功");
     }
@@ -110,5 +119,20 @@ public class UserServiceImpl implements UserService {
         com.github.pagehelper.PageInfo<User> pageInfo = new com.github.pagehelper.PageInfo<>(users);
         log.info("查询用户列表成功");
         return new PageInfo(pageInfo.getTotal(), pageInfo.getList());
+    }
+
+    /**
+     * 根据手机号和姓名查询用户信息
+     * @param user 用户信息
+     */
+    private void queryUserByUsernameAndPhone(UserDTO user){
+        User userAnother = userMapper.queryUserByUsername(user.getUsername());
+        User userAnotherAnother = userMapper.queryUserByPhone(user.getPhone());
+        if (userAnother != null && !userAnother.getId().equals(user.getId())){
+            throw new CommonException("用户名已存在");
+        }
+        if (userAnotherAnother != null && !userAnotherAnother.getId().equals(user.getId())){
+            throw new CommonException("手机号已存在");
+        }
     }
 }

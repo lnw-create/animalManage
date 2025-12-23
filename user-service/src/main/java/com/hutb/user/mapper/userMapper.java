@@ -22,8 +22,8 @@ public interface userMapper {
      * @param id 用户id
      * @param status 状态
      */
-    @Update("update user set status = #{status} where id = #{id}")
-    long removeUser(Long id, String status);
+    @Update("update user set status = #{status},modified_user = #{modifiedUser}, update_time = now() where id = #{id}")
+    long removeUser(Long id,String modifiedUser, String status);
 
     /**
      * 根据id查询用户信息
@@ -38,7 +38,7 @@ public interface userMapper {
      * @param userDTO 用户信息
      */
     @Update("update user set username = #{username}, password = #{password}, real_name = #{realName}, " +
-            "phone = #{phone}, email = #{email}, modified_user = #{modifiedUser}, update_time = {updateTime} where id = #{id}")
+            "phone = #{phone}, email = #{email}, modified_user = #{modifiedUser}, update_time = #{updateTime} where id = #{id}")
     long updateUser(UserDTO userDTO);
 
     /**
@@ -47,4 +47,21 @@ public interface userMapper {
      * @return 用户列表
      */
     List<User> queryUserList(PageQueryListDTO pageQueryListDTO);
+
+    /**
+     * 根据用户名查询用户信息
+     * @param username 用户名
+     * @return 用户信息
+     */
+    @Select("select * from user where username = #{username} and status = '1'")
+    User queryUserByUsername(String username);
+
+
+    /**
+     * 根据手机号查询用户信息
+     * @param phone 手机号
+     * @return 用户信息
+     */
+    @Select("select * from user where phone = #{phone} and status = '1'")
+    User queryUserByPhone(String phone);
 }

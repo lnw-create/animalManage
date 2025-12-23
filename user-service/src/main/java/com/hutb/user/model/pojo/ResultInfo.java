@@ -27,6 +27,7 @@ public class ResultInfo<T> {
 
     public static <T> ResultInfo<T> fail(String msg) {
         ResultInfo<T> result = new ResultInfo<>();
+        result.setCode("0");
         result.setMsg(msg);
         return result;
     }

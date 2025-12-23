@@ -1,11 +1,14 @@
 package com.hutb.user.controller;
 
+import com.hutb.commonUtils.exception.CommonException;
 import com.hutb.user.model.DTO.PageQueryListDTO;
 import com.hutb.user.model.DTO.UserDTO;
 import com.hutb.user.model.pojo.ResultInfo;
 import com.hutb.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.zip.DataFormatException;
 
 @RestController
 @RequestMapping("admin/user")
@@ -17,27 +20,45 @@ public class UserController {
      * 新增用户
      */
     @PostMapping("addUser")
-    public ResultInfo addUser(@RequestBody UserDTO userDTO){
-        userService.addUser(userDTO);
-        return ResultInfo.success();
+    public ResultInfo addUser(@RequestBody UserDTO userDTO) {
+        try {
+            userService.addUser(userDTO);
+            return ResultInfo.success();
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误: " + e.getMessage());
+        }
     }
 
     /**
      * 删除用户
      */
-    @DeleteMapping("removeUser")
+    @PostMapping("removeUser")
     public ResultInfo removeUser(@RequestParam Long id){
-        userService.removeUser(id);
-        return ResultInfo.success();
+        try {
+            userService.removeUser(id);
+            return ResultInfo.success();
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误: " + e.getMessage());
+        }
     }
 
     /**
      * 更新用户
      */
     @PostMapping("editUser")
-    public ResultInfo updateUser(@RequestBody UserDTO userDTO){
-        userService.updateUser(userDTO);
-        return ResultInfo.success();
+    public ResultInfo updateUser(@RequestBody UserDTO userDTO) {
+        try {
+            userService.updateUser(userDTO);
+            return ResultInfo.success();
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误: " + e.getMessage());
+        }
     }
 
     /**
@@ -45,6 +66,12 @@ public class UserController {
      */
     @GetMapping("queryUserList")
     public ResultInfo queryUserList(@RequestBody PageQueryListDTO pageQueryListDTO){
-        return ResultInfo.success(userService.queryUserList(pageQueryListDTO));
+        try {
+            return ResultInfo.success(userService.queryUserList(pageQueryListDTO));
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误: " + e.getMessage());
+        }
     }
 }
