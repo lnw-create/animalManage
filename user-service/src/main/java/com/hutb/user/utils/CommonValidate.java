@@ -3,6 +3,7 @@ package com.hutb.user.utils;
 import com.hutb.commonUtils.utils.CommonUtils;
 import com.hutb.user.model.DTO.AdminDTO;
 import com.hutb.user.model.DTO.UserDTO;
+import com.hutb.user.model.DTO.VolunteerDTO;
 
 /**
  * 简单参数校验
@@ -59,6 +60,21 @@ public class CommonValidate {
         }
         if (CommonUtils.stringIsBlank(email)){
             throw new RuntimeException("邮箱不能为空");
+        }
+    }
+
+    /**
+     * 志愿者通用简单参数校验
+     */
+    public static void volunteerValidate(VolunteerDTO volunteerDTO) {
+        String idCard = volunteerDTO.getIdCard();
+        String address = volunteerDTO.getAddress();
+
+        if (CommonUtils.stringIsBlank(idCard)){
+            throw new RuntimeException("身份证号不能为空");
+        }
+        if (CommonUtils.stringIsBlank(address)){
+            throw new RuntimeException("地址不能为空");
         }
     }
 }

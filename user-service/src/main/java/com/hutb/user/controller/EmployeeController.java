@@ -48,7 +48,7 @@ public class EmployeeController {
     /**
      * 更新员工
      */
-    @PostMapping("updateEmployee")
+    @PostMapping("editEmployee")
     public ResultInfo updateEmployee(@RequestBody AdminDTO adminDTO){
         try {
             employeeService.updateEmployee(adminDTO);

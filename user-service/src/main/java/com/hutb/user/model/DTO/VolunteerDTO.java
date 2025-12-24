@@ -1,5 +1,6 @@
 package com.hutb.user.model.DTO;
 
+import com.hutb.user.model.pojo.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,15 +13,8 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class VolunteerDTO {
-    private Long id;
-
+public class VolunteerDTO extends User{
     private Long userId;
-
-    private String realName;
-
-    //性别 1:男 2:女
-    private String gender;
 
     //身份证号（脱敏存储）
     private String idCard;
@@ -30,6 +24,9 @@ public class VolunteerDTO {
 
     //现居地址
     private String address;
+
+    // 状态
+    private String status;
 
     /* -------------------- 志愿业务信息 -------------------- */
     //累计志愿时长（小时）

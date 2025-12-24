@@ -17,6 +17,8 @@ public class Volunteer {
 
     private Long userId;
 
+    private String username;
+
     private String realName;
 
     //性别 1:男 2:女
@@ -42,4 +44,7 @@ public class Volunteer {
     private Date updateTime;
     private String createUser;
     private String modifiedUser;
+    
+    // 状态
+    private String status;
 }

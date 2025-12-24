@@ -8,5 +8,10 @@
         <if test="username != null and username != ''">
             and username like CONCAT('%', #{username}, '%')
         </if>
+        <if test="queryCondition != null and queryCondition != ''">
+            and (username like CONCAT('%', #{queryCondition}, '%')
+                or phone like CONCAT('%', #{queryCondition}, '%'))
+        </if>
+        order by update_time desc
     </select>
 </mapper>

@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class PageQueryListDTO {
     private String username;
     private String status;
+    private String queryCondition;
     private Integer pageNum = 1;
     private Integer pageSize = 10;
 }

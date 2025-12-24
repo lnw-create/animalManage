@@ -41,4 +41,12 @@ public class UserCommonConstant {
     public static final String USER_STATUS_ENABLE = "1";
     // 删除
     public static final String USER_STATUS_DELETE = "-1";
+
+    /**
+     * 志愿者状态
+     */
+    // 启用
+    public static final String VOLUNTEER_STATUS_ENABLE = "1";
+    // 删除
+     public static final String VOLUNTEER_STATUS_DELETE = "-1";
 }
