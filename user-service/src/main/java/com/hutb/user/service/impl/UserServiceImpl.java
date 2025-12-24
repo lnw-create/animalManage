@@ -3,7 +3,6 @@ package com.hutb.user.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.hutb.commonUtils.exception.CommonException;
-import com.hutb.commonUtils.utils.CommonUtils;
 import com.hutb.user.constant.UserCommonConstant;
 import com.hutb.user.mapper.userMapper;
 import com.hutb.user.model.DTO.PageQueryListDTO;
@@ -40,6 +39,7 @@ public class UserServiceImpl implements UserService {
         queryUserByUsernameAndPhone(userDTO);
 
         //3.todo 新增
+        userDTO.setStatus(UserCommonConstant.USER_STATUS_ENABLE);
         userDTO.setCreateUser("1");
         userDTO.setModifiedUser("1");
         userDTO.setCreateTime(new Date());

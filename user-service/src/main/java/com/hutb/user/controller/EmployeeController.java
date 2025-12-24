@@ -1,5 +1,6 @@
 package com.hutb.user.controller;
 
+import com.hutb.commonUtils.exception.CommonException;
 import com.hutb.user.model.DTO.AdminDTO;
 import com.hutb.user.model.DTO.PageQueryListDTO;
 import com.hutb.user.model.pojo.ResultInfo;
@@ -19,17 +20,29 @@ public class EmployeeController {
      */
     @PostMapping("addEmployee")
     public ResultInfo addEmployee(@RequestBody AdminDTO adminDTO){
-        employeeService.addEmployee(adminDTO);
-        return ResultInfo.success();
+        try {
+            employeeService.addEmployee(adminDTO);
+            return ResultInfo.success();
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误: " + e.getMessage());
+        }
     }
 
     /**
      * 删除员工
      */
-    @DeleteMapping("removeEmployee")
+    @PostMapping("removeEmployee")
     public ResultInfo removeEmployee(@RequestParam Long id){
-        employeeService.removeEmployee(id);
-        return ResultInfo.success();
+        try {
+            employeeService.removeEmployee(id);
+            return ResultInfo.success();
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误: " + e.getMessage());
+        }
     }
 
     /**
@@ -37,15 +50,27 @@ public class EmployeeController {
      */
     @PostMapping("updateEmployee")
     public ResultInfo updateEmployee(@RequestBody AdminDTO adminDTO){
-        employeeService.updateEmployee(adminDTO);
-        return ResultInfo.success();
+        try {
+            employeeService.updateEmployee(adminDTO);
+            return ResultInfo.success();
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误: " + e.getMessage());
+        }
     }
 
     /**
      * 查询员工列表
      */
     @GetMapping("queryEmployeeList")
-    public ResultInfo queryEmployeeList(@RequestBody PageQueryListDTO queryAdminListDTO){
-        return ResultInfo.success(employeeService.queryEmployeeList(queryAdminListDTO));
+    public ResultInfo queryEmployeeList(@RequestBody PageQueryListDTO pageQueryListDTO){
+        try {
+            return ResultInfo.success(employeeService.queryEmployeeList(pageQueryListDTO));
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误: " + e.getMessage());
+        }
     }
 }

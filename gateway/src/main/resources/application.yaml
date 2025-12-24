@@ -13,7 +13,7 @@ spring:
         - id: user-service
           uri: lb://user-service
           predicates:
-            - Path=/admin/user/**
+            - Path=/admin/**
       httpclient:
         headers:
           allow-forwards: true

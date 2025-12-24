@@ -8,6 +8,16 @@ public class UserCommonConstant {
      * 超管账号
      */
     public static final String ADMIN_ACCOUNT = "admin";
+    /**
+     * 超管角色
+     */
+    public static final String ADMIN_ROLE_SUPER = "super_admin";
+
+    /**
+     * 普通管理员角色
+     */
+    public static final String ADMIN_ROLE_NORMAL = "normal_admin";
+
 
     /**
      * 超管密码
