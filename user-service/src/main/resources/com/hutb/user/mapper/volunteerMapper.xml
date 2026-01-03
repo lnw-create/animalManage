@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hutb.user.mapper.volunteerMapper">
+    <select id="queryVolunteerList" parameterType="com.hutb.user.model.pojo.Volunteer">
+        select * from volunteer
+        <where>
+            <if test="username != null and username != ''">
+                and username like CONCAT('%', #{username}, '%')
+            </if>
+            and status = '1'
+        </where>
+        order by update_time desc
+    </select>
+
+    <update id="updateVolunteer">
+        update volunteer
+        <set>
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="realName != null">
+                real_name = #{realName},
+            </if>
+            <if test="idCard != null">
+                id_card = #{idCard},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="address != null">
+                address = #{address},
+            </if>
+            <if test="totalHours != null">
+                total_hours = #{totalHours},
+            </if>
+            <if test="activityCount != null">
+                activity_count = #{activityCount},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            modified_user = #{modifiedUser},
+            update_time = now()
+        </set>
+        where id = #{id}
+    </update>
+</mapper>
