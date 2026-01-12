@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 import java.util.Map;
 
-//@Component
+@Component
 public class GlobalFilter implements org.springframework.cloud.gateway.filter.GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -54,11 +54,12 @@ public class GlobalFilter implements org.springframework.cloud.gateway.filter.Gl
         }
         String userId = chaims.get("userId").toString();
 
-        //6. 将用户信息传递到服务
+        //6. 修改发送给微服务的请求头，加入用户信息
         ServerWebExchange user_id = exchange.mutate()
                 .request(builder -> builder.header("userId", userId))
                 .build();
 
+        //7. 放行，调用下一个过滤器
         return chain.filter(user_id);
     }
 

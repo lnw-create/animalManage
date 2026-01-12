@@ -3,6 +3,7 @@ package com.hutb.user.service;
 import com.hutb.user.model.DTO.AdminDTO;
 import com.hutb.user.model.DTO.PageQueryListDTO;
 import com.hutb.user.model.pojo.PageInfo;
+import com.hutb.user.model.vo.LoginResponse;
 
 public interface EmployeeService {
     /**
@@ -29,4 +30,12 @@ public interface EmployeeService {
      * @return 员工列表
      */
     PageInfo queryEmployeeList(PageQueryListDTO queryAdminListDTO);
+    
+    /**
+     * 员工登录
+     * @param username 用户名
+     * @param password 密码
+     * @return 登录响应
+     */
+    LoginResponse login(String username, String password);
 }

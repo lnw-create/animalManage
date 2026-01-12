@@ -4,6 +4,8 @@ import com.hutb.commonUtils.exception.CommonException;
 import com.hutb.user.model.DTO.AdminDTO;
 import com.hutb.user.model.DTO.PageQueryListDTO;
 import com.hutb.user.model.pojo.ResultInfo;
+import com.hutb.user.model.vo.LoginRequest;
+import com.hutb.user.model.vo.LoginResponse;
 import com.hutb.user.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,21 @@ public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
+
+    /**
+     * 员工登录
+     */
+    @PostMapping("login")
+    public ResultInfo login(@RequestBody LoginRequest loginRequest){
+        try {
+            LoginResponse loginResponse = employeeService.login(loginRequest.getUsername(), loginRequest.getPassword());
+            return ResultInfo.success(loginResponse);
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误: " + e.getMessage());
+        }
+    }
 
     /**
      * 新增员工

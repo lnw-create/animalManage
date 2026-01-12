@@ -9,13 +9,10 @@
     </excludeFromCompile>
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
-      <profile name="Annotation profile for animalManage" enabled="true">
+      <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$PROJECT_DIR$/../maven/apache-maven-3.9.9/mvn_repo/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
-        </processorPath>
         <module name="common-utils" />
         <module name="user-service" />
         <module name="gateway" />
@@ -29,7 +26,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="am-common" options="-parameters" />
-      <module name="animalManage" options="-parameters" />
+      <module name="animalManage" options="" />
       <module name="common-utils" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="user-service" options="-parameters" />

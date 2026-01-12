@@ -1,4 +1,4 @@
-package com.hutb.gateway.utils;
+package com.hutb.commonUtils.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

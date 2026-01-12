@@ -9,14 +9,20 @@ import com.hutb.user.model.DTO.PageQueryListDTO;
 import com.hutb.user.model.DTO.UserDTO;
 import com.hutb.user.model.pojo.PageInfo;
 import com.hutb.user.model.pojo.User;
+import com.hutb.user.model.vo.LoginResponse;
 import com.hutb.user.service.UserService;
 import com.hutb.user.utils.CommonValidate;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -119,6 +125,51 @@ public class UserServiceImpl implements UserService {
         com.github.pagehelper.PageInfo<User> pageInfo = new com.github.pagehelper.PageInfo<>(users);
         log.info("查询用户列表成功");
         return new PageInfo(pageInfo.getTotal(), pageInfo.getList());
+    }
+
+    @Override
+    public LoginResponse login(String username, String password) {
+        log.info("用户登录: username={}", username);
+        
+        // 1. 参数校验
+        if (username == null || username.trim().isEmpty()) {
+            throw new CommonException("用户名不能为空");
+        }
+        if (password == null || password.trim().isEmpty()) {
+            throw new CommonException("密码不能为空");
+        }
+        
+        // 2. 查询用户信息
+        User user = userMapper.queryUserByUsername(username);
+        if (user == null) {
+            throw new CommonException("用户名或密码错误");
+        }
+        
+        // 3. 验证密码
+        if (!password.equals(user.getPassword())) {
+            throw new CommonException("用户名或密码错误");
+        }
+        
+        // 4. 检查用户状态
+        if (!UserCommonConstant.USER_STATUS_ENABLE.equals(user.getStatus())) {
+            throw new CommonException("账号已被禁用");
+        }
+        
+        // 5. 生成JWT token
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", user.getId());
+        claims.put("username", user.getUsername());
+        
+        // 使用与网关一致的密钥和过期时间
+        SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+        long timeout = 24 * 60 * 60 * 1000; // 24小时
+        
+        String token = com.hutb.commonUtils.utils.JwtUtil.createJwt(String.valueOf(secretKey), timeout, claims);
+        
+        log.info("用户登录成功: id={}", user.getId());
+        
+        // 返回登录响应对象
+        return new LoginResponse(user.getId(), user.getUsername(), "user", token);
     }
 
     /**
