@@ -1,7 +1,7 @@
 package com.hutb.user.constant;
 
 /**
- * 管理员常量类
+ * 用户常量类
  */
 public class UserCommonConstant {
     /**

@@ -25,6 +25,7 @@
         <module>user-service</module>
         <module>common-utils</module>
         <module>gateway</module>
+        <module>volunteerActivity-service</module>
     </modules>
     <scm>
         <connection/>

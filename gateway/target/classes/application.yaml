@@ -14,6 +14,10 @@ spring:
           uri: lb://user-service
           predicates:
             - Path=/admin/**
+        - id: volunteerActivity-service
+          uri: lb://volunteerActivity-service
+          predicates:
+            - Path=/volunteerActivity/**
       httpclient:
         headers:
           allow-forwards: true
