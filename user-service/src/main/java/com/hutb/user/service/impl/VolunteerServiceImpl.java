@@ -1,10 +1,12 @@
 package com.hutb.user.service.impl;
 
 import com.hutb.commonUtils.exception.CommonException;
+import com.hutb.commonUtils.utils.UserContext;
 import com.hutb.user.constant.UserCommonConstant;
 import com.hutb.user.mapper.userMapper;
 import com.hutb.user.mapper.volunteerMapper;
 import com.hutb.user.model.DTO.VolunteerDTO;
+import com.hutb.user.model.pojo.Admin;
 import com.hutb.user.model.pojo.PageInfo;
 import com.hutb.user.model.pojo.User;
 import com.hutb.user.model.pojo.Volunteer;
@@ -49,14 +51,15 @@ public class VolunteerServiceImpl implements VolunteerService {
             throw new CommonException("关联用户不存在");
         }
 
-        //todo
+        // 2. 设置志愿者信息
+        Volunteer modifier = volunteerMapper.queryVolunteerById(UserContext.getUserId());
         volunteerDTO.setPhone(user.getPhone());
         volunteerDTO.setUsername(user.getUsername());
         volunteerDTO.setRealName(user.getRealName());
         volunteerDTO.setUpdateTime(new Date());
         volunteerDTO.setCreateTime(new Date());
-        volunteerDTO.setModifiedUser("1");
-        volunteerDTO.setCreateUser("1");
+        volunteerDTO.setModifiedUser(modifier.getUsername());
+        volunteerDTO.setCreateUser(modifier.getUsername());
         volunteerDTO.setStatus(UserCommonConstant.VOLUNTEER_STATUS_DELETE);
 
         // 3. 新增
@@ -85,8 +88,9 @@ public class VolunteerServiceImpl implements VolunteerService {
         if (volunteer == null) {
             throw new CommonException("志愿者不存在");
         }
-        // 3.删除 todo设置修改人
-        long remove = volunteerMapper.removeVolunteer(id, "1", UserCommonConstant.USER_STATUS_DELETE);
+        // 3.删除
+        Volunteer modifier = volunteerMapper.queryVolunteerById(UserContext.getUserId());
+        long remove = volunteerMapper.removeVolunteer(id, modifier.getUsername(), UserCommonConstant.USER_STATUS_DELETE);
         if (remove == 0) {
             throw new CommonException("删除志愿者失败");
         }
@@ -116,8 +120,9 @@ public class VolunteerServiceImpl implements VolunteerService {
         // 3.查询更新的志愿者信息是否存在
         queryVolunteerByUsernameAndPhone(volunteerDTO);
 
-        // 4.todo 更新志愿者
-        volunteerDTO.setModifiedUser("1");
+        // 4.更新志愿者
+        Volunteer modifier = volunteerMapper.queryVolunteerById(UserContext.getUserId());
+        volunteerDTO.setModifiedUser(modifier.getUsername());
         volunteerDTO.setUpdateTime(new Date());
         long update = volunteerMapper.updateVolunteer(volunteerDTO);
         if (update == 0) {

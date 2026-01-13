@@ -3,6 +3,7 @@ package com.hutb.user.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.hutb.commonUtils.exception.CommonException;
+import com.hutb.commonUtils.utils.UserContext;
 import com.hutb.user.constant.UserCommonConstant;
 import com.hutb.user.mapper.employeeMapper;
 import com.hutb.user.model.DTO.AdminDTO;
@@ -44,10 +45,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         //2. 判断员工是否存在
         queryEmployeeByUsernameAndPhone(adminDTO);
 
-        //3.todo 新增
+        //3.新增
+        Admin modifier = employeeMapper.queryAdminById(UserContext.getUserId());
         adminDTO.setRole(UserCommonConstant.ADMIN_ROLE_NORMAL);
-        adminDTO.setCreateUser("1");
-        adminDTO.setModifiedUser("1");
+        adminDTO.setCreateUser(modifier.getUsername());
+        adminDTO.setModifiedUser(modifier.getUsername());
         adminDTO.setCreateTime(new Date());
         adminDTO.setUpdateTime(new Date());
         employeeMapper.addEmployee(adminDTO);
@@ -70,8 +72,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (admin == null){
             throw new CommonException("管理员不存在");
         }
-        //3.删除 todo设置修改人
-        long remove = employeeMapper.removeEmployee(id, "1", UserCommonConstant.ADMIN_STATUS_DELETE);
+        //3.删除
+        Admin modifier = employeeMapper.queryAdminById(UserContext.getUserId());
+        long remove = employeeMapper.removeEmployee(id, modifier.getUsername(), UserCommonConstant.ADMIN_STATUS_DELETE);
         if (remove == 0){
             throw new CommonException("删除员工失败");
         }
@@ -101,8 +104,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         //3.查询更新的用户信息是否存在
         queryEmployeeByUsernameAndPhone(adminDTO);
 
-        //4.todo 更新用户
-        adminDTO.setModifiedUser("1");
+        //4.更新用户
+        Admin modifier = employeeMapper.queryAdminById(UserContext.getUserId());
+        adminDTO.setModifiedUser(modifier.getUsername());
         adminDTO.setUpdateTime(new Date());
         long update = employeeMapper.updateAdmin(adminDTO);
         if (update == 0){
@@ -126,6 +130,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         return new PageInfo(pageInfo.getTotal(), pageInfo.getList());
     }
 
+    /**
+     * 员工登录
+     * @param username 用户名
+     * @param password 密码
+     * @return 登录响应
+     */
     @Override
     public LoginResponse login(String username, String password) {
         log.info("员工登录: username={}", username);

@@ -3,6 +3,7 @@ package com.hutb.user.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.hutb.commonUtils.exception.CommonException;
+import com.hutb.commonUtils.utils.UserContext;
 import com.hutb.user.constant.UserCommonConstant;
 import com.hutb.user.mapper.userMapper;
 import com.hutb.user.model.DTO.PageQueryListDTO;
@@ -44,10 +45,13 @@ public class UserServiceImpl implements UserService {
         //2. 判断用户是否存在
         queryUserByUsernameAndPhone(userDTO);
 
-        //3.todo 新增
+        //4. 查询用户信息
+        User user = userMapper.queryUserById(UserContext.getUserId());
+
+        //5.新增
         userDTO.setStatus(UserCommonConstant.USER_STATUS_ENABLE);
-        userDTO.setCreateUser("1");
-        userDTO.setModifiedUser("1");
+        userDTO.setCreateUser(user.getUsername());
+        userDTO.setModifiedUser(user.getUsername());
         userDTO.setCreateTime(new Date());
         userDTO.setUpdateTime(new Date());
         userMapper.addUser(userDTO);
@@ -70,8 +74,9 @@ public class UserServiceImpl implements UserService {
         if (user == null){
             throw new CommonException("用户不存在");
         }
-        //3.删除 todo设置修改人
-        long remove = userMapper.removeUser(id, "1", UserCommonConstant.USER_STATUS_DELETE);
+        User modifier = userMapper.queryUserById(UserContext.getUserId());
+        //4.删除
+        long remove = userMapper.removeUser(id, modifier.getUsername(), UserCommonConstant.USER_STATUS_DELETE);
         if (remove == 0){
             throw new CommonException("删除用户失败");
         }
@@ -101,8 +106,9 @@ public class UserServiceImpl implements UserService {
         //3.查询更新的用户信息是否存在
         queryUserByUsernameAndPhone(userDTO);
 
-        //4.todo 更新用户
-        userDTO.setModifiedUser("1");
+        //4.更新用户
+        User modifier = userMapper.queryUserById(UserContext.getUserId());
+        userDTO.setModifiedUser(modifier.getUsername());
         userDTO.setUpdateTime(new Date());
         long update = userMapper.updateUser(userDTO);
         if (update == 0){
@@ -127,6 +133,12 @@ public class UserServiceImpl implements UserService {
         return new PageInfo(pageInfo.getTotal(), pageInfo.getList());
     }
 
+    /**
+     * 用户登录
+     * @param username 用户名
+     * @param password 密码
+     * @return 登录响应
+     */
     @Override
     public LoginResponse login(String username, String password) {
         log.info("用户登录: username={}", username);
