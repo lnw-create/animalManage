@@ -17,7 +17,7 @@ public class Admin {
     private String username;
     private String password;
     private String realName;
-    // 1-超级管理员 0-普通管理员
+    // super_admin-超级管理员 normal_admin-普通管理员
     private String role;
     private String phone;
     // 1-正常 0-禁用 -1-删除

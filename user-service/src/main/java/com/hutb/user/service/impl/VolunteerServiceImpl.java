@@ -55,6 +55,7 @@ public class VolunteerServiceImpl implements VolunteerService {
         volunteerDTO.setPhone(user.getPhone());
         volunteerDTO.setUsername(user.getUsername());
         volunteerDTO.setRealName(user.getRealName());
+        volunteerDTO.setRole(user.getRole());
 
         // 3. 新增
         volunteerDTO.setCreateTime(new Date());

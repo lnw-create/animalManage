@@ -43,6 +43,14 @@ public class UserCommonConstant {
     public static final String USER_STATUS_DELETE = "-1";
 
     /**
+     * 用户角色
+     */
+    // 普通用户
+    public static final String USER_ROLE_NORMAL = "normal_user";
+    // 志愿者
+    public static final String USER_ROLE_VOLUNTEER = "volunteer";
+
+    /**
      * 志愿者状态
      */
     // 启用

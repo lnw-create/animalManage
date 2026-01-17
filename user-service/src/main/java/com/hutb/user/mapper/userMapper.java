@@ -13,8 +13,8 @@ public interface userMapper {
      * 新增用户
      * @param userDTO 用户信息
      */
-    @Insert("insert into user(username,password,real_name,phone,status,create_time,update_time,create_user,update_user) " +
-            "values(#{username},#{password},#{realName},#{phone},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser})")
+    @Insert("insert into user(username,password,real_name,phone,status,create_time,update_time,create_user,update_user,role) " +
+            "values(#{username},#{password},#{realName},#{phone},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser},#{role})")
     void addUser(UserDTO userDTO);
 
     /**

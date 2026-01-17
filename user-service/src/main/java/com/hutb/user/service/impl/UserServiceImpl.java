@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService {
 
         //4.新增
         userDTO.setStatus(UserCommonConstant.USER_STATUS_ENABLE);
+        userDTO.setRole(UserCommonConstant.USER_ROLE_NORMAL);
         userDTO.setCreateUser(UserContext.getUsername());
         userDTO.setUpdateUser(UserContext.getUsername());
         userDTO.setCreateTime(new Date());
@@ -190,6 +191,7 @@ public class UserServiceImpl implements UserService {
         
         // 3. 设置注册用户的默认值
         userDTO.setStatus(UserCommonConstant.USER_STATUS_ENABLE); // 默认启用状态
+        userDTO.setRole(UserCommonConstant.USER_ROLE_NORMAL);
         userDTO.setCreateUser(userDTO.getUsername()); // 注册用户设置为用户名
         userDTO.setUpdateUser(userDTO.getUsername()); // 注册用户设置为用户名
         userDTO.setCreateTime(new Date());
@@ -231,4 +233,6 @@ public class UserServiceImpl implements UserService {
             throw new CommonException("手机号已存在");
         }
     }
+
+    //todo:更新用户权限接口，用户注册志愿者时调用修改角色
 }
