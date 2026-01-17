@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hutb.shopping.mapper.StockMapper">
+    <!-- 查询库存列表 -->
+    <select id="queryStockList" resultType="com.hutb.shopping.model.pojo.Stock">
+        SELECT * FROM stock
+        <where>
+            status != -1
+            <if test="productName != null and productName != ''">
+                AND product_name LIKE CONCAT('%', #{productName}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
+    </select>
+</mapper>
