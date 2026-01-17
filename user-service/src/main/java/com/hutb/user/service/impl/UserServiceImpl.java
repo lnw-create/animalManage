@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
         //4.新增
         userDTO.setStatus(UserCommonConstant.USER_STATUS_ENABLE);
         userDTO.setCreateUser(UserContext.getUsername());
-        userDTO.setModifiedUser(UserContext.getUsername());
+        userDTO.setUpdateUser(UserContext.getUsername());
         userDTO.setCreateTime(new Date());
         userDTO.setUpdateTime(new Date());
         userMapper.addUser(userDTO);
@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
         queryUserByUsernameAndPhone(userDTO);
 
         //4.更新用户
-        userDTO.setModifiedUser(UserContext.getUsername());
+        userDTO.setUpdateUser(UserContext.getUsername());
         userDTO.setUpdateTime(new Date());
         long update = userMapper.updateUser(userDTO);
         if (update == 0){
@@ -175,6 +175,32 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 用户注册
+     * @param userDTO 用户信息
+     */
+    @Override
+    public void registerUser(UserDTO userDTO) throws CommonException {
+        log.info("用户注册: {}", userDTO);
+        
+        // 1. 参数校验
+        CommonValidate.userValidate(userDTO);
+        
+        // 2. 检查用户名和手机号是否已存在
+        checkUserByUsernameAndPhone(userDTO);
+        
+        // 3. 设置注册用户的默认值
+        userDTO.setStatus(UserCommonConstant.USER_STATUS_ENABLE); // 默认启用状态
+        userDTO.setCreateUser(userDTO.getUsername()); // 注册用户设置为用户名
+        userDTO.setUpdateUser(userDTO.getUsername()); // 注册用户设置为用户名
+        userDTO.setCreateTime(new Date());
+        userDTO.setUpdateTime(new Date());
+        
+        // 4. 执行注册
+        userMapper.addUser(userDTO);
+        log.info("用户注册成功");
+    }
+
+    /**
      * 根据手机号和姓名查询用户信息
      * @param user 用户信息
      */
@@ -185,6 +211,23 @@ public class UserServiceImpl implements UserService {
             throw new CommonException("用户名已存在");
         }
         if (userAnotherAnother != null && !userAnotherAnother.getId().equals(user.getId())){
+            throw new CommonException("手机号已存在");
+        }
+    }
+    
+    /**
+     * 检查用户名和手机号是否已存在（用于注册）
+     * @param user 用户信息
+     */
+    private void checkUserByUsernameAndPhone(UserDTO user){
+        User userByUsername = userMapper.queryUserByUsername(user.getUsername());
+        User userByPhone = userMapper.queryUserByPhone(user.getPhone());
+        
+        if (userByUsername != null) {
+            throw new CommonException("用户名已存在");
+        }
+        
+        if (userByPhone != null) {
             throw new CommonException("手机号已存在");
         }
     }

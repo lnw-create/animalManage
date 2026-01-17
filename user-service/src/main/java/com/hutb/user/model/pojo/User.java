@@ -24,5 +24,5 @@ public class User {
     private Date createTime;
     private Date updateTime;
     private String createUser;
-    private String modifiedUser;
+    private String updateUser;
 }

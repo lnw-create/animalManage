@@ -43,7 +43,7 @@ public class Volunteer {
     private Date createTime;
     private Date updateTime;
     private String createUser;
-    private String modifiedUser;
+    private String updateUser;
     
     // 状态
     private String status;

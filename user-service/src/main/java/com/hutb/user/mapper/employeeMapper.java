@@ -17,8 +17,8 @@ public interface employeeMapper {
      * 新增员工
      * @param adminDTO 员工信息
      */
-    @Insert("insert into admin(username,password,real_name,phone,email,status,role,create_time,update_time,create_user,modified_user) " +
-            "values(#{username},#{password},#{realName},#{phone},#{email},#{status},#{role},#{createTime},#{updateTime},#{createUser},#{modifiedUser})")
+    @Insert("insert into admin(username,password,real_name,phone,email,status,role,create_time,update_time,create_user,update_user) " +
+            "values(#{username},#{password},#{realName},#{phone},#{email},#{status},#{role},#{createTime},#{updateTime},#{createUser},#{updateUser})")
     void addEmployee(AdminDTO adminDTO);
 
     /**
@@ -26,8 +26,8 @@ public interface employeeMapper {
      * @param id 用户id
      * @param status 状态
      */
-    @Update("update admin set status = #{status},modified_user = #{modifiedUser}, update_time = now() where id = #{id}")
-    long removeUser(Long id,String modifiedUser, String status);
+    @Update("update admin set status = #{status},update_user = #{updateUser}, update_time = now() where id = #{id}")
+    long removeUser(Long id,String updateUser, String status);
 
     /**
      * 根据id查询员工信息
@@ -40,18 +40,18 @@ public interface employeeMapper {
     /**
      * 删除员工
      * @param id 员工id
-     * @param modifiedUser 员工编号
+     * @param updateUser 员工编号
      * @param status 员工状态
      */
-    @Update("update admin set status = #{status},modified_user = #{modifiedUser}, update_time = now() where id = #{id}")
-    long removeEmployee(Long id, String modifiedUser, String status);
+    @Update("update admin set status = #{status},update_user = #{updateUser}, update_time = now() where id = #{id}")
+    long removeEmployee(Long id, String updateUser, String status);
 
     /**
      * 更新员工信息
      * @param adminDTO 员工信息
      */
     @Update("update admin set username = #{username}, password = #{password}, real_name = #{realName}, " +
-            "phone = #{phone}, email = #{email}, modified_user = #{modifiedUser}, status = #{status}, update_time = #{updateTime} where id = #{id}")
+            "phone = #{phone}, email = #{email}, update_user = #{updateUser}, status = #{status}, update_time = #{updateTime} where id = #{id}")
     long updateAdmin(AdminDTO adminDTO);
 
     /**

@@ -13,8 +13,8 @@ public interface userMapper {
      * 新增用户
      * @param userDTO 用户信息
      */
-    @Insert("insert into user(username,password,real_name,phone,email,status,create_time,update_time,create_user,modified_user) " +
-            "values(#{username},#{password},#{realName},#{phone},#{email},#{status},#{createTime},#{updateTime},#{createUser},#{modifiedUser})")
+    @Insert("insert into user(username,password,real_name,phone,email,status,create_time,update_time,create_user,update_user) " +
+            "values(#{username},#{password},#{realName},#{phone},#{email},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser})")
     void addUser(UserDTO userDTO);
 
     /**
@@ -22,8 +22,8 @@ public interface userMapper {
      * @param id 用户id
      * @param status 状态
      */
-    @Update("update user set status = #{status},modified_user = #{modifiedUser}, update_time = now() where id = #{id}")
-    long removeUser(Long id,String modifiedUser, String status);
+    @Update("update user set status = #{status},update_user = #{updateUser}, update_time = now() where id = #{id}")
+    long removeUser(Long id,String updateUser, String status);
 
     /**
      * 根据id查询用户信息
@@ -38,7 +38,7 @@ public interface userMapper {
      * @param userDTO 用户信息
      */
     @Update("update user set username = #{username}, password = #{password}, real_name = #{realName}, " +
-            "phone = #{phone}, email = #{email}, modified_user = #{modifiedUser}, update_time = #{updateTime} where id = #{id}")
+            "phone = #{phone}, email = #{email}, update_user = #{updateUser}, update_time = #{updateTime} where id = #{id}")
     long updateUser(UserDTO userDTO);
 
     /**

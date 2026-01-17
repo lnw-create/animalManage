@@ -44,7 +44,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         //3.新增
         adminDTO.setRole(UserCommonConstant.ADMIN_ROLE_NORMAL);
         adminDTO.setCreateUser(UserContext.getUsername());
-        adminDTO.setModifiedUser(UserContext.getUsername());
+        adminDTO.setUpdateUser(UserContext.getUsername());
         adminDTO.setCreateTime(new Date());
         adminDTO.setUpdateTime(new Date());
         employeeMapper.addEmployee(adminDTO);
@@ -99,7 +99,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         queryEmployeeByUsernameAndPhone(adminDTO);
 
         //4.更新用户
-        adminDTO.setModifiedUser(UserContext.getUsername());
+        adminDTO.setUpdateUser(UserContext.getUsername());
         adminDTO.setUpdateTime(new Date());
         long update = employeeMapper.updateAdmin(adminDTO);
         if (update == 0){

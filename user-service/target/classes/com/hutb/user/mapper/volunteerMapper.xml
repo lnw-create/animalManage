@@ -39,7 +39,7 @@
             <if test="status != null">
                 status = #{status},
             </if>
-            modified_user = #{modifiedUser},
+            update_user = #{updateUser},
             update_time = now()
         </set>
         where id = #{id}

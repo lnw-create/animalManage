@@ -46,7 +46,7 @@ public class VolunteerActivityServiceImpl implements VolunteerActivityService {
         // 3. 新增
         volunteerActivityDTO.setStatus(VolunteerActivityCommonConstant.ACTIVITY_STATUS_ENROLLING);
         volunteerActivityDTO.setCreateUser(UserContext.getUsername());
-        volunteerActivityDTO.setModifiedUser(UserContext.getUsername());
+        volunteerActivityDTO.setUpdateUser(UserContext.getUsername());
         volunteerActivityDTO.setCreateTime(new Date());
         volunteerActivityDTO.setUpdateTime(new Date());
         volunteerActivityMapper.addVolunteerActivity(volunteerActivityDTO);
@@ -104,7 +104,7 @@ public class VolunteerActivityServiceImpl implements VolunteerActivityService {
         }
 
         // 4. 更新志愿活动
-        volunteerActivityDTO.setModifiedUser(UserContext.getUsername());
+        volunteerActivityDTO.setUpdateUser(UserContext.getUsername());
         volunteerActivityDTO.setUpdateTime(new Date());
         long updated = volunteerActivityMapper.updateVolunteerActivity(volunteerActivityDTO);
         if (updated == 0) {

@@ -60,7 +60,7 @@ public class VolunteerServiceImpl implements VolunteerService {
         volunteerDTO.setCreateTime(new Date());
         volunteerDTO.setUpdateTime(new Date());
         volunteerDTO.setCreateUser(UserContext.getUsername());
-        volunteerDTO.setModifiedUser(UserContext.getUsername());
+        volunteerDTO.setUpdateUser(UserContext.getUsername());
         volunteerDTO.setStatus(UserCommonConstant.USER_STATUS_ENABLE);
         volunteerMapper.addVolunteer(volunteerDTO);
         log.info("添加志愿者成功");
@@ -114,7 +114,7 @@ public class VolunteerServiceImpl implements VolunteerService {
         queryVolunteerByUsernameAndPhone(volunteerDTO);
 
         // 4.更新志愿者
-        volunteerDTO.setModifiedUser(UserContext.getUsername());
+        volunteerDTO.setUpdateUser(UserContext.getUsername());
         volunteerDTO.setUpdateTime(new Date());
         long update = volunteerMapper.updateVolunteer(volunteerDTO);
         if (update == 0) {

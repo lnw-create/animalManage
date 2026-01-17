@@ -13,8 +13,8 @@ public interface VolunteerActivityMapper {
      * 新增志愿活动
      * @param volunteerActivityDTO 志愿活动信息
      */
-    @Insert("insert into activity(activity_name, description, start_time, end_time, location, max_participants, current_participants, volunteer_hours, status, create_time, update_time, create_user, modified_user) " +
-            "values(#{activityName}, #{description}, #{startTime}, #{endTime}, #{location}, #{maxParticipants}, #{currentParticipants},#{volunteerHours}, #{status}, #{createTime}, #{updateTime}, #{createUser}, #{modifiedUser})")
+    @Insert("insert into activity(activity_name, description, start_time, end_time, location, max_participants, current_participants, volunteer_hours, status, create_time, update_time, create_user, update_user) " +
+            "values(#{activityName}, #{description}, #{startTime}, #{endTime}, #{location}, #{maxParticipants}, #{currentParticipants},#{volunteerHours}, #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})")
     void addVolunteerActivity(VolunteerActivityDTO volunteerActivityDTO);
 
     /**
@@ -22,8 +22,8 @@ public interface VolunteerActivityMapper {
      * @param id 志愿活动id
      * @param status 状态
      */
-    @Update("update activity set status = #{status}, modified_user = #{modifiedUser}, update_time = now() where id = #{id}")
-    long removeVolunteerActivity(Long id, String status, String modifiedUser);
+    @Update("update activity set status = #{status}, update_user = #{updateUser}, update_time = now() where id = #{id}")
+    long removeVolunteerActivity(Long id, String status, String updateUser);
 
     /**
      * 根据id查询志愿活动信息
@@ -40,7 +40,7 @@ public interface VolunteerActivityMapper {
      */
     @Update("update activity set activity_name = #{activityName}, description = #{description}, start_time = #{startTime}, " +
             "end_time = #{endTime}, location = #{location}, max_participants = #{maxParticipants}, current_participants = #{currentParticipants}," +
-            "volunteer_hours = #{volunteerHours}, status = #{status}, modified_user = #{modifiedUser}, update_time = #{updateTime} where id = #{id}")
+            "volunteer_hours = #{volunteerHours}, status = #{status}, update_user = #{updateUser}, update_time = #{updateTime} where id = #{id}")
     long updateVolunteerActivity(VolunteerActivityDTO volunteerActivityDTO);
 
     /**
