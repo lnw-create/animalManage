@@ -2,8 +2,8 @@ package com.hutb.user.service;
 
 import com.hutb.user.model.DTO.PageQueryListDTO;
 import com.hutb.user.model.DTO.UserDTO;
+import com.hutb.user.model.VO.LoginResponse;
 import com.hutb.user.model.pojo.PageInfo;
-import com.hutb.user.model.vo.LoginResponse;
 
 import java.util.zip.DataFormatException;
 

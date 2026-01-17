@@ -11,6 +11,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new Intercept());
+        registry.addInterceptor(new Intercept())
+                .addPathPatterns("/**")  // 拦截所有请求
+                .excludePathPatterns("/login", "/register", "/error");  // 排除不需要拦截的路径
     }
 }

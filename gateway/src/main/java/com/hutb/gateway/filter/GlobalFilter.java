@@ -44,23 +44,23 @@ public class GlobalFilter implements org.springframework.cloud.gateway.filter.Gl
         }
 
         //5.解析token并判断token是否合法
-        Map<String, Object> chaims = null;
+        Map<String, Object> claims = null;
         try {
-            chaims = JwtUtil.parseJwt(token, "user-service");
+            claims = JwtUtil.parseJwt(token, "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC8FgCz6/n59Z6VX5xtzvQ4aCU2oIqxERUd/Qk5uVQ2WMZS6OfmvmP3ZQ+Oo+2y1E+W8yaZTSVXVI2ztNxJJNkMSQX+uCv3+6FbX6W//R/1DhXD7XkXiPx2+6NgljEiKCw+7g1y4UlywX1m0JDlPSqphGyWTybD4m37Xy/cJwIDAQAB");
         } catch (Exception e) {
             ServerHttpResponse response = exchange.getResponse();
             response.setRawStatusCode(401);
             return response.setComplete();
         }
-        String userId = chaims.get("userId").toString();
+        String username1 = claims.get("username").toString();
 
         //6. 修改发送给微服务的请求头，加入用户信息
-        ServerWebExchange user_id = exchange.mutate()
-                .request(builder -> builder.header("userId", userId))
+        ServerWebExchange username = exchange.mutate()
+                .request(builder -> builder.header("username", username1))
                 .build();
 
         //7. 放行，调用下一个过滤器
-        return chain.filter(user_id);
+        return chain.filter(username);
     }
 
     @Override

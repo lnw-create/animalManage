@@ -4,6 +4,7 @@ package com.hutb.volunteerActivity.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.hutb.commonUtils.exception.CommonException;
+import com.hutb.commonUtils.utils.UserContext;
 import com.hutb.volunteerActivity.constant.VolunteerActivityCommonConstant;
 import com.hutb.volunteerActivity.mapper.VolunteerActivityMapper;
 import com.hutb.volunteerActivity.model.DTO.PageQueryListDTO;
@@ -44,8 +45,8 @@ public class VolunteerActivityServiceImpl implements VolunteerActivityService {
 
         // 3. 新增
         volunteerActivityDTO.setStatus(VolunteerActivityCommonConstant.ACTIVITY_STATUS_ENROLLING);
-        volunteerActivityDTO.setCreateUser("1");
-        volunteerActivityDTO.setModifiedUser("1");
+        volunteerActivityDTO.setCreateUser(UserContext.getUsername());
+        volunteerActivityDTO.setModifiedUser(UserContext.getUsername());
         volunteerActivityDTO.setCreateTime(new Date());
         volunteerActivityDTO.setUpdateTime(new Date());
         volunteerActivityMapper.addVolunteerActivity(volunteerActivityDTO);
@@ -69,7 +70,7 @@ public class VolunteerActivityServiceImpl implements VolunteerActivityService {
             throw new CommonException("志愿活动不存在");
         }
         // 3. 删除（设置为删除状态）
-        long removed = volunteerActivityMapper.removeVolunteerActivity(id, VolunteerActivityCommonConstant.ACTIVITY_STATUS_DELETED, "1");
+        long removed = volunteerActivityMapper.removeVolunteerActivity(id, VolunteerActivityCommonConstant.ACTIVITY_STATUS_DELETED, UserContext.getUsername());
         if (removed == 0) {
             throw new CommonException("删除志愿活动失败");
         }
@@ -103,7 +104,7 @@ public class VolunteerActivityServiceImpl implements VolunteerActivityService {
         }
 
         // 4. 更新志愿活动
-        volunteerActivityDTO.setModifiedUser("1");
+        volunteerActivityDTO.setModifiedUser(UserContext.getUsername());
         volunteerActivityDTO.setUpdateTime(new Date());
         long updated = volunteerActivityMapper.updateVolunteerActivity(volunteerActivityDTO);
         if (updated == 0) {

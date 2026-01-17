@@ -1,4 +1,4 @@
-package com.hutb.user.model.vo;
+package com.hutb.user.model.VO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

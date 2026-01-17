@@ -1,4 +1,4 @@
-package com.hutb.user.model.vo;
+package com.hutb.user.model.DTO;
 
 import lombok.Data;
 

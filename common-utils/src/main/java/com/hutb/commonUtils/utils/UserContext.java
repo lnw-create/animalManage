@@ -4,17 +4,17 @@ package com.hutb.commonUtils.utils;
  *  获取用户信息工具类
  */
 public class UserContext {
-    private static final ThreadLocal<Long> currentUser = new ThreadLocal<>();
+    private static final ThreadLocal<String> currentUser = new ThreadLocal<>();
 
-    //设置id
-    public static void setUserId(Long userId) {
-        currentUser.set(userId);
+    //设置用户名
+    public static void setUsername(String username) {
+        currentUser.set(username);
     }
-    //获取id
-    public static Long getUserId(){
+    //获取用户名
+    public static String getUsername(){
         return currentUser.get();
     }
-    //删除id
+    //删除用户名
     public static void remove(){
         currentUser.remove();
     }

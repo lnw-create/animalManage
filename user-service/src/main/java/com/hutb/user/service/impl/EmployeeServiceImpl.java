@@ -11,16 +11,12 @@ import com.hutb.user.model.DTO.PageQueryListDTO;
 import com.hutb.user.model.pojo.Admin;
 import com.hutb.user.model.pojo.PageInfo;
 import com.hutb.user.model.pojo.User;
-import com.hutb.user.model.vo.LoginResponse;
+import com.hutb.user.model.VO.LoginResponse;
 import com.hutb.user.service.EmployeeService;
 import com.hutb.user.utils.CommonValidate;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -46,10 +42,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         queryEmployeeByUsernameAndPhone(adminDTO);
 
         //3.新增
-        Admin modifier = employeeMapper.queryAdminById(UserContext.getUserId());
         adminDTO.setRole(UserCommonConstant.ADMIN_ROLE_NORMAL);
-        adminDTO.setCreateUser(modifier.getUsername());
-        adminDTO.setModifiedUser(modifier.getUsername());
+        adminDTO.setCreateUser(UserContext.getUsername());
+        adminDTO.setModifiedUser(UserContext.getUsername());
         adminDTO.setCreateTime(new Date());
         adminDTO.setUpdateTime(new Date());
         employeeMapper.addEmployee(adminDTO);
@@ -73,8 +68,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new CommonException("管理员不存在");
         }
         //3.删除
-        Admin modifier = employeeMapper.queryAdminById(UserContext.getUserId());
-        long remove = employeeMapper.removeEmployee(id, modifier.getUsername(), UserCommonConstant.ADMIN_STATUS_DELETE);
+        long remove = employeeMapper.removeEmployee(id, UserContext.getUsername(), UserCommonConstant.ADMIN_STATUS_DELETE);
         if (remove == 0){
             throw new CommonException("删除员工失败");
         }
@@ -105,8 +99,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         queryEmployeeByUsernameAndPhone(adminDTO);
 
         //4.更新用户
-        Admin modifier = employeeMapper.queryAdminById(UserContext.getUserId());
-        adminDTO.setModifiedUser(modifier.getUsername());
+        adminDTO.setModifiedUser(UserContext.getUsername());
         adminDTO.setUpdateTime(new Date());
         long update = employeeMapper.updateAdmin(adminDTO);
         if (update == 0){
@@ -170,11 +163,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         claims.put("username", admin.getUsername());
         claims.put("role", admin.getRole());
 
-        // 使用与网关一致的密钥和过期时间
-        SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+        // 使用与网关一致的固定密钥和过期时间
         long timeout = 24 * 60 * 60 * 1000; // 24小时
-
-        String token = com.hutb.commonUtils.utils.JwtUtil.createJwt(String.valueOf(secretKey), timeout, claims);
+                
+        String token = com.hutb.commonUtils.utils.JwtUtil.createJwt("MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC8FgCz6/n59Z6VX5xtzvQ4aCU2oIqxERUd/Qk5uVQ2WMZS6OfmvmP3ZQ+Oo+2y1E+W8yaZTSVXVI2ztNxJJNkMSQX+uCv3+6FbX6W//R/1DhXD7XkXiPx2+6NgljEiKCw+7g1y4UlywX1m0JDlPSqphGyWTybD4m37Xy/cJwIDAQAB", timeout, claims);
         
         log.info("员工登录成功: id={}", admin.getId());
         

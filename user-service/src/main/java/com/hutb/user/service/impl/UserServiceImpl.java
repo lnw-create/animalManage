@@ -8,18 +8,14 @@ import com.hutb.user.constant.UserCommonConstant;
 import com.hutb.user.mapper.userMapper;
 import com.hutb.user.model.DTO.PageQueryListDTO;
 import com.hutb.user.model.DTO.UserDTO;
+import com.hutb.user.model.VO.LoginResponse;
 import com.hutb.user.model.pojo.PageInfo;
 import com.hutb.user.model.pojo.User;
-import com.hutb.user.model.vo.LoginResponse;
 import com.hutb.user.service.UserService;
 import com.hutb.user.utils.CommonValidate;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -45,13 +41,10 @@ public class UserServiceImpl implements UserService {
         //2. 判断用户是否存在
         queryUserByUsernameAndPhone(userDTO);
 
-        //4. 查询用户信息
-        User user = userMapper.queryUserById(UserContext.getUserId());
-
-        //5.新增
+        //4.新增
         userDTO.setStatus(UserCommonConstant.USER_STATUS_ENABLE);
-        userDTO.setCreateUser(user.getUsername());
-        userDTO.setModifiedUser(user.getUsername());
+        userDTO.setCreateUser(UserContext.getUsername());
+        userDTO.setModifiedUser(UserContext.getUsername());
         userDTO.setCreateTime(new Date());
         userDTO.setUpdateTime(new Date());
         userMapper.addUser(userDTO);
@@ -74,9 +67,8 @@ public class UserServiceImpl implements UserService {
         if (user == null){
             throw new CommonException("用户不存在");
         }
-        User modifier = userMapper.queryUserById(UserContext.getUserId());
         //4.删除
-        long remove = userMapper.removeUser(id, modifier.getUsername(), UserCommonConstant.USER_STATUS_DELETE);
+        long remove = userMapper.removeUser(id, UserContext.getUsername(), UserCommonConstant.USER_STATUS_DELETE);
         if (remove == 0){
             throw new CommonException("删除用户失败");
         }
@@ -107,8 +99,7 @@ public class UserServiceImpl implements UserService {
         queryUserByUsernameAndPhone(userDTO);
 
         //4.更新用户
-        User modifier = userMapper.queryUserById(UserContext.getUserId());
-        userDTO.setModifiedUser(modifier.getUsername());
+        userDTO.setModifiedUser(UserContext.getUsername());
         userDTO.setUpdateTime(new Date());
         long update = userMapper.updateUser(userDTO);
         if (update == 0){
@@ -172,11 +163,10 @@ public class UserServiceImpl implements UserService {
         claims.put("userId", user.getId());
         claims.put("username", user.getUsername());
         
-        // 使用与网关一致的密钥和过期时间
-        SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+        // 使用与网关一致的固定密钥和过期时间
         long timeout = 24 * 60 * 60 * 1000; // 24小时
-        
-        String token = com.hutb.commonUtils.utils.JwtUtil.createJwt(String.valueOf(secretKey), timeout, claims);
+                        
+        String token = com.hutb.commonUtils.utils.JwtUtil.createJwt("MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC8FgCz6/n59Z6VX5xtzvQ4aCU2oIqxERUd/Qk5uVQ2WMZS6OfmvmP3ZQ+Oo+2y1E+W8yaZTSVXVI2ztNxJJNkMSQX+uCv3+6FbX6W//R/1DhXD7XkXiPx2+6NgljEiKCw+7g1y4UlywX1m0JDlPSqphGyWTybD4m37Xy/cJwIDAQAB", timeout, claims);
         
         log.info("用户登录成功: id={}", user.getId());
         

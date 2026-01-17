@@ -52,21 +52,15 @@ public class VolunteerServiceImpl implements VolunteerService {
         }
 
         // 2. 设置志愿者信息
-        Volunteer modifier = volunteerMapper.queryVolunteerById(UserContext.getUserId());
         volunteerDTO.setPhone(user.getPhone());
         volunteerDTO.setUsername(user.getUsername());
         volunteerDTO.setRealName(user.getRealName());
-        volunteerDTO.setUpdateTime(new Date());
-        volunteerDTO.setCreateTime(new Date());
-        volunteerDTO.setModifiedUser(modifier.getUsername());
-        volunteerDTO.setCreateUser(modifier.getUsername());
-        volunteerDTO.setStatus(UserCommonConstant.VOLUNTEER_STATUS_DELETE);
 
         // 3. 新增
         volunteerDTO.setCreateTime(new Date());
         volunteerDTO.setUpdateTime(new Date());
-        volunteerDTO.setCreateUser("1");
-        volunteerDTO.setModifiedUser("1");
+        volunteerDTO.setCreateUser(UserContext.getUsername());
+        volunteerDTO.setModifiedUser(UserContext.getUsername());
         volunteerDTO.setStatus(UserCommonConstant.USER_STATUS_ENABLE);
         volunteerMapper.addVolunteer(volunteerDTO);
         log.info("添加志愿者成功");
@@ -89,8 +83,7 @@ public class VolunteerServiceImpl implements VolunteerService {
             throw new CommonException("志愿者不存在");
         }
         // 3.删除
-        Volunteer modifier = volunteerMapper.queryVolunteerById(UserContext.getUserId());
-        long remove = volunteerMapper.removeVolunteer(id, modifier.getUsername(), UserCommonConstant.USER_STATUS_DELETE);
+        long remove = volunteerMapper.removeVolunteer(id, UserContext.getUsername(), UserCommonConstant.VOLUNTEER_STATUS_DELETE);
         if (remove == 0) {
             throw new CommonException("删除志愿者失败");
         }
@@ -121,8 +114,7 @@ public class VolunteerServiceImpl implements VolunteerService {
         queryVolunteerByUsernameAndPhone(volunteerDTO);
 
         // 4.更新志愿者
-        Volunteer modifier = volunteerMapper.queryVolunteerById(UserContext.getUserId());
-        volunteerDTO.setModifiedUser(modifier.getUsername());
+        volunteerDTO.setModifiedUser(UserContext.getUsername());
         volunteerDTO.setUpdateTime(new Date());
         long update = volunteerMapper.updateVolunteer(volunteerDTO);
         if (update == 0) {

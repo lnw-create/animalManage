@@ -2,8 +2,9 @@ package com.hutb.user.service;
 
 import com.hutb.user.model.DTO.AdminDTO;
 import com.hutb.user.model.DTO.PageQueryListDTO;
+import com.hutb.user.model.VO.LoginResponse;
 import com.hutb.user.model.pojo.PageInfo;
-import com.hutb.user.model.vo.LoginResponse;
+import com.hutb.user.model.VO.LoginResponse;
 
 public interface EmployeeService {
     /**

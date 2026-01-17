@@ -26,6 +26,7 @@
         <module>common-utils</module>
         <module>gateway</module>
         <module>volunteerActivity-service</module>
+        <module>shopping-service</module>
     </modules>
     <scm>
         <connection/>

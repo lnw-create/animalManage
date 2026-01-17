@@ -18,6 +18,10 @@ spring:
           uri: lb://volunteerActivity-service
           predicates:
             - Path=/volunteerActivity/**
+        - id: shopping-service
+          uri: lb://shopping-service
+          predicates:
+            - Path=/shopping/**
       httpclient:
         headers:
           allow-forwards: true
