@@ -32,6 +32,21 @@ public class UserController {
     }
 
     /**
+     * 用户注册
+     */
+    @PostMapping("/register")
+    public ResultInfo register(@RequestBody UserDTO userDTO) {
+        try {
+            userService.registerUser(userDTO);
+            return ResultInfo.success();
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误: " + e.getMessage());
+        }
+    }
+
+    /**
      * 新增用户
      */
     @PostMapping("addUser")

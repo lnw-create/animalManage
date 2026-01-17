@@ -40,4 +40,10 @@ public interface UserService {
      * @return 登录响应
      */
     LoginResponse login(String username, String password);
+    
+    /**
+     * 用户注册
+     * @param userDTO 用户信息
+     */
+    void registerUser(UserDTO userDTO) throws DataFormatException;
 }
