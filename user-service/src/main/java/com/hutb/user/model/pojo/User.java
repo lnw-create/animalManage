@@ -18,7 +18,6 @@ public class User {
     private String password;
     private String realName;
     private String phone;
-    private String email;
     // 1-正常 0-禁用 -1-删除
     private String status = "1";
     private Date createTime;

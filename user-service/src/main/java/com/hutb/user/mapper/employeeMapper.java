@@ -17,8 +17,8 @@ public interface employeeMapper {
      * 新增员工
      * @param adminDTO 员工信息
      */
-    @Insert("insert into admin(username,password,real_name,phone,email,status,role,create_time,update_time,create_user,update_user) " +
-            "values(#{username},#{password},#{realName},#{phone},#{email},#{status},#{role},#{createTime},#{updateTime},#{createUser},#{updateUser})")
+    @Insert("insert into admin(username,password,real_name,phone,status,role,create_time,update_time,create_user,update_user) " +
+            "values(#{username},#{password},#{realName},#{phone},#{status},#{role},#{createTime},#{updateTime},#{createUser},#{updateUser})")
     void addEmployee(AdminDTO adminDTO);
 
     /**
@@ -51,7 +51,7 @@ public interface employeeMapper {
      * @param adminDTO 员工信息
      */
     @Update("update admin set username = #{username}, password = #{password}, real_name = #{realName}, " +
-            "phone = #{phone}, email = #{email}, update_user = #{updateUser}, status = #{status}, update_time = #{updateTime} where id = #{id}")
+            "phone = #{phone}, update_user = #{updateUser}, status = #{status}, update_time = #{updateTime} where id = #{id}")
     long updateAdmin(AdminDTO adminDTO);
 
     /**
