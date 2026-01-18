@@ -59,8 +59,13 @@ public class CommonValidate {
      * 志愿者通用简单参数校验
      */
     public static void volunteerValidate(VolunteerDTO volunteerDTO) {
+        Long userId = volunteerDTO.getUserId();
         String idCard = volunteerDTO.getIdCard();
         String address = volunteerDTO.getAddress();
+
+        if (userId == null){
+            throw new RuntimeException("用户ID不能为空");
+        }
 
         if (CommonUtils.stringIsBlank(idCard)){
             throw new RuntimeException("身份证号不能为空");

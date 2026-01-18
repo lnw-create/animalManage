@@ -5,7 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.hutb.commonUtils.exception.CommonException;
 import com.hutb.commonUtils.utils.UserContext;
 import com.hutb.user.constant.UserCommonConstant;
-import com.hutb.user.mapper.employeeMapper;
+import com.hutb.user.mapper.EmployeeMapper;
 import com.hutb.user.model.DTO.AdminDTO;
 import com.hutb.user.model.DTO.PageQueryListDTO;
 import com.hutb.user.model.pojo.Admin;
@@ -27,7 +27,7 @@ import java.util.Map;
 public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
-    private employeeMapper employeeMapper;
+    private EmployeeMapper employeeMapper;
     /**
      * 添加员工
      * @param adminDTO 员工信息

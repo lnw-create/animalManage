@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 @Mapper
-public interface userMapper {
+public interface UserMapper {
     /**
      * 新增用户
      * @param userDTO 用户信息
@@ -64,4 +64,12 @@ public interface userMapper {
      */
     @Select("select * from user where phone = #{phone} and status = '1'")
     User queryUserByPhone(String phone);
+
+    /**
+     * 根据用户id更新用户权限
+     * @param userId 用户id
+     * @param role 用户角色志愿者
+     */
+    @Update("update user set role = #{role},update_user = #{updateUser}, update_time = now() where id = #{userId}")
+    int updateUserById(Long userId, String role, String updateUser);
 }

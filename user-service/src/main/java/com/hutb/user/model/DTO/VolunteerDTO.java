@@ -16,17 +16,11 @@ import java.util.Date;
 public class VolunteerDTO extends User{
     private Long userId;
 
-    //身份证号（脱敏存储）
+    //身份证号
     private String idCard;
-
-    //手机号（与用户表可相同，冗余方便联系）
-    private String phone;
 
     //现居地址
     private String address;
-
-    // 状态
-    private String status;
 
     /* -------------------- 志愿业务信息 -------------------- */
     //累计志愿时长（小时）

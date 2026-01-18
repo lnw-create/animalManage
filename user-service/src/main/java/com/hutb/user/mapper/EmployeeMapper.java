@@ -12,7 +12,7 @@ import org.apache.ibatis.annotations.Update;
 import java.util.List;
 
 @Mapper
-public interface employeeMapper {
+public interface EmployeeMapper {
     /**
      * 新增员工
      * @param adminDTO 员工信息

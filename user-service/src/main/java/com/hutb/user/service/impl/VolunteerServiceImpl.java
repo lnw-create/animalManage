@@ -3,10 +3,9 @@ package com.hutb.user.service.impl;
 import com.hutb.commonUtils.exception.CommonException;
 import com.hutb.commonUtils.utils.UserContext;
 import com.hutb.user.constant.UserCommonConstant;
-import com.hutb.user.mapper.userMapper;
-import com.hutb.user.mapper.volunteerMapper;
+import com.hutb.user.mapper.UserMapper;
+import com.hutb.user.mapper.VolunteerMapper;
 import com.hutb.user.model.DTO.VolunteerDTO;
-import com.hutb.user.model.pojo.Admin;
 import com.hutb.user.model.pojo.PageInfo;
 import com.hutb.user.model.pojo.User;
 import com.hutb.user.model.pojo.Volunteer;
@@ -21,29 +20,34 @@ import java.util.List;
 
 import com.github.pagehelper.PageHelper;
 import com.hutb.user.model.DTO.PageQueryListDTO;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
 public class VolunteerServiceImpl implements VolunteerService {
 
     @Autowired
-    private volunteerMapper volunteerMapper;
+    private VolunteerMapper volunteerMapper;
 
     @Autowired
-    private userMapper userMapper;
+    private UserMapper userMapper;
 
     /**
      * 添加志愿者
      * @param volunteerDTO 志愿者信息
      */
+    @Transactional
     @Override
     public void addVolunteer(VolunteerDTO volunteerDTO) throws CommonException {
         log.info("添加志愿者:{}", volunteerDTO);
         // 1. 参数校验
         CommonValidate.volunteerValidate(volunteerDTO);
 
-        // 2. 判断志愿者是否存在（根据手机号等唯一标识）
-        queryVolunteerByUsernameAndPhone(volunteerDTO);
+        // 2. 判断志愿者是否存在
+        Volunteer volunteer = volunteerMapper.queryVolunteerByUserId(volunteerDTO.getUserId());
+        if (volunteer != null) {
+            throw new CommonException("志愿者已存在");
+        }
 
         // 3. 判断关联用户是否存在
         User user = userMapper.queryUserById(volunteerDTO.getUserId());
@@ -64,6 +68,12 @@ public class VolunteerServiceImpl implements VolunteerService {
         volunteerDTO.setUpdateUser(UserContext.getUsername());
         volunteerDTO.setStatus(UserCommonConstant.USER_STATUS_ENABLE);
         volunteerMapper.addVolunteer(volunteerDTO);
+
+        //4.修改用户表role
+        int i = userMapper.updateUserById(volunteerDTO.getUserId(), UserCommonConstant.USER_ROLE_VOLUNTEER, UserContext.getUsername());
+        if (i == 0) {
+            throw new CommonException("修改用户角色失败");
+        }
         log.info("添加志愿者成功");
     }
 
@@ -111,10 +121,7 @@ public class VolunteerServiceImpl implements VolunteerService {
             throw new CommonException("志愿者信息不存在");
         }
 
-        // 3.查询更新的志愿者信息是否存在
-        queryVolunteerByUsernameAndPhone(volunteerDTO);
-
-        // 4.更新志愿者
+        // 3.更新志愿者
         volunteerDTO.setUpdateUser(UserContext.getUsername());
         volunteerDTO.setUpdateTime(new Date());
         long update = volunteerMapper.updateVolunteer(volunteerDTO);
@@ -138,22 +145,5 @@ public class VolunteerServiceImpl implements VolunteerService {
         com.github.pagehelper.PageInfo<Volunteer> pageInfo = new com.github.pagehelper.PageInfo<>(volunteers);
         log.info("查询志愿者列表成功");
         return new PageInfo(pageInfo.getTotal(), pageInfo.getList());
-    }
-
-    /**
-     * 根据手机号和用户名查询志愿者信息，用于校验唯一性
-     * @param volunteer 志愿者信息
-     */
-    private void queryVolunteerByUsernameAndPhone(VolunteerDTO volunteer) {
-        Volunteer volunteerAnother = volunteerMapper.queryVolunteerByPhone(volunteer.getPhone());
-        if (volunteerAnother != null && !volunteerAnother.getId().equals(volunteer.getId())) {
-            throw new CommonException("手机号已存在");
-        }
-        
-        // 检查用户名是否已存在
-        Volunteer volunteerByUsername = volunteerMapper.queryVolunteerByUsername(volunteer.getUsername());
-        if (volunteerByUsername != null && !volunteerByUsername.getId().equals(volunteer.getId())) {
-            throw new CommonException("用户名已存在");
-        }
     }
 }

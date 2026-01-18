@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 @Mapper
-public interface volunteerMapper {
+public interface VolunteerMapper {
     /**
      * 新增志愿者
      * @param volunteerDTO 志愿者信息
@@ -18,13 +18,22 @@ public interface volunteerMapper {
     void addVolunteer(VolunteerDTO volunteerDTO);
 
     /**
-     * 删除志愿者
+     * 根据志愿者id删除志愿者
      * @param id 志愿者id
      * @param updateUser 修改人
      * @param status 状态
      */
     @Update("update volunteer set status = #{status},update_user = #{updateUser}, update_time = now() where id = #{id}")
     long removeVolunteer(Long id, String updateUser, String status);
+
+    /**
+     * 根据用户id删除志愿者
+     * @param userId 志愿者id
+     * @param updateUser 修改人
+     * @param status 状态
+     */
+    @Update("update volunteer set status = #{status},update_user = #{updateUser}, update_time = now() where userId = #{userId}")
+    long removeVolunteerByUserId(Long userId, String updateUser, String status);
 
     /**
      * 根据id查询志愿者信息
@@ -62,4 +71,12 @@ public interface volunteerMapper {
      */
     @Select("select * from volunteer where username = #{username} and status = '1'")
     Volunteer queryVolunteerByUsername(String username);
+
+    /**
+     * 根据用户id查询志愿者信息
+     * @param userId 用户id
+     * @return 志愿者信息
+     */
+    @Select("select * from volunteer where user_id = #{userId} and status = '1'")
+    Volunteer queryVolunteerByUserId(Long userId);
 }

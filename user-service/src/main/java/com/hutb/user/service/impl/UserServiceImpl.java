@@ -5,7 +5,8 @@ import com.github.pagehelper.PageHelper;
 import com.hutb.commonUtils.exception.CommonException;
 import com.hutb.commonUtils.utils.UserContext;
 import com.hutb.user.constant.UserCommonConstant;
-import com.hutb.user.mapper.userMapper;
+import com.hutb.user.mapper.UserMapper;
+import com.hutb.user.mapper.VolunteerMapper;
 import com.hutb.user.model.DTO.PageQueryListDTO;
 import com.hutb.user.model.DTO.UserDTO;
 import com.hutb.user.model.VO.LoginResponse;
@@ -16,6 +17,8 @@ import com.hutb.user.utils.CommonValidate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +29,10 @@ import java.util.Map;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private userMapper userMapper;
+    private UserMapper userMapper;
+
+    @Autowired
+    private VolunteerMapper volunteerMapper;
 
     /**
      * 添加用户
@@ -56,6 +62,7 @@ public class UserServiceImpl implements UserService {
      * 删除用户
      * @param id 用户id
      */
+    @Transactional
     @Override
     public void removeUser(Long id) throws CommonException {
         log.info("删除用户:id-{}",id);
@@ -67,6 +74,14 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.queryUserById(id);
         if (user == null){
             throw new CommonException("用户不存在");
+        }
+        //3.判断是否注册志愿者
+        if (user.getRole().equals(UserCommonConstant.USER_ROLE_VOLUNTEER)){
+            //删除志愿者信息
+            long l = volunteerMapper.removeVolunteer(id, UserContext.getUsername(), UserCommonConstant.VOLUNTEER_STATUS_DELETE);
+            if (l == 0){
+                throw new CommonException("删除志愿者信息失败");
+            }
         }
         //4.删除
         long remove = userMapper.removeUser(id, UserContext.getUsername(), UserCommonConstant.USER_STATUS_DELETE);
@@ -233,6 +248,4 @@ public class UserServiceImpl implements UserService {
             throw new CommonException("手机号已存在");
         }
     }
-
-    //todo:更新用户权限接口，用户注册志愿者时调用修改角色
 }
