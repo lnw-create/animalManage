@@ -175,19 +175,20 @@ public class UserServiceImpl implements UserService {
         }
         
         // 5. 生成JWT token
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", user.getId());
-        claims.put("username", user.getUsername());
-        
-        // 使用与网关一致的固定密钥和过期时间
+        // 使用新的JWT工具方法，包含角色信息
         long timeout = 24 * 60 * 60 * 1000; // 24小时
-                        
-        String token = com.hutb.commonUtils.utils.JwtUtil.createJwt("MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC8FgCz6/n59Z6VX5xtzvQ4aCU2oIqxERUd/Qk5uVQ2WMZS6OfmvmP3ZQ+Oo+2y1E+W8yaZTSVXVI2ztNxJJNkMSQX+uCv3+6FbX6W//R/1DhXD7XkXiPx2+6NgljEiKCw+7g1y4UlywX1m0JDlPSqphGyWTybD4m37Xy/cJwIDAQAB", timeout, claims);
+        
+        String token = com.hutb.commonUtils.utils.JwtUtil.createTokenWithRole(
+            "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC8FgCz6/n59Z6VX5xtzvQ4aCU2oIqxERUd/Qk5uVQ2WMZS6OfmvmP3ZQ+Oo+2y1E+W8yaZTSVXVI2ztNxJJNkMSQX+uCv3+6FbX6W//R/1DhXD7XkXiPx2+6NgljEiKCw+7g1y4UlywX1m0JDlPSqphGyWTybD4m37Xy/cJwIDAQAB",
+            timeout,
+            user.getUsername(),
+            user.getRole()
+        );
         
         log.info("用户登录成功: id={}", user.getId());
         
         // 返回登录响应对象
-        return new LoginResponse(user.getId(), user.getUsername(), "user", token);
+        return new LoginResponse(user.getId(), user.getUsername(), user.getRole(), token);
     }
 
     /**

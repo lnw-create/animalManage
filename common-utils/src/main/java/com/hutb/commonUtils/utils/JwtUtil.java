@@ -6,6 +6,7 @@ import io.jsonwebtoken.security.Keys;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 public class JwtUtil {
@@ -32,5 +33,22 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
         return claims;
+    }
+    
+    /**
+     * 生成包含用户名和角色的JWT令牌
+     */
+    public static String createTokenWithRole(String secretKey, long timeout, String username, String role) {
+        HashMap<String, Object> claims = new HashMap<>();
+        claims.put("username", username);
+        claims.put("role", role);
+        claims.put("timestamp", System.currentTimeMillis());
+        
+        SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
+        return Jwts.builder()
+                .setClaims(claims)
+                .setExpiration(new Date(System.currentTimeMillis() + timeout))
+                .signWith(key)
+                .compact();
     }
 }
