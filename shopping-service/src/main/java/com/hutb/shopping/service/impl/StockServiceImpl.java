@@ -103,7 +103,6 @@ public class StockServiceImpl implements StockService {
      * @param stockDTO 库存信息
      */
     @Override
-    @Transactional
     public void updateStock(StockDTO stockDTO) {
         log.info("更新库存信息: {}", stockDTO);
 
