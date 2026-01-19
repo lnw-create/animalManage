@@ -5,9 +5,12 @@ import com.github.pagehelper.PageHelper;
 import com.hutb.commonUtils.exception.CommonException;
 import com.hutb.commonUtils.utils.UserContext;
 import com.hutb.shopping.constant.ShoppingConstant;
+import com.hutb.shopping.mapper.CategoryMapper;
+import com.hutb.shopping.model.pojo.Category;
 import com.hutb.shopping.model.pojo.PageInfo;
 import com.hutb.shopping.model.DTO.PageQueryListDTO;
 import com.hutb.shopping.model.pojo.Stock;
+import com.hutb.shopping.service.CategoryService;
 import com.hutb.shopping.utils.CommonValidate;
 import com.hutb.shopping.mapper.StockMapper;
 import com.hutb.shopping.model.DTO.StockDTO;
@@ -15,6 +18,7 @@ import com.hutb.shopping.service.StockService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -25,6 +29,9 @@ public class StockServiceImpl implements StockService {
 
     @Autowired
     private StockMapper stockMapper;
+
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     /**
      * 新增库存
@@ -41,6 +48,12 @@ public class StockServiceImpl implements StockService {
         Stock stock = stockMapper.queryStockByProductName(stockDTO.getProductName(), ShoppingConstant.STOCK_STATUS_DELETED);
         if (stock != null){
             throw new CommonException("库存已存在");
+        }
+
+        //4.查询商品分类信息是否存在
+        Category category = categoryMapper.queryCategoryById(stockDTO.getCategoryId(), ShoppingConstant.CATEGORY_STATUS_DELETED);
+        if (category == null){
+            throw new CommonException("商品分类信息不存在");
         }
 
         // 3. 设置默认值
@@ -90,6 +103,7 @@ public class StockServiceImpl implements StockService {
      * @param stockDTO 库存信息
      */
     @Override
+    @Transactional
     public void updateStock(StockDTO stockDTO) {
         log.info("更新库存信息: {}", stockDTO);
 
@@ -105,7 +119,16 @@ public class StockServiceImpl implements StockService {
             throw new CommonException("商品信息不存在");
         }
 
-        // 3. 更新库存
+        // 2. 判断是否修改关联分类信息
+        if (!stock.getCategoryId().equals(stockDTO.getCategoryId())){
+            //查询商品分类信息是否存在
+            Category category = categoryMapper.queryCategoryById(stockDTO.getCategoryId(), ShoppingConstant.CATEGORY_STATUS_DELETED);
+            if (category == null){
+                throw new CommonException("商品分类信息不存在");
+            }
+        }
+
+        // 4. 更新库存
         stockDTO.setUpdateTime(new Date());
         stockDTO.setUpdateUser(UserContext.getUsername());
         long updated = stockMapper.updateStock(stockDTO);

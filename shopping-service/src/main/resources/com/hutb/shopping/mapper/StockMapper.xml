@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hutb.shopping.mapper.StockMapper">
     <!-- 查询库存列表 -->
-    <select id="queryStockList" resultType="com.hutb.shopping.model.pojo.Stock">
+    <select id="queryCategoryListWithPage" resultType="com.hutb.shopping.model.pojo.Category">
         SELECT * FROM stock
         <where>
             status != -1
@@ -11,12 +11,6 @@
             </if>
             <if test="status != null and status != ''">
                 AND status = #{status}
-            </if>
-            <if test="minPrice != null and minPrice != ''">
-                AND price >= #{minPrice}
-            </if>
-            <if test="maxPrice != null and maxPrice != ''">
-                AND price &lt;= #{maxPrice}
             </if>
         </where>
     </select>

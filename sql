@@ -83,3 +83,15 @@ CREATE TABLE stock (
     update_user VARCHAR(50) COMMENT '更新人',
     status TINYINT DEFAULT 1 COMMENT '状态：1-正常，0-缺货，-1-删除，2-下架'
 ) COMMENT='库存表';
+
+CREATE TABLE category (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
+    name VARCHAR(100) NOT NULL UNIQUE COMMENT '分类名称',
+    description VARCHAR(500) COMMENT '分类描述',
+    sort INT DEFAULT 0 COMMENT '排序值',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    create_user VARCHAR(50) COMMENT '创建人',
+    update_user VARCHAR(50) COMMENT '更新人',
+    status VARCHAR(2) DEFAULT '1' COMMENT '状态：1-正常，0-禁用，-1-删除'
+) COMMENT='商品分类表';
