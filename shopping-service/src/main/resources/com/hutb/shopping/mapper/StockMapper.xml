@@ -12,6 +12,12 @@
             <if test="status != null and status != ''">
                 AND status = #{status}
             </if>
+            <if test="minPrice != null and minPrice != ''">
+                AND price >= #{minPrice}
+            </if>
+            <if test="maxPrice != null and maxPrice != ''">
+                AND price &lt;= #{maxPrice}
+            </if>
         </where>
     </select>
 </mapper>

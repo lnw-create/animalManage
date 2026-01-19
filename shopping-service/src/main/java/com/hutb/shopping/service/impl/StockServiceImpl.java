@@ -38,7 +38,7 @@ public class StockServiceImpl implements StockService {
         CommonValidate.validateStock(stockDTO);
 
         // 2. 判断库存是否已存在
-        Stock stock = stockMapper.queryStockById(stockDTO.getProductId(), ShoppingConstant.STOCK_STATUS_DELETED);
+        Stock stock = stockMapper.queryStockByProductName(stockDTO.getProductName(), ShoppingConstant.STOCK_STATUS_DELETED);
         if (stock != null){
             throw new CommonException("库存已存在");
         }
@@ -64,25 +64,25 @@ public class StockServiceImpl implements StockService {
      */
     @Override
     public void removeStock(Long id) {
-        log.info("删除库存:id-{}", id);
+        log.info("删除商品库存信息:id-{}", id);
 
         // 1. 参数校验
         if (id == null || id <= 0) {
-            throw new CommonException("删除库存id不能为空");
+            throw new CommonException("删除商品id不能为空");
         }
 
         // 2. 判断库存是否存在
         Stock stock = stockMapper.queryStockById(id, ShoppingConstant.STOCK_STATUS_DELETED);
         if (stock == null) {
-            throw new CommonException("库存不存在");
+            throw new CommonException("商品信息不存在");
         }
 
         // 3. 删除
         long removed = stockMapper.removeStock(id, ShoppingConstant.STOCK_STATUS_DELETED,UserContext.getUsername());
         if (removed == 0) {
-            throw new CommonException("删除库存失败");
+            throw new CommonException("删除商品库存信息失败");
         }
-        log.info("删除库存成功");
+        log.info("删除商品库存信息成功");
     }
 
     /**
@@ -100,7 +100,12 @@ public class StockServiceImpl implements StockService {
         }
         CommonValidate.validateStock(stockDTO);
 
-        // 2. 更新库存
+        Stock stock = stockMapper.queryStockById(id, ShoppingConstant.STOCK_STATUS_DELETED);
+        if (stock == null) {
+            throw new CommonException("商品信息不存在");
+        }
+
+        // 3. 更新库存
         stockDTO.setUpdateTime(new Date());
         stockDTO.setUpdateUser(UserContext.getUsername());
         long updated = stockMapper.updateStock(stockDTO);

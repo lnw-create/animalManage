@@ -67,3 +67,19 @@ CREATE TABLE activity (
                           create_user VARCHAR(255) COMMENT '创建人',
                           modified_user VARCHAR(255) COMMENT '修改人'
 ) COMMENT '活动表';
+
+
+CREATE TABLE stock (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
+    product_name VARCHAR(255) NOT NULL UNIQUE COMMENT '商品名称',
+    product_description TEXT COMMENT '商品描述',
+    price DECIMAL(10,2) COMMENT '商品积分价格',
+    image VARCHAR(500) COMMENT '商品图片',
+    quantity INT DEFAULT 0 COMMENT '库存数量',
+    category_id BIGINT COMMENT '商品分类ID',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    create_user VARCHAR(50) COMMENT '创建人',
+    update_user VARCHAR(50) COMMENT '更新人',
+    status TINYINT DEFAULT 1 COMMENT '状态：1-正常，0-缺货，-1-删除，2-下架'
+) COMMENT='库存表';

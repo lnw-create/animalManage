@@ -42,12 +42,20 @@ public interface StockMapper {
     int updateStock(StockDTO stockDTO);
 
     /**
-     * 根据ID查询库存
-     * @param id 库存ID
+     * 根据库存名称查询库存
+     * @param productName 库存名称
      * @param status 排除的状态值
      * @return 库存信息
      */
-    @Select("select * from stock where id = #{id} and status != #{status}")
+    @Select("select * from stock where product_name = #{productName} and status != #{status}")
+    Stock queryStockByProductName(String productName, String status);
+
+    /**
+     * 根据ID查询库存
+     * @param id 库存ID
+     * @return 库存信息
+     */
+    @Select("select * from stock where id = #{id}  and status != #{status}")
     Stock queryStockById(long id, String status);
 
     /**

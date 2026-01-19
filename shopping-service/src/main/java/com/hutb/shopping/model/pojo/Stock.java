@@ -12,14 +12,23 @@ public class Stock {
 
     private Long id;
 
-     //商品ID
-    private Long productId;
-
      //商品名称
     private String productName;
 
+    //商品描述
+    private String productDescription;
+
+    //商品积分价格
+    private Double price;
+
+    //商品图片
+    private String image;
+
     //库存数量
     private Integer quantity;
+
+    //商品分类ID
+    private Long categoryId;
 
     //创建时间
     private Date createTime;

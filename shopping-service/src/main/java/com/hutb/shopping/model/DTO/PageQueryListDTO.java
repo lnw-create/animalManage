@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 public class PageQueryListDTO {
     private String productName;
     private String status;
+    private Double minPrice;
+    private Double maxPrice;
     private Integer pageNum = 1;
     private Integer pageSize = 10;
 }
