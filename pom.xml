@@ -27,6 +27,7 @@
         <module>gateway</module>
         <module>volunteerActivity-service</module>
         <module>shopping-service</module>
+        <module>pet-service</module>
     </modules>
     <scm>
         <connection/>

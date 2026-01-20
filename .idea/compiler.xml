@@ -6,6 +6,7 @@
       <directory url="file://$PROJECT_DIR$/common-utils/src/main/resources/archetype-resources" includeSubdirectories="true" />
       <directory url="file://$PROJECT_DIR$/gateway/src/main/resources/archetype-resources" includeSubdirectories="true" />
       <directory url="file://$PROJECT_DIR$/volunteerActivity-service/src/main/resources/archetype-resources" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/pet-service/src/main/resources/archetype-resources" includeSubdirectories="true" />
     </excludeFromCompile>
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
@@ -16,6 +17,7 @@
         <module name="common-utils" />
         <module name="user-service" />
         <module name="shopping-service" />
+        <module name="pet-service" />
         <module name="gateway" />
         <module name="volunteerActivity-service" />
       </profile>
@@ -30,6 +32,7 @@
       <module name="animalManage" options="" />
       <module name="common-utils" options="-parameters" />
       <module name="gateway" options="-parameters" />
+      <module name="pet-service" options="-parameters" />
       <module name="shopping-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
       <module name="volunteerActivity-service" options="-parameters" />

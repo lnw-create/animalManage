@@ -10,7 +10,6 @@ import com.hutb.shopping.model.pojo.Category;
 import com.hutb.shopping.model.pojo.PageInfo;
 import com.hutb.shopping.model.DTO.PageQueryListDTO;
 import com.hutb.shopping.model.pojo.Stock;
-import com.hutb.shopping.service.CategoryService;
 import com.hutb.shopping.utils.CommonValidate;
 import com.hutb.shopping.mapper.StockMapper;
 import com.hutb.shopping.model.DTO.StockDTO;
@@ -18,7 +17,6 @@ import com.hutb.shopping.service.StockService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
