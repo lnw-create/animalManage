@@ -2,6 +2,8 @@ package com.hutb.pet.model.DTO;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
  * 宠物信息DTO
  */
@@ -45,4 +47,16 @@ public class PetDTO {
 
     //当前主人ID（领养人）
     private Long ownerId;
+
+    //创建时间
+    private LocalDateTime createTime;
+
+    //更新时间
+    private LocalDateTime updateTime;
+
+    //创建人
+    private String createUser;
+
+    //更新人
+    private String updateUser;
 }

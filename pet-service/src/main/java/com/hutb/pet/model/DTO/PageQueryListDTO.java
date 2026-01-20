@@ -1,18 +1,15 @@
 package com.hutb.pet.model.DTO;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
- * 分页查询参数
+ * 宠物查询DTO
  */
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
 public class PageQueryListDTO {
-    private String status;
+    private String name;
+    private String species;
+    private Integer adoptionStatus;
     private Integer pageNum = 1;
     private Integer pageSize = 10;
 }
-

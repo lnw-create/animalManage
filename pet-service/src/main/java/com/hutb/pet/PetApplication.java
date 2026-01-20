@@ -3,7 +3,7 @@ package com.hutb.pet;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages = {"com.hutb.shopping", "com.hutb.commonUtils"})
+@SpringBootApplication(scanBasePackages = {"com.hutb.pet", "com.hutb.commonUtils"})
 public class PetApplication {
 
     public static void main(String[] args) {

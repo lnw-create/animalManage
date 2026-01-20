@@ -22,13 +22,10 @@
         <module name="volunteerActivity-service" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="21">
-      <module name="am-common" target="17" />
-    </bytecodeTargetLevel>
+    <bytecodeTargetLevel target="17" />
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="am-common" options="-parameters" />
       <module name="animalManage" options="" />
       <module name="common-utils" options="-parameters" />
       <module name="gateway" options="-parameters" />

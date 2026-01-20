@@ -113,6 +113,10 @@ public class GlobalFilter implements org.springframework.cloud.gateway.filter.Gl
             if (path.contains("/shopping")) { // 管理志愿活动
                 return true;
             }
+            if (path.contains("/pet")) { // 管理宠物
+                return true;
+            }
+
         }
 
         // 普通用户权限：仅可管理自己的信息，可查看志愿者活动（只读）

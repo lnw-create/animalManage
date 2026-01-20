@@ -11,7 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class PageQueryListDTO {
+    // 商品名称
     private String productName;
+    // 分类名称
+    private String name;
     private String status;
     private Double minPrice;
     private Double maxPrice;
