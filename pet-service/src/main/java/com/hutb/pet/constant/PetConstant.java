@@ -11,9 +11,9 @@ public class PetConstant {
     public static final String ADOPTION_STATUS_ADOPTED = "2";     // 已领养
     
     // 领养申请状态常量
-    public static final String ADOPTION_APPLICATION_STATUS_PENDING = "PENDING";   // 待审批
-    public static final String ADOPTION_APPLICATION_STATUS_APPROVED = "APPROVED"; // 已批准
-    public static final String ADOPTION_APPLICATION_STATUS_REJECTED = "REJECTED"; // 已拒绝
+    public static final String ADOPTION_APPLICATION_STATUS_PENDING = "0";   // 待审批
+    public static final String ADOPTION_APPLICATION_STATUS_APPROVED = "1"; // 已批准
+    public static final String ADOPTION_APPLICATION_STATUS_REJECTED = "-1"; // 已拒绝
     
     // 绝育状态常量
     public static final String NEUTERED_NO = "0";    // 未绝育

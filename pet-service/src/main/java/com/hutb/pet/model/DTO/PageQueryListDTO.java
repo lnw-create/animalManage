@@ -9,7 +9,14 @@ import lombok.Data;
 public class PageQueryListDTO {
     private String name;
     private String species;
+    // 领养状态
     private Integer adoptionStatus;
+
+    // 领养申请状态
+    private String status;
+    private Long userId;
+    private Long petId;
+
     private Integer pageNum = 1;
     private Integer pageSize = 10;
 }

@@ -91,10 +91,10 @@ public class PetController {
     }
     
     /**
-     * 获取领养申请详情
+     * 获取单个领养申请信息(供管理员使用)
      */
-    @GetMapping("getAdoptionApplication/{id}")
-    public ResultInfo getAdoptionApplication(@PathVariable Long id) {
+    @GetMapping("getAdoptionApplication")
+    public ResultInfo getAdoptionApplication(@RequestParam Long id) {
         try {
             return ResultInfo.success(petService.getAdoptionApplicationById(id));
         } catch (CommonException e) {
@@ -105,10 +105,10 @@ public class PetController {
     }
 
     /**
-     * 获取宠物的所有申请记录
+     * 获取某个宠物的所有申请记录(供管理员使用)
      */
-    @GetMapping("getAdoptionApplicationsByPetId/{petId}")
-    public ResultInfo getAdoptionApplicationsByPetId(@PathVariable Long petId) {
+    @GetMapping("getAdoptionApplicationsByPetId")
+    public ResultInfo getAdoptionApplicationsByPetId(@RequestParam Long petId) {
         try {
             return ResultInfo.success(petService.getAdoptionApplicationsByPetId(petId));
         } catch (CommonException e) {

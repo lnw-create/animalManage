@@ -141,11 +141,10 @@ public class PetServiceImpl implements PetService {
     @Override
     public void adoptPet(AdoptPetRequestDTO adoptPetRequestDTO) {
         Long id = adoptPetRequestDTO.getPetId();
-        String username = UserContext.getUsername();
-        log.info("用户 {} 领养宠物: {}", username, id);
+        log.info("用户 {} 领养宠物: {}", UserContext.getUsername(), id);
         
         // 1. 验证宠物是否存在且可领养
-        Pet pet = petMapper.queryPetById(id, PetConstant.PET_STATUS_DELETED);
+        Pet pet = petMapper.queryPetById(id, PetConstant.ADOPTION_STATUS_ADOPTED);
         if (pet == null) {
             throw new CommonException("宠物信息不存在");
         }
@@ -164,15 +163,15 @@ public class PetServiceImpl implements PetService {
         AdoptionApplication application = new AdoptionApplication();
         application.setPetId(id);
         application.setUserId(UserContext.getUserId());
-        application.setApplicantName(username);
+        application.setApplicantName(UserContext.getUsername());
         application.setApplicantPhone(adoptPetRequestDTO.getApplicantPhone());
         application.setApplicantAddress(adoptPetRequestDTO.getApplicantAddress());
         application.setApplicationReason(adoptPetRequestDTO.getApplicationReason());
         application.setStatus(PetConstant.ADOPTION_APPLICATION_STATUS_PENDING); // 待审批
-        application.setCreateTime(java.time.LocalDateTime.now());
-        application.setUpdateTime(java.time.LocalDateTime.now());
-        application.setCreateUser(username);
-        application.setUpdateUser(username);
+        application.setCreateTime(LocalDateTime.now());
+        application.setUpdateTime(LocalDateTime.now());
+        application.setCreateUser(UserContext.getUsername());
+        application.setUpdateUser(UserContext.getUsername());
         
         int result = adoptionApplicationMapper.createAdoptionApplication(application);
         if (result == 0) {
@@ -180,11 +179,16 @@ public class PetServiceImpl implements PetService {
         }
         
         // 4. 更新宠物状态为"已申请"
-        petMapper.adoptPet(id, username, PetConstant.ADOPTION_STATUS_APPLIED);
+        petMapper.adoptPet(id, UserContext.getUsername(), PetConstant.ADOPTION_STATUS_APPLIED);
         
         log.info("领养申请提交成功，宠物ID: {}", id);
     }
-    
+
+    /**
+     * 查询领养申请详情
+     * @param id 领养申请id
+     * @return 领养申请详情
+     */
     @Override
     public AdoptionApplication getAdoptionApplicationById(Long id) {
         log.info("查询领养申请详情: {}", id);
@@ -193,6 +197,11 @@ public class PetServiceImpl implements PetService {
         return application;
     }
     
+    /**
+     * 查询宠物的所有申请记录
+     * @param petId 宠物id
+     * @return 宠物的所有申请记录
+     */
     @Override
     public List<AdoptionApplication> getAdoptionApplicationsByPetId(Long petId) {
         log.info("查询宠物的所有申请记录: {}", petId);
@@ -200,7 +209,12 @@ public class PetServiceImpl implements PetService {
         log.info("查询宠物申请记录成功，共{}条", applications.size());
         return applications;
     }
-    
+
+    /**
+     * 查询所有领养申请
+     * @param queryDTO 分页查询参数
+     * @return 领养申请列表
+     */
     @Override
     public PageInfo getAllAdoptionApplications(PageQueryListDTO queryDTO) {
         log.info("查询所有领养申请: {}", queryDTO);
@@ -213,6 +227,11 @@ public class PetServiceImpl implements PetService {
         return new PageInfo(pageInfo.getTotal(), pageInfo.getList());
     }
     
+    /**
+     * 审批领养申请
+     * @param applicationId 申请id
+     * @param approved 是否批准
+     */
     @Override
     public void approveAdoptionApplication(Long applicationId, Boolean approved) {
         log.info("审批领养申请: {}, 批准: {}", applicationId, approved);
