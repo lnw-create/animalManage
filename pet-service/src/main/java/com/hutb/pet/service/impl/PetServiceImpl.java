@@ -149,10 +149,6 @@ public class PetServiceImpl implements PetService {
             throw new CommonException("宠物信息不存在");
         }
         
-        if (!PetConstant.ADOPTION_STATUS_AVAILABLE.equals(pet.getAdoptionStatus())) {
-            throw new CommonException("该宠物目前不可领养");
-        }
-        
         // 2. 检查用户是否已对该宠物提交申请
         int existingCount = adoptionApplicationMapper.checkExistingApplication(id, UserContext.getUserId());
         if (existingCount > 0) {
