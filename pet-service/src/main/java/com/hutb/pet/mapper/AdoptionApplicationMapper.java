@@ -45,4 +45,10 @@ public interface AdoptionApplicationMapper {
      */
     @Select("SELECT COUNT(*) FROM adoption_application WHERE pet_id = #{petId} AND user_id = #{userId} AND status IN ('PENDING', 'APPROVED')")
     int checkExistingApplication(Long petId,Long userId);
+
+    /**
+     * 批量拒绝其他申请
+     */
+    @Update("UPDATE adoption_application SET status = #{status}, update_time = now(), update_user = #{updateUser} WHERE pet_id = #{petId} AND id != #{applicationId}")
+    int batchRejectOtherApplications(Long applicationId,String status,String updateUser);
 }
