@@ -247,7 +247,7 @@ public class PetServiceImpl implements PetService {
         if (approved) {
             //获取宠物id
             Long petId = adoptionApplicationMapper.getAdoptionApplicationById(applicationId).getPetId();
-            int i1 = adoptionApplicationMapper.batchRejectOtherApplications(petId,
+            int i1 = adoptionApplicationMapper.batchRejectOtherApplications(petId,applicationId,
                     PetConstant.ADOPTION_APPLICATION_STATUS_REJECTED,
                     UserContext.getUsername());
             if (i1 == 0) {

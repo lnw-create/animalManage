@@ -44,11 +44,11 @@ public interface AdoptionApplicationMapper {
      * 检查用户是否已对某宠物提交申请
      */
     @Select("SELECT COUNT(*) FROM adoption_application WHERE pet_id = #{petId} AND user_id = #{userId} AND status !=#{status}")
-    int checkExistingApplication(Long petId,Long userId, String status);
+    int checkExistingApplication(Long petId ,Long userId, String status);
 
     /**
      * 批量拒绝其他申请
      */
     @Update("UPDATE adoption_application SET status = #{status}, update_time = now(), update_user = #{updateUser} WHERE pet_id = #{petId} AND id != #{applicationId}")
-    int batchRejectOtherApplications(Long applicationId,String status,String updateUser);
+    int batchRejectOtherApplications(Long petId,Long applicationId,String status,String updateUser);
 }
