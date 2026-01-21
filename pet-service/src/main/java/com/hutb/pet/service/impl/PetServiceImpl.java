@@ -150,7 +150,7 @@ public class PetServiceImpl implements PetService {
         }
         
         // 2. 检查用户是否已对该宠物提交申请
-        int existingCount = adoptionApplicationMapper.checkExistingApplication(id, UserContext.getUserId());
+        int existingCount = adoptionApplicationMapper.checkExistingApplication(id, UserContext.getUserId(), PetConstant.ADOPTION_APPLICATION_STATUS_APPROVED);
         if (existingCount > 0) {
             throw new CommonException("您已对这只宠物提交了领养申请，请勿重复申请");
         }

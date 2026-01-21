@@ -43,8 +43,8 @@ public interface AdoptionApplicationMapper {
     /**
      * 检查用户是否已对某宠物提交申请
      */
-    @Select("SELECT COUNT(*) FROM adoption_application WHERE pet_id = #{petId} AND user_id = #{userId} AND status IN ('PENDING', 'APPROVED')")
-    int checkExistingApplication(Long petId,Long userId);
+    @Select("SELECT COUNT(*) FROM adoption_application WHERE pet_id = #{petId} AND user_id = #{userId} AND status !=#{status}")
+    int checkExistingApplication(Long petId,Long userId, String status);
 
     /**
      * 批量拒绝其他申请
