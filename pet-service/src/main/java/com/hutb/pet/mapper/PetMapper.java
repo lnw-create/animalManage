@@ -55,4 +55,12 @@ public interface PetMapper {
      * @return 宠物列表
      */
     List<Pet> queryPetList(PageQueryListDTO petQueryDTO);
+
+    /**
+     * 宠物 adoption
+     * @param id 宠物ID
+     * @param username 用户名
+     */
+    @Update("UPDATE pet SET adoption_status = #{adoptionStatus}, update_time = now(), update_user = #{username} WHERE id = #{id}")
+    void adoptPet(Long id, String username, String adoptionStatus);
 }

@@ -37,7 +37,7 @@ public class PetDTO {
     private String isVaccinated;
 
     //领养状态 (0-待领养, 1-已申请, 2-已领养)
-    private Integer adoptionStatus;
+    private String adoptionStatus;
 
     //宠物描述/背景故事
     private String description;

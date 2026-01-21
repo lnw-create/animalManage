@@ -73,4 +73,19 @@ public class PetController {
             return ResultInfo.fail("系统错误: " + e.getMessage());
         }
     }
+
+    /**
+     * 领养宠物
+     */
+    @PostMapping("adoptPet")
+    public ResultInfo adoptPet(@RequestParam Long id) {
+        try {
+            petService.adoptPet(id);
+            return ResultInfo.success();
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误: " + e.getMessage());
+        }
+    }
 }

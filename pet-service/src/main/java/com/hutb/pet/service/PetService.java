@@ -30,4 +30,10 @@ public interface PetService {
      * @return 宠物列表
      */
     PageInfo queryPetList(PageQueryListDTO petQueryDTO);
+
+    /**
+     *  adopted宠物
+     * @param id 宠物id
+     */
+    void adoptPet(Long id);
 }

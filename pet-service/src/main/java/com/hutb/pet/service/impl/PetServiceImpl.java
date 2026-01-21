@@ -126,4 +126,26 @@ public class PetServiceImpl implements PetService {
         log.info("查询宠物列表成功");
         return new PageInfo(pageInfo.getTotal(), pageInfo.getList());
     }
+
+    /**
+     * 领养宠物
+     * @param id 宠物id
+     */
+    @Override
+    public void adoptPet(Long id) {
+        log.info("领养宠物: {}", id);
+        Pet pet = petMapper.queryPetById(id, PetConstant.PET_STATUS_DELETED);
+        if (pet == null) {
+            throw new CommonException("宠物信息不存在");
+        }
+        //1. 更新宠物信息为已申请
+        petMapper.adoptPet(id, UserContext.getUsername(),PetConstant.ADOPTION_STATUS_APPLIED);
+
+        //2. todo 发送领养申请
+
+        // todo 判断领养申请是否成功
+
+        //3. 更新用户信息为已领养
+        petMapper.adoptPet(id, UserContext.getUsername(), PetConstant.ADOPTION_STATUS_ADOPTED);
+    }
 }

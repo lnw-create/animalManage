@@ -6,9 +6,9 @@ package com.hutb.pet.constant;
 public class PetConstant {
     
     // 领养状态常量
-    public static final Integer ADOPTION_STATUS_AVAILABLE = 0;   // 待领养
-    public static final Integer ADOPTION_STATUS_APPLIED = 1;     // 已申请
-    public static final Integer ADOPTION_STATUS_ADOPTED = 2;     // 已领养
+    public static final String ADOPTION_STATUS_AVAILABLE = "0";   // 待领养
+    public static final String ADOPTION_STATUS_APPLIED = "1";     // 已申请
+    public static final String ADOPTION_STATUS_ADOPTED = "2";     // 已领养
     
     // 绝育状态常量
     public static final String NEUTERED_NO = "0";    // 未绝育
