@@ -175,14 +175,15 @@ public class UserServiceImpl implements UserService {
         }
         
         // 5. 生成JWT token
-        // 使用新的JWT工具方法，包含角色信息
+        // 使用新的JWT工具方法，包含角色和用户ID信息
         long timeout = 24 * 60 * 60 * 1000; // 24小时
         
-        String token = com.hutb.commonUtils.utils.JwtUtil.createTokenWithRole(
+        String token = com.hutb.commonUtils.utils.JwtUtil.createTokenWithUserInfo(
             "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC8FgCz6/n59Z6VX5xtzvQ4aCU2oIqxERUd/Qk5uVQ2WMZS6OfmvmP3ZQ+Oo+2y1E+W8yaZTSVXVI2ztNxJJNkMSQX+uCv3+6FbX6W//R/1DhXD7XkXiPx2+6NgljEiKCw+7g1y4UlywX1m0JDlPSqphGyWTybD4m37Xy/cJwIDAQAB",
             timeout,
             user.getUsername(),
-            user.getRole()
+            user.getRole(),
+            user.getId()
         );
         
         log.info("用户登录成功: id={}", user.getId());

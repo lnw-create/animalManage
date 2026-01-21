@@ -51,4 +51,22 @@ public class JwtUtil {
                 .signWith(key)
                 .compact();
     }
+    
+    /**
+     * 生成包含用户名、角色和用户ID的JWT令牌
+     */
+    public static String createTokenWithUserInfo(String secretKey, long timeout, String username, String role, Long userId) {
+        HashMap<String, Object> claims = new HashMap<>();
+        claims.put("username", username);
+        claims.put("role", role);
+        claims.put("userId", userId);
+        claims.put("timestamp", System.currentTimeMillis());
+        
+        SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
+        return Jwts.builder()
+                .setClaims(claims)
+                .setExpiration(new Date(System.currentTimeMillis() + timeout))
+                .signWith(key)
+                .compact();
+    }
 }

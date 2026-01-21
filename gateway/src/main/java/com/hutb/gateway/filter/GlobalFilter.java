@@ -64,6 +64,7 @@ public class GlobalFilter implements org.springframework.cloud.gateway.filter.Gl
         
         String username = claims.get("username").toString();
         String role = claims.get("role").toString();
+        Long userId = ((Number) claims.get("userId")).longValue();
         
         //6. 权限校验
         if (!hasPermission(path, role)) {
@@ -74,7 +75,7 @@ public class GlobalFilter implements org.springframework.cloud.gateway.filter.Gl
 
         //7. 修改发送给微服务的请求头，加入用户信息
         ServerWebExchange modifiedExchange = exchange.mutate()
-                .request(builder -> builder.header("username", username).header("role", role))
+                .request(builder -> builder.header("username", username).header("userId", String.valueOf(userId)).header("role", role))
                 .build();
 
         //8. 放行，调用下一个过滤器
