@@ -47,7 +47,7 @@ public class CommonValidate {
         if (petDTO.getIsVaccinated() != null && !("0".equals(petDTO.getIsVaccinated()) || "1".equals(petDTO.getIsVaccinated()))) {
             throw new CommonException("疫苗状态不能为空");
         }
-        if (petDTO.getAdoptionStatus() != null && (petDTO.getAdoptionStatus() < 0 || petDTO.getAdoptionStatus() > 2)) {
+        if (petDTO.getAdoptionStatus() != null && (Integer.parseInt(petDTO.getAdoptionStatus()) < 0 || Integer.parseInt(petDTO.getAdoptionStatus()) > 2)) {
             throw new CommonException("领养状态不能为空");
         }
         if (petDTO.getOwnerId() != null && petDTO.getOwnerId() <= 0) {

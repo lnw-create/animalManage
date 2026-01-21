@@ -95,3 +95,21 @@ CREATE TABLE category (
     update_user VARCHAR(50) COMMENT '更新人',
     status VARCHAR(2) DEFAULT '1' COMMENT '状态：1-正常，0-禁用，-1-删除'
 ) COMMENT='商品分类表';
+
+CREATE TABLE adoption_application (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申请ID',
+    pet_id BIGINT NOT NULL COMMENT '宠物ID',
+    user_id BIGINT NOT NULL COMMENT '申请人ID',
+    status VARCHAR(20) DEFAULT 'PENDING' COMMENT '申请状态: PENDING(待审批), APPROVED(已批准), REJECTED(已拒绝)',
+    applicant_name VARCHAR(100) COMMENT '申请人姓名',
+    applicant_phone VARCHAR(20) COMMENT '申请人电话',
+    applicant_address TEXT COMMENT '申请人地址',
+    application_reason TEXT COMMENT '申请理由',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    create_user VARCHAR(50) COMMENT '创建人',
+    update_user VARCHAR(50) COMMENT '更新人',
+    INDEX idx_pet_id (pet_id),
+    INDEX idx_user_id (user_id),
+    INDEX idx_status (status)
+) COMMENT='领养申请表';

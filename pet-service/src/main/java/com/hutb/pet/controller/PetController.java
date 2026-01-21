@@ -5,6 +5,7 @@ import com.hutb.pet.model.DTO.PetDTO;
 import com.hutb.pet.model.DTO.PageQueryListDTO;
 import com.hutb.pet.model.pojo.ResultInfo;
 import com.hutb.pet.service.PetService;
+import com.hutb.pet.model.DTO.AdoptPetRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,12 +76,71 @@ public class PetController {
     }
 
     /**
-     * 领养宠物
+     * 领养宠物（提交领养申请）
      */
     @PostMapping("adoptPet")
-    public ResultInfo adoptPet(@RequestParam Long id) {
+    public ResultInfo adoptPet(@RequestBody AdoptPetRequestDTO adoptPetRequestDTO) {
         try {
-            petService.adoptPet(id);
+            petService.adoptPet(adoptPetRequestDTO);
+            return ResultInfo.success();
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * 获取领养申请详情
+     */
+    @GetMapping("getAdoptionApplication/{id}")
+    public ResultInfo getAdoptionApplication(@PathVariable Long id) {
+        try {
+            return ResultInfo.success(petService.getAdoptionApplicationById(id));
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 获取宠物的所有申请记录
+     */
+    @GetMapping("getAdoptionApplicationsByPetId/{petId}")
+    public ResultInfo getAdoptionApplicationsByPetId(@PathVariable Long petId) {
+        try {
+            return ResultInfo.success(petService.getAdoptionApplicationsByPetId(petId));
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 获取所有领养申请（供管理员使用）
+     */
+    @PostMapping("getAllAdoptionApplications")
+    public ResultInfo getAllAdoptionApplications(@RequestBody PageQueryListDTO queryDTO) {
+        try {
+            return ResultInfo.success(petService.getAllAdoptionApplications(queryDTO));
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 审批领养申请
+     */
+    @PostMapping("approveAdoptionApplication")
+    public ResultInfo approveAdoptionApplication(
+            @RequestParam Long applicationId, 
+            @RequestParam Boolean approved) {
+        try {
+            petService.approveAdoptionApplication(applicationId, approved);
             return ResultInfo.success();
         } catch (CommonException e) {
             return ResultInfo.fail(e.getMessage());

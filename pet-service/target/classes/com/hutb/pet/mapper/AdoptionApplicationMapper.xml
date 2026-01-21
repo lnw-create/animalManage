@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hutb.pet.mapper.AdoptionApplicationMapper">
+    
+    <!-- 获取所有领养申请（分页） -->
+    <select id="getAllAdoptionApplications" resultType="com.hutb.pet.model.pojo.AdoptionApplication">
+        SELECT * FROM adoption_application
+        <where>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+            <if test="petId != null">
+                AND pet_id = #{petId}
+            </if>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+    
+</mapper>

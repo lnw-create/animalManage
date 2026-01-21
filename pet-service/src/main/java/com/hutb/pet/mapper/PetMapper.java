@@ -63,4 +63,14 @@ public interface PetMapper {
      */
     @Update("UPDATE pet SET adoption_status = #{adoptionStatus}, update_time = now(), update_user = #{username} WHERE id = #{id}")
     void adoptPet(Long id, String username, String adoptionStatus);
+    
+    /**
+     * 更新宠物领养人及状态
+     * @param id 宠物ID
+     * @param ownerId 领养人ID
+     * @param adoptionStatus 领养状态
+     * @param username 操作用户名
+     */
+    @Update("UPDATE pet SET owner_id = #{ownerId}, adoption_status = #{adoptionStatus}, update_time = now(), update_user = #{username} WHERE id = #{id}")
+    void updatePetOwner(@Param("id") Long id, @Param("ownerId") Long ownerId, @Param("adoptionStatus") String adoptionStatus, @Param("username") String username);
 }
