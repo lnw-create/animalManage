@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hutb.shopping.mapper.OrderMapper">
+    <select id="queryOrderList" resultType="com.hutb.shopping.model.pojo.Order">
+        SELECT * FROM orders
+        <where>
+            <if test="query.id != null">
+                AND id = #{query.id}
+            </if>
+            <if test="query.userId != null">
+                AND user_id = #{query.userId}
+            </if>
+            <if test="query.status != null and query.status != ''">
+                AND status = #{query.status}
+            </if>
+            <if test="query.startTime != null">
+                AND create_time >= #{query.startTime}
+            </if>
+            <if test="query.endTime != null">
+                AND create_time &lt;= #{query.endTime}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="querySalesTop10" resultType="com.hutb.shopping.model.DTO.sales.SalesTop10DTO">
+        SELECT product_id,product_name,COUNT(*) AS sales_quantity
+        FROM orders
+        <where>
+            <if test="startTime != null and startTime != ''">
+                AND create_time >= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND create_time &lt;= #{endTime}
+            </if>
+            AND status = 'delivered'
+        </where>
+        GROUP BY product_id, product_name
+        ORDER BY sales_quantity DESC
+        LIMIT 10
+    </select>
+</mapper>

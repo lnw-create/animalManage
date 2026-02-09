@@ -4,6 +4,8 @@ import com.hutb.commonUtils.exception.CommonException;
 import com.hutb.commonUtils.utils.CommonUtils;
 import com.hutb.shopping.model.DTO.CategoryDTO;
 import com.hutb.shopping.model.DTO.StockDTO;
+import com.hutb.shopping.model.DTO.order.OrderCreateDTO;
+import com.hutb.shopping.model.DTO.order.OrderUpdateDTO;
 
 public class CommonValidate {
     
@@ -51,6 +53,35 @@ public class CommonValidate {
         }
         if (categoryDTO.getSort() != null && categoryDTO.getSort() < 0) {
             throw new CommonException("排序值不能为负数");
+        }
+    }
+
+    /**
+     * 验证订单信息
+     * @param orderCreateDTO 订单信息
+     */
+    public static void validateOrder(OrderCreateDTO orderCreateDTO) {
+        if (orderCreateDTO == null) {
+            throw new CommonException("订单信息不能为空");
+        }
+        if (orderCreateDTO.getUserId() == null || orderCreateDTO.getUserId() <= 0) {
+            throw new CommonException("用户ID不能为空");
+        }
+        if (CommonUtils.stringIsBlank(orderCreateDTO.getShippingAddress())) {
+            throw new CommonException("收货地址不能为空");
+        }
+    }
+
+    /**
+     * 验证订单更新信息
+     * @param orderUpdateDTO 订单信息
+     */
+    public static void validateOrderUpdate(OrderUpdateDTO orderUpdateDTO) {
+        if (orderUpdateDTO == null) {
+            throw new CommonException("订单信息不能为空");
+        }
+        if (orderUpdateDTO.getId() == null || orderUpdateDTO.getId() <= 0) {
+            throw new CommonException("订单ID不能为空");
         }
     }
 }

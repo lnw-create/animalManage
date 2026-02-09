@@ -28,6 +28,7 @@
         <module>volunteerActivity-service</module>
         <module>shopping-service</module>
         <module>pet-service</module>
+        <module>shopping-service</module>
     </modules>
     <scm>
         <connection/>

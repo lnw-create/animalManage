@@ -1,6 +1,0 @@
-com\hutb\commonUtils\utils\UserContext.class
-com\hutb\commonUtils\utils\CommonUtils.class
-com\hutb\commonUtils\utils\Intercept.class
-com\hutb\commonUtils\utils\JwtUtil.class
-com\hutb\commonUtils\utils\WebMvcConfig.class
-com\hutb\commonUtils\exception\CommonException.class
