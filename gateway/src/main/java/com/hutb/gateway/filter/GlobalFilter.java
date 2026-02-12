@@ -140,6 +140,11 @@ public class GlobalFilter implements org.springframework.cloud.gateway.filter.Gl
             }
         }
 
+        //ai
+        if (path.contains("/ai")) {
+            return true;
+        }
+
         // 默认情况下，只有匹配以上规则的请求才能通过
         return false;
     }

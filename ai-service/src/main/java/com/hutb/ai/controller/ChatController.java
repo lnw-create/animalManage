@@ -1,4 +1,4 @@
-package com.hutb.user.controller;
+package com.hutb.ai.controller;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ public class ChatController {
      * @param prompt
      * @return
      */
-    @GetMapping("/chat")
+    @PostMapping("/chat")
     public String chat(@RequestParam String prompt) {
         return chatClient.prompt()
                 .user(prompt)
@@ -32,7 +32,7 @@ public class ChatController {
      * @param image
      * @return
      */
-    @GetMapping("/chat-with-image")
+    @PostMapping("/chat-with-image")
     public String chatWithImage(@RequestParam String prompt,
                                 @RequestParam String image) {
         try {
