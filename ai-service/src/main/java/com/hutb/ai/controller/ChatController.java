@@ -1,7 +1,9 @@
 package com.hutb.ai.controller;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 
 @RestController
 @RequestMapping("/ai")
@@ -19,10 +21,13 @@ public class ChatController {
      * @return
      */
     @PostMapping("/chat")
-    public String chat(@RequestParam String prompt) {
+    public Flux<String> chat(@RequestParam String prompt,@RequestParam String sessionId) {
         return chatClient.prompt()
                 .user(prompt)
-                .call()
+                .advisors(
+                        a -> a.param(ChatMemory.CONVERSATION_ID, sessionId)
+                )
+                .stream()
                 .content();
     }
 
