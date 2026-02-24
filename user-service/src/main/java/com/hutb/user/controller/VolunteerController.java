@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
  * 志愿者管理控制器
  */
 @RestController
-@RequestMapping("/volunteer")
+@RequestMapping("userService/volunteer")
 public class VolunteerController {
 
     @Autowired

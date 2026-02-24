@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("admin")
+@RequestMapping("userService/admin")
 public class EmployeeController {
 
     @Autowired
