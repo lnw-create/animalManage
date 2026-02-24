@@ -98,7 +98,7 @@ public class GlobalFilter implements org.springframework.cloud.gateway.filter.Gl
             if (path.contains("/normalAdmin")) {
                 return true;
             }
-            if (path.contains("/user")) {
+            if (path.contains("/user/")) {
                 return true;
             }
             if (path.contains("/volunteer")) {

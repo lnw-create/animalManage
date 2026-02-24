@@ -34,7 +34,7 @@ public interface EmployeeMapper {
      * @param id 员工id
      * @return 员工信息
      */
-    @Select("select * from admin where id = #{id} and status = '1' ")
+    @Select("select * from admin where id = #{id} and status != '-1' ")
     Admin queryAdminById(Long id);
 
     /**
@@ -51,7 +51,7 @@ public interface EmployeeMapper {
      * @param adminDTO 员工信息
      */
     @Update("update admin set username = #{username}, password = #{password}, real_name = #{realName}, " +
-            "phone = #{phone}, update_user = #{updateUser}, status = #{status}, update_time = #{updateTime} where id = #{id}")
+            "phone = #{phone}, update_user = #{updateUser}, status = #{status}, gender = #{gender}, id_card = #{idCard}, update_time = #{updateTime} where id = #{id}")
     long updateAdmin(AdminDTO adminDTO);
 
     /**
@@ -59,14 +59,14 @@ public interface EmployeeMapper {
      * @param queryAdminListDTO 筛选条件
      * @return 员工列表
      */
-    List<User> queryAdminList(PageQueryListDTO queryAdminListDTO);
+    List<Admin> queryAdminList(PageQueryListDTO queryAdminListDTO);
 
     /**
      * 根据用户名查询员工信息
      * @param username 用户名
      * @return 员工信息
      */
-    @Select("select * from admin where username = #{username} and status = '1' ")
+    @Select("select * from admin where username = #{username} and status != '-1' ")
     Admin queryAdminByUsername(String username);
 
     /**
@@ -75,5 +75,5 @@ public interface EmployeeMapper {
      * @return 员工信息
      */
     @Select("select * from admin where phone = #{phone} and status = '1' ")
-    User queryAdminByPhone(String phone);
+    Admin queryAdminByPhone(String phone);
 }

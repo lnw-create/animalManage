@@ -122,8 +122,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         log.info("查询员工列表:{}",queryAdminListDTO);
         //分页查询
         Page<Object> page = PageHelper.startPage(queryAdminListDTO.getPageNum(), queryAdminListDTO.getPageSize());
-        List<User> users = employeeMapper.queryAdminList(queryAdminListDTO);
-        com.github.pagehelper.PageInfo<User> pageInfo = new com.github.pagehelper.PageInfo<>(users);
+        List<Admin> admins = employeeMapper.queryAdminList(queryAdminListDTO);
+        com.github.pagehelper.PageInfo<Admin> pageInfo = new com.github.pagehelper.PageInfo<>(admins);
         log.info("查询员工列表成功");
         return new PageInfo(pageInfo.getTotal(), pageInfo.getList());
     }
@@ -185,7 +185,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     private void queryEmployeeByUsernameAndPhone(AdminDTO admin){
         Admin adminA = employeeMapper.queryAdminByUsername(admin.getUsername());
-        User adminB = employeeMapper.queryAdminByPhone(admin.getPhone());
+        Admin adminB = employeeMapper.queryAdminByPhone(admin.getPhone());
         if (adminA != null && !adminA.getId().equals(admin.getId())){
             throw new CommonException("用户名已存在");
         }

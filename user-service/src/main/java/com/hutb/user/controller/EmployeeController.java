@@ -80,7 +80,7 @@ public class EmployeeController {
     /**
      * 查询员工列表
      */
-    @GetMapping("normalAdmin/queryEmployeeList")
+    @PostMapping("normalAdmin/queryEmployeeList")
     public ResultInfo queryEmployeeList(@RequestBody PageQueryListDTO pageQueryListDTO){
         try {
             return ResultInfo.success(employeeService.queryEmployeeList(pageQueryListDTO));

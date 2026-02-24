@@ -94,7 +94,7 @@ public class UserController {
     /**
      * 查询用户列表
      */
-    @GetMapping("allUser/queryUserList")
+    @PostMapping("allUser/queryUserList")
     public ResultInfo queryUserList(@RequestBody PageQueryListDTO pageQueryListDTO){
         try {
             return ResultInfo.success(userService.queryUserList(pageQueryListDTO));

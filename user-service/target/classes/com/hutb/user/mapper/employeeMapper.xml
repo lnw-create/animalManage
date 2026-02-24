@@ -6,6 +6,7 @@
     <select id="queryAdminList" resultType="com.hutb.user.model.pojo.Admin">
         select * from admin
         <where>
+            status != '-1'
             <if test="username != null and username != ''">
                 and username like CONCAT('%', #{username}, '%')
             </if>
