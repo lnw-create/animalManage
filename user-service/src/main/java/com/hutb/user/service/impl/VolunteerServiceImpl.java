@@ -60,6 +60,8 @@ public class VolunteerServiceImpl implements VolunteerService {
         volunteerDTO.setUsername(user.getUsername());
         volunteerDTO.setRealName(user.getRealName());
         volunteerDTO.setRole(user.getRole());
+        volunteerDTO.setGender(user.getGender());
+        volunteerDTO.setIdCard(user.getIdCard());
 
         // 3. 新增
         volunteerDTO.setCreateTime(new Date());

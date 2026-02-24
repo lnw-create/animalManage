@@ -17,6 +17,8 @@ public class CommonValidate {
         String password = adminDTO.getPassword();
         String realName = adminDTO.getRealName();
         String phone = adminDTO.getPhone();
+        String gender = adminDTO.getGender();
+        String idCard = adminDTO.getIdCard();
 
         if (CommonUtils.stringIsBlank(username)){
             throw new RuntimeException("用户名不能为空");
@@ -29,6 +31,12 @@ public class CommonValidate {
         }
         if (CommonUtils.stringIsBlank(phone)){
             throw new RuntimeException("手机号不能为空");
+        }
+        if (CommonUtils.stringIsBlank(gender)){
+            throw new RuntimeException("性别不能为空");
+        }
+        if (CommonUtils.stringIsBlank(idCard)){
+            throw new RuntimeException("身份证号不能为空");
         }
     }
 

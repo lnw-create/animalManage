@@ -24,7 +24,7 @@ public class OrderController {
     /**
      * 创建订单
      */
-    @PostMapping("createOrder")
+    @PostMapping("normalVolunteer/createOrder")
     public ResultInfo createOrder(@RequestBody OrderCreateDTO orderCreateDTO) {
         try {
             orderService.addOrder(orderCreateDTO);
@@ -39,7 +39,7 @@ public class OrderController {
     /**
      * 获取订单详情
      */
-    @GetMapping("/getOrder")
+    @GetMapping("normalVolunteer/getOrder")
     public ResultInfo getOrder(@RequestParam Long id) {
         try {
             Order order = orderService.queryOrderById(id);
@@ -54,7 +54,7 @@ public class OrderController {
     /**
      * 更新订单
      */
-    @PostMapping("/updateOrder")
+    @PostMapping("normalVolunteer/updateOrder")
     public ResultInfo updateOrder(@RequestBody OrderUpdateDTO orderUpdateDTO) {
         try {
             orderService.updateOrder(orderUpdateDTO);
@@ -69,7 +69,7 @@ public class OrderController {
     /**
      * 删除订单
      */
-    @PostMapping("/deleteOrder")
+    @PostMapping("normalVolunteer/deleteOrder")
     public ResultInfo deleteOrder(@RequestParam Long id) {
         try {
             orderService.removeOrder(id);
@@ -84,7 +84,7 @@ public class OrderController {
     /**
      * 查询订单列表
      */
-    @GetMapping("/list")
+    @GetMapping("normalVolunteer/list")
     public ResultInfo getOrderList(OrderQueryDTO orderQueryDTO) {
         try {
             PageInfo pageInfo = orderService.queryOrderList(orderQueryDTO);

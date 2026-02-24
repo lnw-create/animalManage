@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("admin/user")
+@RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -19,7 +19,7 @@ public class UserController {
     /**
      * 用户登录
      */
-    @PostMapping("login")
+    @PostMapping("normalUser/login")
     public ResultInfo login(@RequestBody LoginRequest loginRequest) {
         try {
             LoginResponse loginResponse = userService.login(loginRequest.getUsername(), loginRequest.getPassword());
@@ -34,7 +34,7 @@ public class UserController {
     /**
      * 用户注册
      */
-    @PostMapping("/register")
+    @PostMapping("normalUser/register")
     public ResultInfo register(@RequestBody UserDTO userDTO) {
         try {
             userService.registerUser(userDTO);
@@ -49,7 +49,7 @@ public class UserController {
     /**
      * 新增用户
      */
-    @PostMapping("addUser")
+    @PostMapping("normalUser/addUser")
     public ResultInfo addUser(@RequestBody UserDTO userDTO) {
         try {
             userService.addUser(userDTO);
@@ -64,7 +64,7 @@ public class UserController {
     /**
      * 删除用户
      */
-    @PostMapping("removeUser")
+    @PostMapping("normalUser/removeUser")
     public ResultInfo removeUser(@RequestParam Long id){
         try {
             userService.removeUser(id);
@@ -79,7 +79,7 @@ public class UserController {
     /**
      * 更新用户
      */
-    @PostMapping("editUser")
+    @PostMapping("normalUser/editUser")
     public ResultInfo updateUser(@RequestBody UserDTO userDTO) {
         try {
             userService.updateUser(userDTO);
@@ -94,7 +94,7 @@ public class UserController {
     /**
      * 查询用户列表
      */
-    @GetMapping("queryUserList")
+    @GetMapping("allUser/queryUserList")
     public ResultInfo queryUserList(@RequestBody PageQueryListDTO pageQueryListDTO){
         try {
             return ResultInfo.success(userService.queryUserList(pageQueryListDTO));

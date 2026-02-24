@@ -64,7 +64,7 @@ public class PetController {
     /**
      * 查询宠物列表
      */
-    @GetMapping("queryPetList")
+    @GetMapping("allUser/queryPetList")
     public ResultInfo queryPetList(@RequestBody PageQueryListDTO petQueryDTO) {
         try {
             return ResultInfo.success(petService.queryPetList(petQueryDTO));
@@ -78,7 +78,7 @@ public class PetController {
     /**
      * 领养宠物（提交领养申请）
      */
-    @PostMapping("adoptPet")
+    @PostMapping("allUser/adoptPet")
     public ResultInfo adoptPet(@RequestBody AdoptPetRequestDTO adoptPetRequestDTO) {
         try {
             petService.adoptPet(adoptPetRequestDTO);

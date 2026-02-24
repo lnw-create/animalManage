@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
  * 志愿者管理控制器
  */
 @RestController
-@RequestMapping("admin/volunteer")
+@RequestMapping("/volunteer")
 public class VolunteerController {
 
     @Autowired
@@ -21,7 +21,7 @@ public class VolunteerController {
     /**
      * 新增志愿者
      */
-    @PostMapping("addVolunteer")
+    @PostMapping("normalVolunteer/addVolunteer")
     public ResultInfo addVolunteer(@RequestBody VolunteerDTO volunteerDTO) {
         try {
             volunteerService.addVolunteer(volunteerDTO);
@@ -36,7 +36,7 @@ public class VolunteerController {
     /**
      * 删除志愿者
      */
-    @PostMapping("removeVolunteer")
+    @PostMapping("normalVolunteer/removeVolunteer")
     public ResultInfo removeVolunteer(@RequestParam Long id) {
         try {
             volunteerService.removeVolunteer(id);
@@ -51,7 +51,7 @@ public class VolunteerController {
     /**
      * 更新志愿者
      */
-    @PostMapping("editVolunteer")
+    @PostMapping("normalVolunteer/editVolunteer")
     public ResultInfo updateVolunteer(@RequestBody VolunteerDTO volunteerDTO) {
         try {
             volunteerService.updateVolunteer(volunteerDTO);
@@ -66,7 +66,7 @@ public class VolunteerController {
     /**
      * 查询志愿者列表
      */
-    @GetMapping("queryVolunteerList")
+    @GetMapping("normalVolunteer/queryVolunteerList")
     public ResultInfo queryVolunteerList(@RequestBody PageQueryListDTO pageQueryListDTO) {
         try {
             return ResultInfo.success(volunteerService.queryVolunteerList(pageQueryListDTO));

@@ -20,6 +20,8 @@ public class AdminDTO {
     // 1-超级管理员 0-普通管理员
     private String role;
     private String phone;
+    private String idCard;
+    private String gender;
     // 1-正常 0-禁用 -1-删除
     private String status = "1";
     private Date createTime;

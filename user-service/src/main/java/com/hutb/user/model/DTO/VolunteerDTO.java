@@ -16,9 +16,6 @@ import java.util.Date;
 public class VolunteerDTO extends User{
     private Long userId;
 
-    //身份证号
-    private String idCard;
-
     //现居地址
     private String address;
 
@@ -28,6 +25,10 @@ public class VolunteerDTO extends User{
 
     //参与活动次数
     private Integer activityCount = 0;
+
+    //积分
+    private Integer activityPoint = 0;
+
     private Date createTime;
     private Date updateTime;
     private String createUser;

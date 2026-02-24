@@ -98,6 +98,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         //3.查询更新的用户信息是否存在
         queryEmployeeByUsernameAndPhone(adminDTO);
 
+        //判断是否是本人更新
+        if (!id.equals(admin.getId())){
+            throw new CommonException("无权限更新其他员工信息");
+        }
+
         //4.更新用户
         adminDTO.setUpdateUser(UserContext.getUsername());
         adminDTO.setUpdateTime(new Date());

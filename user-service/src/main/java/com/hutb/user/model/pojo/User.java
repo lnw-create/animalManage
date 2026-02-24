@@ -17,9 +17,11 @@ public class User {
     private String username;
     private String password;
     private String realName;
+    private String gender;
     //normal_user-普通用户 volunteer-志愿者
     private String role;
     private String phone;
+    private String idCard;
     // 1-正常 0-禁用 -1-删除
     private String status = "1";
     private Date createTime;

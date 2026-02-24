@@ -13,8 +13,8 @@ public interface UserMapper {
      * 新增用户
      * @param userDTO 用户信息
      */
-    @Insert("insert into user(username,password,real_name,phone,status,create_time,update_time,create_user,update_user,role) " +
-            "values(#{username},#{password},#{realName},#{phone},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser},#{role})")
+    @Insert("insert into user(username,password,real_name,phone,status,create_time,update_time,create_user,update_user,role,gender,id_card) " +
+            "values(#{username},#{password},#{realName},#{phone},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser},#{role},#{gender},#{idCard})")
     void addUser(UserDTO userDTO);
 
     /**
@@ -38,7 +38,8 @@ public interface UserMapper {
      * @param userDTO 用户信息
      */
     @Update("update user set username = #{username}, password = #{password}, real_name = #{realName}, " +
-            "phone = #{phone}, update_user = #{updateUser}, update_time = #{updateTime} where id = #{id}")
+            "phone = #{phone}, update_user = #{updateUser}, update_time = #{updateTime}, gender = #{gender}, id_card = #{idCard}" +
+            " where id = #{id}")
     long updateUser(UserDTO userDTO);
 
     /**

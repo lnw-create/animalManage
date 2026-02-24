@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("admin/employee")
+@RequestMapping("admin")
 public class EmployeeController {
 
     @Autowired
@@ -20,7 +20,7 @@ public class EmployeeController {
     /**
      * 员工登录
      */
-    @PostMapping("login")
+    @PostMapping("normalAdmin/login")
     public ResultInfo login(@RequestBody LoginRequest loginRequest){
         try {
             LoginResponse loginResponse = employeeService.login(loginRequest.getUsername(), loginRequest.getPassword());
@@ -35,7 +35,7 @@ public class EmployeeController {
     /**
      * 新增员工
      */
-    @PostMapping("addEmployee")
+    @PostMapping("superAdmin/addEmployee")
     public ResultInfo addEmployee(@RequestBody AdminDTO adminDTO){
         try {
             employeeService.addEmployee(adminDTO);
@@ -50,7 +50,7 @@ public class EmployeeController {
     /**
      * 删除员工
      */
-    @PostMapping("removeEmployee")
+    @PostMapping("superAdmin/removeEmployee")
     public ResultInfo removeEmployee(@RequestParam Long id){
         try {
             employeeService.removeEmployee(id);
@@ -65,7 +65,7 @@ public class EmployeeController {
     /**
      * 更新员工
      */
-    @PostMapping("editEmployee")
+    @PostMapping("normalAdmin/editEmployee")
     public ResultInfo updateEmployee(@RequestBody AdminDTO adminDTO){
         try {
             employeeService.updateEmployee(adminDTO);
@@ -80,7 +80,7 @@ public class EmployeeController {
     /**
      * 查询员工列表
      */
-    @GetMapping("queryEmployeeList")
+    @GetMapping("normalAdmin/queryEmployeeList")
     public ResultInfo queryEmployeeList(@RequestBody PageQueryListDTO pageQueryListDTO){
         try {
             return ResultInfo.success(employeeService.queryEmployeeList(pageQueryListDTO));

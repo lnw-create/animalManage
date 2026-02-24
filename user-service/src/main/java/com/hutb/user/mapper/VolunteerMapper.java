@@ -13,8 +13,8 @@ public interface VolunteerMapper {
      * 新增志愿者
      * @param volunteerDTO 志愿者信息
      */
-    @Insert("insert into volunteer(user_id,username,real_name,id_card,phone,address,total_hours,activity_count,status,create_time,update_time,create_user,update_user) " +
-            "values(#{userId},#{username},#{realName},#{idCard},#{phone},#{address},#{totalHours},#{activityCount},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser})")
+    @Insert("insert into volunteer(user_id,username,real_name,id_card,phone,address,total_hours,activity_count,status,create_time,update_time,create_user,update_user,gender,activity_point) " +
+            "values(#{userId},#{username},#{realName},#{idCard},#{phone},#{address},#{totalHours},#{activityCount},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser},#{gender},#{activityPoint})")
     void addVolunteer(VolunteerDTO volunteerDTO);
 
     /**

@@ -40,6 +40,9 @@ public class Volunteer {
     //参与活动次数
     private Integer activityCount = 0;
 
+    //活动积分
+    private Integer activityPoint = 0;
+
     private Date createTime;
     private Date updateTime;
     private String createUser;

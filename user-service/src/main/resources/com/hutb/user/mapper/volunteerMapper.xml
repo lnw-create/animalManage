@@ -27,6 +27,9 @@
             <if test="phone != null">
                 phone = #{phone},
             </if>
+            <if test="gender != null">
+                gender = #{gender},
+            </if>
             <if test="address != null">
                 address = #{address},
             </if>
@@ -35,6 +38,9 @@
             </if>
             <if test="activityCount != null">
                 activity_count = #{activityCount},
+            </if>
+            <if test="activityPoint != null">
+                activity_point = #{activityPoint},
             </if>
             <if test="status != null">
                 status = #{status},

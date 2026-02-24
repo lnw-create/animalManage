@@ -47,7 +47,7 @@ public class VolunteerActivityController {
     /**
      * 更新志愿活动
      */
-    @PostMapping("editActivity")
+    @PostMapping("normalVolunteer/editActivity")
     public ResultInfo updateActivity(@RequestBody VolunteerActivityDTO volunteerActivityDTO) {
         try {
             volunteerActivityService.updateVolunteerActivity(volunteerActivityDTO);
@@ -62,7 +62,7 @@ public class VolunteerActivityController {
     /**
      * 查询志愿活动列表
      */
-    @GetMapping("queryActivityList")
+    @GetMapping("allUser/queryActivityList")
     public ResultInfo queryActivityList(@RequestBody PageQueryListDTO pageQueryListDTO) {
         try {
             return ResultInfo.success(volunteerActivityService.queryVolunteerActivityList(pageQueryListDTO));

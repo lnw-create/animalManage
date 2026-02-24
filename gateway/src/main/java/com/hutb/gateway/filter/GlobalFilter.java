@@ -3,7 +3,6 @@ package com.hutb.gateway.filter;
 import com.hutb.gateway.utils.JwtUtil;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.core.Ordered;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
@@ -96,53 +95,47 @@ public class GlobalFilter implements org.springframework.cloud.gateway.filter.Gl
 
         // 普通管理员权限：可管理自己、普通用户及志愿者
         if (ROLE_NORMAL_ADMIN.equals(role)) {
-            if (path.contains("/admin/employee/editEmployee")) { // 管理自己的员工信息
+            if (path.contains("/normalAdmin")) {
                 return true;
             }
-            if (path.contains("/admin/employee/queryEmployeeList")) { // 可以查看员工列表
+            if (path.contains("/user")) {
                 return true;
             }
-            if (path.contains("/admin/user/")) { // 管理普通用户
+            if (path.contains("/volunteer")) {
                 return true;
             }
-            if (path.contains("/admin/volunteer/")) { // 管理志愿者
+            if (path.contains("/volunteerActivity")) {
                 return true;
             }
-            if (path.contains("/volunteerActivity")) { // 管理志愿活动
+            if (path.contains("/shopping")) {
                 return true;
             }
-            if (path.contains("/shopping")) { // 管理志愿活动
+            if (path.contains("/pet")) {
                 return true;
             }
-            if (path.contains("/pet")) { // 管理宠物
+            if (path.contains("/ai")) {
                 return true;
             }
-
         }
 
         // 普通用户权限：仅可管理自己的信息，可查看志愿者活动（只读）
         if (ROLE_NORMAL_USER.equals(role)) {
-            if (path.contains("/admin/user/editUser")) { // 编辑自己的用户信息
+            if (path.contains("/normalUser")) {
                 return true;
             }
-            if (path.contains("/volunteerActivity/queryActivityList")) { // 查看志愿活动列表（只读）
+            if (path.contains("/allUser")) {
                 return true;
             }
         }
 
         // 志愿者权限：可参与志愿活动服务以及商品服务
         if (ROLE_VOLUNTEER.equals(role)) {
-            if (path.contains("/admin/user/editUser")) { // 编辑自己的用户信息
+            if (path.contains("/normalVolunteer")) {
                 return true;
             }
-            if (path.contains("/volunteerActivity/queryActivityList")) { // 查看志愿活动列表（只读）
+            if (path.contains("/allUser")) {
                 return true;
             }
-        }
-
-        //ai
-        if (path.contains("/ai")) {
-            return true;
         }
 
         // 默认情况下，只有匹配以上规则的请求才能通过
