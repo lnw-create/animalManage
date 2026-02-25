@@ -48,10 +48,12 @@ public class StockServiceImpl implements StockService {
             throw new CommonException("库存已存在");
         }
 
-        //4.查询商品分类信息是否存在
-        Category category = categoryMapper.queryCategoryById(stockDTO.getCategoryId(), ShoppingConstant.CATEGORY_STATUS_DELETED);
-        if (category == null){
-            throw new CommonException("商品分类信息不存在");
+        if (stockDTO.getCategoryId() == null || stockDTO.getCategoryId() <= 0) {
+            //4.查询商品分类信息是否存在
+            Category category = categoryMapper.queryCategoryById(stockDTO.getCategoryId(), ShoppingConstant.CATEGORY_STATUS_DELETED);
+            if (category == null){
+                throw new CommonException("商品分类信息不存在");
+            }
         }
 
         // 3. 设置默认值
@@ -117,11 +119,13 @@ public class StockServiceImpl implements StockService {
         }
 
         // 2. 判断是否修改关联分类信息
-        if (!stock.getCategoryId().equals(stockDTO.getCategoryId())){
-            //查询商品分类信息是否存在
-            Category category = categoryMapper.queryCategoryById(stockDTO.getCategoryId(), ShoppingConstant.CATEGORY_STATUS_DELETED);
-            if (category == null){
-                throw new CommonException("商品分类信息不存在");
+        if (stockDTO.getCategoryId() != null){
+            if (!stock.getCategoryId().equals(stockDTO.getCategoryId())){
+                //查询商品分类信息是否存在
+                Category category = categoryMapper.queryCategoryById(stockDTO.getCategoryId(), ShoppingConstant.CATEGORY_STATUS_DELETED);
+                if (category == null){
+                    throw new CommonException("商品分类信息不存在");
+                }
             }
         }
 

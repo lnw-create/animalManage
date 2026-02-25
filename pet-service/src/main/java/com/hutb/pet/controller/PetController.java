@@ -64,7 +64,7 @@ public class PetController {
     /**
      * 查询宠物列表
      */
-    @GetMapping("allUser/queryPetList")
+    @PostMapping("allUser/queryPetList")
     public ResultInfo queryPetList(@RequestBody PageQueryListDTO petQueryDTO) {
         try {
             return ResultInfo.success(petService.queryPetList(petQueryDTO));

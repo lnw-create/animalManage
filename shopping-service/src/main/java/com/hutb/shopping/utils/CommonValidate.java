@@ -29,9 +29,6 @@ public class CommonValidate {
         if (stockDTO.getQuantity() == null || stockDTO.getQuantity() < 0) {
             throw new CommonException("库存数量不能为负数");
         }
-        if (stockDTO.getCategoryId() != null && stockDTO.getCategoryId() <= 0) {
-            throw new CommonException("商品分类ID不能为空");
-        }
     }
     
     /**

@@ -45,6 +45,7 @@ public class PetServiceImpl implements PetService {
         CommonValidate.validatePet(petDTO);
 
         // 2. 设置默认值
+        petDTO.setStatus(PetConstant.PET_STATUS_NORMAL);
         petDTO.setAdoptionStatus(PetConstant.ADOPTION_STATUS_AVAILABLE); // 默认状态为待领养
         petDTO.setOwnerId(null); // 新增时ownerId默认为null
         petDTO.setCreateTime(LocalDateTime.now());

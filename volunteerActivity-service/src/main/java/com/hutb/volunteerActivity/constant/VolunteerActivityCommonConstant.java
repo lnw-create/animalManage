@@ -13,6 +13,9 @@ public class VolunteerActivityCommonConstant {
     // 进行中
     public static final String ACTIVITY_STATUS_IN_PROGRESS = "2";
 
+    // 已结束
+    public static final String ACTIVITY_STATUS_ENDED = "3";
+
     // 已删除
     public static final String ACTIVITY_STATUS_DELETED = "-1";
 

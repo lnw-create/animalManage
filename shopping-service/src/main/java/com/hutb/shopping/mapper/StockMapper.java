@@ -18,8 +18,8 @@ public interface StockMapper {
      * @param stockDTO 库存信息
      * @return 影响行数
      */
-    @Insert("insert into stock (product_id, product_name, quantity, create_time, update_time, status , create_user , update_user ) " +
-            "VALUES (#{productId}, #{productName}, #{quantity}, #{createTime}, #{updateTime}, #{status}, #{createUser}, #{updateUser})")
+    @Insert("insert into stock (product_name, quantity, create_time, update_time, status , create_user , update_user , product_description ,image ,category_id ,price) " +
+            "VALUES (#{productName}, #{quantity}, #{createTime}, #{updateTime}, #{status}, #{createUser}, #{updateUser}, #{productDescription}, #{image}, #{categoryId}, #{price})")
     int addStock(StockDTO stockDTO);
 
     /**
@@ -37,7 +37,7 @@ public interface StockMapper {
      * @param stockDTO 库存信息
      * @return 影响行数
      */
-    @Update("UPDATE stock SET product_name = #{productName}, quantity = #{quantity}, " +
+    @Update("UPDATE stock SET product_name = #{productName}, quantity = #{quantity}, product_description = #{productDescription}, price = #{price}, image = #{image}, " +
             "update_time = now() WHERE id = #{id}")
     int updateStock(StockDTO stockDTO);
 

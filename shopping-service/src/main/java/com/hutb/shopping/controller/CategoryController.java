@@ -63,7 +63,7 @@ public class CategoryController {
     /**
      * 查询分类列表
      */
-    @GetMapping("allUser/queryCategoryList")
+    @PostMapping("allUser/queryCategoryList")
     public ResultInfo queryCategoryList(@RequestBody PageQueryListDTO pageQueryListDTO) {
         try {
             return ResultInfo.success(categoryService.queryCategoryList(pageQueryListDTO));

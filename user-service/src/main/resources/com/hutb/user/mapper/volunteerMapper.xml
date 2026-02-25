@@ -42,9 +42,6 @@
             <if test="activityPoint != null">
                 activity_point = #{activityPoint},
             </if>
-            <if test="status != null">
-                status = #{status},
-            </if>
             update_user = #{updateUser},
             update_time = now()
         </set>

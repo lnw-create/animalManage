@@ -13,7 +13,7 @@ spring:
         - id: user-service
           uri: lb://user-service
           predicates:
-            - Path=/admin/**
+            - Path=/userService/**
         - id: volunteerActivity-service
           uri: lb://volunteerActivity-service
           predicates:
@@ -29,7 +29,7 @@ spring:
         - id: ai-service
           uri: lb://ai-service
           predicates:
-            - Path=/ai/**
+            - Path=allUser/ai/**
       httpclient:
         headers:
           allow-forwards: true

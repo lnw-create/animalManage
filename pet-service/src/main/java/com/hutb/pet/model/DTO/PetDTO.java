@@ -45,6 +45,8 @@ public class PetDTO {
     //主图URL
     private String photo;
 
+    private String status;
+
     //当前主人ID（领养人）
     private Long ownerId;
 

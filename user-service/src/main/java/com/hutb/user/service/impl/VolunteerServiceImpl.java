@@ -43,6 +43,11 @@ public class VolunteerServiceImpl implements VolunteerService {
         // 1. 参数校验
         CommonValidate.volunteerValidate(volunteerDTO);
 
+        if (volunteerDTO.getUserId() == null){
+            throw new RuntimeException("用户ID不能为空");
+        }
+
+
         // 2. 判断志愿者是否存在
         Volunteer volunteer = volunteerMapper.queryVolunteerByUserId(volunteerDTO.getUserId());
         if (volunteer != null) {

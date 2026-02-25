@@ -63,7 +63,7 @@ public class StockController {
     /**
      * 查询库存列表
      */
-    @GetMapping("allUser/queryStockList")
+    @PostMapping("allUser/queryStockList")
     public ResultInfo queryStockList(@RequestBody PageQueryListDTO pageQueryListDTO) {
         try {
             return ResultInfo.success(stockService.queryStockList(pageQueryListDTO));

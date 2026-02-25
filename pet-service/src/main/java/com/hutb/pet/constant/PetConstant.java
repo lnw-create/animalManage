@@ -29,7 +29,6 @@ public class PetConstant {
     
     // 宠物状态常量
     public static final String PET_STATUS_NORMAL = "1";      // 正常
-    public static final String PET_STATUS_ADOPTED = "2";     // 已被领养
     public static final String PET_STATUS_DELETED = "-1";     // 删除
     
     // 宠物类型常量

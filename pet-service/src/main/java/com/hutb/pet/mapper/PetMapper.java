@@ -46,7 +46,7 @@ public interface PetMapper {
      * @param status 排除的状态值
      * @return 宠物信息
      */
-    @Select("select * from pet where id = #{id} and adoption_status != #{status}")
+    @Select("select * from pet where id = #{id} and status != #{status}")
     Pet queryPetById(long id, String status);
 
     /**

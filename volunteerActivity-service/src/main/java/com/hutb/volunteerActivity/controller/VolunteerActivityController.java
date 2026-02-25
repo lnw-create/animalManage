@@ -62,7 +62,7 @@ public class VolunteerActivityController {
     /**
      * 查询志愿活动列表
      */
-    @GetMapping("allUser/queryActivityList")
+    @PostMapping("allUser/queryActivityList")
     public ResultInfo queryActivityList(@RequestBody PageQueryListDTO pageQueryListDTO) {
         try {
             return ResultInfo.success(volunteerActivityService.queryVolunteerActivityList(pageQueryListDTO));

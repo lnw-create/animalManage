@@ -48,6 +48,8 @@ public class Pet {
     //当前主人ID（领养人）
     private Long ownerId;
 
+    private String status;
+
     //创建时间
     private LocalDateTime createTime;
 
