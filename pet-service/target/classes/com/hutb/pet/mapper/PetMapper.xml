@@ -5,6 +5,7 @@
     <select id="queryPetList" resultType="com.hutb.pet.model.pojo.Pet">
         SELECT * FROM pet
         <where>
+            status != '-1'
             <if test="name != null and name != ''">
                 AND name LIKE CONCAT('%', #{name}, '%')
             </if>

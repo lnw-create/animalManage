@@ -13,5 +13,6 @@
                 AND status = #{status}
             </if>
         </where>
+        order by sort asc
     </select>
 </mapper>
