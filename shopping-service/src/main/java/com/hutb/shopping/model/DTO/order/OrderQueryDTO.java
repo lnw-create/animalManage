@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Data
 public class OrderQueryDTO {
     // 订单ID
-    private Long orderId;
+    private Long id;
 
     // 用户ID
     private Long userId;

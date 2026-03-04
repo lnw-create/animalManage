@@ -8,7 +8,7 @@ import java.util.Date;
  * 商品分类实体类
  */
 @Data
-public class Category {
+public class Category implements java.io.Serializable{
     private Long id;
     
     // 分类名称

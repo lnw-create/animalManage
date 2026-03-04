@@ -8,7 +8,7 @@ import java.util.Date;
  * 库存实体类
  */
 @Data
-public class Stock {
+public class Stock implements java.io.Serializable{
 
     private Long id;
 

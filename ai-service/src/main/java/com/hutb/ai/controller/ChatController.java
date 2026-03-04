@@ -20,7 +20,7 @@ public class ChatController {
      * @param prompt
      * @return
      */
-    @PostMapping("allUser/chat")
+    @GetMapping("allUser/chat")
     public Flux<String> chat(@RequestParam String prompt,@RequestParam String sessionId) {
         return chatClient.prompt()
                 .user(prompt)
@@ -37,7 +37,7 @@ public class ChatController {
      * @param image
      * @return
      */
-    @PostMapping("/chat-with-image")
+    @GetMapping("/chat-with-image")
     public String chatWithImage(@RequestParam String prompt,
                                 @RequestParam String image) {
         try {

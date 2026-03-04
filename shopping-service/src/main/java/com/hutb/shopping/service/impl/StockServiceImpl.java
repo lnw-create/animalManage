@@ -16,10 +16,14 @@ import com.hutb.shopping.model.DTO.StockDTO;
 import com.hutb.shopping.service.StockService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -30,6 +34,16 @@ public class StockServiceImpl implements StockService {
 
     @Autowired
     private CategoryMapper categoryMapper;
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+    private static final String STOCK_LIST_KEY = "stock:list";
+    private static final String LOCK_KEY_PREFIX = "stock:lock: ";
+    private static final long CACHE_EXPIRE_TIME = 3600; // 缓存过期时间，单位分钟
+    private static final long LOCK_EXPIRE_TIME = 300; // 锁过期时间，单位秒
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     /**
      * 新增库存
@@ -68,7 +82,14 @@ public class StockServiceImpl implements StockService {
         if (i == 0) {
             throw new CommonException("添加库存信息失败");
         }
-        log.info("添加库存成功");
+        
+        // 5. 清除缓存
+        try {
+            redisTemplate.delete(STOCK_LIST_KEY);
+            log.info("添加库存成功，清除缓存");
+        } catch (Exception e) {
+            log.error("缓存清除失败，不影响业务操作", e);
+        }
     }
 
     /**
@@ -91,11 +112,18 @@ public class StockServiceImpl implements StockService {
         }
 
         // 3. 删除
-        long removed = stockMapper.removeStock(id, ShoppingConstant.STOCK_STATUS_DELETED,UserContext.getUsername());
+        long removed = stockMapper.removeStock(id, ShoppingConstant.STOCK_STATUS_DELETED, UserContext.getUsername());
         if (removed == 0) {
             throw new CommonException("删除商品库存信息失败");
         }
-        log.info("删除商品库存信息成功");
+        
+        // 4. 清除缓存
+        try {
+            redisTemplate.delete(STOCK_LIST_KEY);
+            log.info("删除商品库存信息成功，清除缓存");
+        } catch (Exception e) {
+            log.error("缓存清除失败，不影响业务操作", e);
+        }
     }
 
     /**
@@ -104,12 +132,12 @@ public class StockServiceImpl implements StockService {
      */
     @Override
     public void updateStock(StockDTO stockDTO) {
-        log.info("更新库存信息: {}", stockDTO);
+        log.info("更新库存信息：{}", stockDTO);
 
         // 1. 参数校验
         Long id = stockDTO.getId();
         if (id == null || id <= 0) {
-            throw new CommonException("更新库存id不能为空");
+            throw new CommonException("更新库存 id 不能为空");
         }
         CommonValidate.validateStock(stockDTO);
 
@@ -129,14 +157,41 @@ public class StockServiceImpl implements StockService {
             }
         }
 
-        // 4. 更新库存
-        stockDTO.setUpdateTime(new Date());
-        stockDTO.setUpdateUser(UserContext.getUsername());
-        long updated = stockMapper.updateStock(stockDTO);
-        if (updated == 0) {
-            throw new CommonException("更新库存信息失败");
+        // 尝试获取分布式锁
+        String lockKey = LOCK_KEY_PREFIX + "updateStock:" + id;
+        boolean lock = false;
+        try {
+            lock = stringRedisTemplate.opsForValue().setIfAbsent(lockKey, "locked", LOCK_EXPIRE_TIME, TimeUnit.SECONDS);
+
+            if (lock) {
+                log.info("获取分布式锁成功，开始更新库存");
+
+                // 4. 更新库存
+                stockDTO.setUpdateTime(new Date());
+                stockDTO.setUpdateUser(UserContext.getUsername());
+                long updated = stockMapper.updateStock(stockDTO);
+                if (updated == 0) {
+                    throw new CommonException("更新库存信息失败");
+                }
+
+                // 5. 清除缓存
+                try {
+                    redisTemplate.delete(STOCK_LIST_KEY);
+                    log.info("更新库存信息成功，清除缓存");
+                } catch (Exception e) {
+                    log.error("缓存清除失败，不影响业务操作", e);
+                }
+
+                log.info("更新库存信息成功");
+            } else {
+                log.warn("获取分布式锁失败，请稍后再试");
+                throw new CommonException("系统繁忙，请稍后再试");
+            }
+        } finally {
+            // 释放锁
+            log.info("释放分布式锁");
+            stringRedisTemplate.delete(lockKey);
         }
-        log.info("更新库存信息成功");
     }
 
     /**
@@ -146,13 +201,53 @@ public class StockServiceImpl implements StockService {
      */
     @Override
     public PageInfo queryStockList(PageQueryListDTO pageQueryListDTO) {
-        log.info("查询库存列表: {}", pageQueryListDTO);
+        log.info("查询库存列表：{}", pageQueryListDTO);
 
-        // 分页查询
-        Page<Object> page = PageHelper.startPage(pageQueryListDTO.getPageNum(), pageQueryListDTO.getPageSize());
-        List<com.hutb.shopping.model.pojo.Stock> stocks = stockMapper.queryStockList(pageQueryListDTO);
-        com.github.pagehelper.PageInfo<Stock> pageInfo = new com.github.pagehelper.PageInfo<>(stocks);
-        log.info("查询库存列表成功");
-        return new PageInfo(pageInfo.getTotal(), pageInfo.getList());
+        // 尝试从缓存获取
+        try {
+            PageInfo cachedPageInfo = (PageInfo) redisTemplate.opsForValue().get(STOCK_LIST_KEY);
+            if (cachedPageInfo != null) {
+                log.info("从缓存获取库存列表");
+                return cachedPageInfo;
+            }
+        } catch (Exception e) {
+            log.error("缓存读取失败，将从数据库查询", e);
+        }
+
+        // 缓存不存在或读取失败，尝试获取分布式锁
+        String lockKey = LOCK_KEY_PREFIX + "queryStockList";
+        try {
+            // 尝试获取分布式锁
+            Boolean lock = stringRedisTemplate.opsForValue().setIfAbsent(lockKey, "locked", LOCK_EXPIRE_TIME, TimeUnit.SECONDS);
+
+            if (lock) {
+                log.info("获取分布式锁成功，开始查询数据库");
+
+                // 从数据库查询
+                Page<Object> page = PageHelper.startPage(pageQueryListDTO.getPageNum(), pageQueryListDTO.getPageSize());
+                List<com.hutb.shopping.model.pojo.Stock> stocks = stockMapper.queryStockList(pageQueryListDTO);
+                com.github.pagehelper.PageInfo<Stock> pageInfo = new com.github.pagehelper.PageInfo<>(stocks);
+                PageInfo result = new PageInfo(pageInfo.getTotal(), pageInfo.getList());
+
+                // 将结果存入缓存
+                redisTemplate.opsForValue().set(STOCK_LIST_KEY, result, CACHE_EXPIRE_TIME + new Random().nextInt(10), TimeUnit.MINUTES);
+                log.info("库存列表存入缓存");
+
+                return result;
+            } else {
+                // 未获取到锁，等待重试
+                log.info("未获取到分布式锁，等待重试");
+                Thread.sleep(100);
+                // 递归调用，重新尝试从缓存获取
+                return queryStockList(pageQueryListDTO);
+            }
+        } catch (InterruptedException e) {
+            log.error("获取锁过程被中断", e);
+            Thread.currentThread().interrupt();
+            throw new CommonException("查询库存列表失败");
+        } finally {
+            // 释放锁
+            stringRedisTemplate.delete(lockKey);
+        }
     }
 }

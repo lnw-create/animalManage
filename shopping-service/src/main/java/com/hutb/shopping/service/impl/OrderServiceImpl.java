@@ -44,6 +44,8 @@ public class OrderServiceImpl implements OrderService {
         // 1. 参数校验
         CommonValidate.validateOrder(orderCreateDTO);
 
+        //todo 判断用户积分余额
+
         // 2. 设置默认值
         Order order = new Order();
         BeanUtils.copyProperties(orderCreateDTO, order);
@@ -51,7 +53,6 @@ public class OrderServiceImpl implements OrderService {
         order.setUserId(orderCreateDTO.getUserId());
         order.setProductId(orderCreateDTO.getProductId());
         order.setProductName(orderCreateDTO.getProductName());
-        order.setPrice(orderCreateDTO.getPrice());
         order.setTotalIntegral(orderCreateDTO.getPrice()); // 单商品，总积分等于单价
         order.setStatus(orderCreateDTO.getStatus());
         order.setShippingAddress(orderCreateDTO.getShippingAddress());

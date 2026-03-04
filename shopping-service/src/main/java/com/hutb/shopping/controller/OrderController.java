@@ -84,8 +84,8 @@ public class OrderController {
     /**
      * 查询订单列表
      */
-    @GetMapping("normalVolunteer/list")
-    public ResultInfo getOrderList(OrderQueryDTO orderQueryDTO) {
+    @PostMapping("normalVolunteer/list")
+    public ResultInfo getOrderList(@RequestBody OrderQueryDTO orderQueryDTO) {
         try {
             PageInfo pageInfo = orderService.queryOrderList(orderQueryDTO);
             return ResultInfo.success(pageInfo);
@@ -99,8 +99,8 @@ public class OrderController {
     /**
      * 查询某时间段内销量前10的商品
      */
-    @GetMapping("/sales/top10")
-    public ResultInfo getSalesTop10(SalesTop10QueryDTO query) {
+    @PostMapping("/sales/top10")
+    public ResultInfo getSalesTop10(@RequestBody SalesTop10QueryDTO query) {
         try {
             List<SalesTop10DTO> top10Products = orderService.querySalesTop10(query);
             return ResultInfo.success(top10Products);

@@ -4,20 +4,21 @@
     <select id="queryOrderList" resultType="com.hutb.shopping.model.pojo.Order">
         SELECT * FROM orders
         <where>
-            <if test="query.id != null">
-                AND id = #{query.id}
+            status != 'deleted'
+            <if test="id != null">
+                AND id = #{id}
             </if>
-            <if test="query.userId != null">
-                AND user_id = #{query.userId}
+            <if test="userId != null">
+                AND user_id = #{userId}
             </if>
-            <if test="query.status != null and query.status != ''">
-                AND status = #{query.status}
+            <if test="status != null and status != ''">
+                AND status = #{status}
             </if>
-            <if test="query.startTime != null">
-                AND create_time >= #{query.startTime}
+            <if test="startTime != null">
+                AND create_time >= #{startTime}
             </if>
-            <if test="query.endTime != null">
-                AND create_time &lt;= #{query.endTime}
+            <if test="endTime != null">
+                AND create_time &lt;= #{endTime}
             </if>
         </where>
         ORDER BY create_time DESC

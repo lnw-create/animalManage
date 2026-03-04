@@ -29,7 +29,7 @@ spring:
         - id: ai-service
           uri: lb://ai-service
           predicates:
-            - Path=allUser/ai/**
+            - Path=/ai/**
       httpclient:
         headers:
           allow-forwards: true

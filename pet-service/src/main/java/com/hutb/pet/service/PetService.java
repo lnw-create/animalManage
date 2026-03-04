@@ -7,6 +7,8 @@ import com.hutb.pet.model.DTO.AdoptionApplicationDTO;
 import com.hutb.pet.model.DTO.AdoptPetRequestDTO;
 import com.hutb.pet.model.pojo.AdoptionApplication;
 
+import java.util.List;
+
 public interface PetService {
     
     /**
@@ -67,4 +69,11 @@ public interface PetService {
      * @param approved 是否批准(true-批准，false-拒绝)
      */
     void approveAdoptionApplication(Long applicationId, Boolean approved);
+
+    /**
+     * 获取用户的所有领养申请记录
+     * @param userId 用户ID
+     * @return 领养申请列表
+     */
+    List<AdoptionApplication> getUserAdoptionApplicationList(Long userId);
 }

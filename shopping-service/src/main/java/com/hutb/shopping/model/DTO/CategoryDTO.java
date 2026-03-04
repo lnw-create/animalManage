@@ -6,7 +6,7 @@ import lombok.Data;
  * 分类信息DTO
  */
 @Data
-public class CategoryDTO {
+public class CategoryDTO implements java.io.Serializable{
     private Long id;
     
     // 分类名称

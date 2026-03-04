@@ -37,7 +37,4 @@ public class Order {
     
     // 商品名称
     private String productName;
-    
-    // 单价（积分）
-    private Integer price;
 }

@@ -1,0 +1,16 @@
+com\hutb\pet\model\DTO\PageQueryListDTO.class
+com\hutb\pet\model\pojo\PageInfo.class
+com\hutb\pet\model\pojo\AdoptionApplication.class
+com\hutb\pet\model\pojo\Pet.class
+com\hutb\pet\service\impl\PetServiceImpl.class
+com\hutb\pet\controller\PetController.class
+com\hutb\pet\mapper\AdoptionApplicationMapper.class
+com\hutb\pet\mapper\PetMapper.class
+com\hutb\pet\model\DTO\AdoptionApplicationDTO.class
+com\hutb\pet\model\pojo\ResultInfo.class
+com\hutb\pet\service\PetService.class
+com\hutb\pet\model\DTO\AdoptPetRequestDTO.class
+com\hutb\pet\constant\PetConstant.class
+com\hutb\pet\PetApplication.class
+com\hutb\pet\model\DTO\PetDTO.class
+com\hutb\pet\utils\CommonValidate.class

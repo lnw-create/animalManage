@@ -18,8 +18,8 @@ public interface OrderMapper {
      * @param order 订单信息
      * @return 影响行数
      */
-    @Insert("INSERT INTO orders (user_id, order_number, total_integral, status, create_time, update_time, create_user, update_user, shipping_address, product_id, product_name, price) " +
-            "VALUES (#{userId}, #{orderNumber}, #{totalIntegral}, #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser}, #{shippingAddress}, #{productId}, #{productName}, #{price})")
+    @Insert("INSERT INTO orders (user_id, order_number, total_integral, status, create_time, update_time, create_user, update_user, shipping_address, product_id, product_name) " +
+            "VALUES (#{userId}, #{orderNumber}, #{totalIntegral}, #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser}, #{shippingAddress}, #{productId}, #{productName})")
     int addOrder(Order order);
 
     /**
@@ -54,7 +54,7 @@ public interface OrderMapper {
      * @param orderQueryDTO 查询参数
      * @return 订单列表
      */
-    List<Order> queryOrderList(@Param("query") OrderQueryDTO orderQueryDTO);
+    List<Order> queryOrderList(OrderQueryDTO orderQueryDTO);
 
     /**
      * 查询某时间段内销量前10的商品

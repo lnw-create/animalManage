@@ -51,4 +51,10 @@ public interface AdoptionApplicationMapper {
      */
     @Update("UPDATE adoption_application SET status = #{status}, update_time = now(), update_user = #{updateUser} WHERE pet_id = #{petId} AND id != #{applicationId}")
     int batchRejectOtherApplications(Long petId,Long applicationId,String status,String updateUser);
+
+    /**
+     * 获取用户领养申请列表
+     */
+    @Select("SELECT * FROM adoption_application WHERE user_id = #{userId}")
+    List<AdoptionApplication> getUserAdoptionApplicationList(Long userId);
 }

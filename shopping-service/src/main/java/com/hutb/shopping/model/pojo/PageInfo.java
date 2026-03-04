@@ -5,7 +5,7 @@ import java.util.List;
 /**
  *分页查询结果
  */
-public class PageInfo<T> {
+public class PageInfo<T> implements java.io.Serializable{
     private long total;
     private List<T> data;
 

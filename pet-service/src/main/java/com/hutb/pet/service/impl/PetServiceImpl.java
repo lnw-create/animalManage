@@ -248,13 +248,26 @@ public class PetServiceImpl implements PetService {
         if (approved) {
             //获取宠物id
             Long petId = adoptionApplicationMapper.getAdoptionApplicationById(applicationId).getPetId();
-            int i1 = adoptionApplicationMapper.batchRejectOtherApplications(petId,applicationId,
+             int i1 = adoptionApplicationMapper.batchRejectOtherApplications(petId,applicationId,
                     PetConstant.ADOPTION_APPLICATION_STATUS_REJECTED,
                     UserContext.getUsername());
-            if (i1 == 0) {
+            if (i1 < 0) {
                 throw new CommonException("批量拒绝其他申请失败");
             }
         }
         log.info("领养申请审批完成，申请ID: {}，结果: {}", applicationId, approved ? "批准" : "拒绝");
+    }
+
+    /**
+     * 查询用户的所有领养申请
+     * @param userId 用户id
+     * @return 用户的所有领养申请
+     */
+    @Override
+    public List<AdoptionApplication> getUserAdoptionApplicationList(Long userId) {
+        log.info("查询用户的所有领养申请: {}", userId);
+        List<AdoptionApplication> applications = adoptionApplicationMapper.getUserAdoptionApplicationList(userId);
+        log.info("查询用户领养申请成功，共{}条", applications.size());
+        return applications;
     }
 }

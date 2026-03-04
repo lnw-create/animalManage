@@ -21,7 +21,7 @@ public class VolunteerController {
     /**
      * 新增志愿者
      */
-    @PostMapping("normalVolunteer/addVolunteer")
+    @PostMapping("allUser/addVolunteer")
     public ResultInfo addVolunteer(@RequestBody VolunteerDTO volunteerDTO) {
         try {
             volunteerService.addVolunteer(volunteerDTO);

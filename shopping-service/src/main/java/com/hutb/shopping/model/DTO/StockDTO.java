@@ -8,7 +8,7 @@ import java.util.Date;
  * 库存数据传输对象
  */
 @Data
-public class StockDTO {
+public class StockDTO implements java.io.Serializable{
     private Long id;
 
     //商品名称

@@ -1,0 +1,3 @@
+com\hutb\gateway\gatewayApplication.class
+com\hutb\gateway\filter\GlobalFilter.class
+com\hutb\gateway\utils\JwtUtil.class

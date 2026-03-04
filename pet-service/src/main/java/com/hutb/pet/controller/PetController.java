@@ -105,6 +105,20 @@ public class PetController {
     }
 
     /**
+     * 获取单个用户的领养申请信息
+     */
+    @GetMapping("allUser/getUserAdoptionApplications")
+    public ResultInfo getUserAdoptionApplications(@RequestParam Long userId) {
+        try {
+            return ResultInfo.success(petService.getUserAdoptionApplicationList(userId));
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误: " + e.getMessage());
+        }
+    }
+
+    /**
      * 获取某个宠物的所有申请记录(供管理员使用)
      */
     @GetMapping("getAdoptionApplicationsByPetId")
