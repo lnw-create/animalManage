@@ -30,4 +30,25 @@ public interface VolunteerService {
      * @return 志愿者列表
      */
     PageInfo queryVolunteerList(PageQueryListDTO pageQueryListDTO);
+
+    /**
+     * 增加用户积分
+     * @param userId 用户 ID
+     * @param points 积分数量
+     */
+    void addPoints(Long userId, Integer points);
+
+    /**
+     * 扣减用户积分
+     * @param userId 用户 ID
+     * @param points 积分数量
+     */
+    void deductPoints(Long userId, Integer points);
+
+    /**
+     * 查询用户积分余额
+     * @param userId 用户 ID
+     * @return 积分余额
+     */
+    Integer getPointBalance(Long userId);
 }

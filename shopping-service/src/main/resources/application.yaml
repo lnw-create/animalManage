@@ -27,3 +27,16 @@ mybatis:
 
 server:
   port: 8083
+
+# Feign 配置
+feign:
+  client:
+    config:
+      user-service:
+        connectTimeout: 5000  # 连接超时时间（毫秒）
+        readTimeout: 10000    # 读取超时时间（毫秒）
+  compression:
+    request:
+      enabled: true  # 启用请求压缩
+    response:
+      enabled: true  # 启用响应压缩

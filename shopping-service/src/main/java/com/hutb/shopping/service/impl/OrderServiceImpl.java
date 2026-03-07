@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.hutb.commonUtils.exception.CommonException;
 import com.hutb.commonUtils.utils.UserContext;
+import com.hutb.shopping.client.VolunteerServiceClient;
 import com.hutb.shopping.constant.ShoppingConstant;
 import com.hutb.shopping.mapper.OrderMapper;
 import com.hutb.shopping.model.DTO.order.OrderCreateDTO;
@@ -13,6 +14,7 @@ import com.hutb.shopping.model.DTO.sales.SalesTop10DTO;
 import com.hutb.shopping.model.DTO.sales.SalesTop10QueryDTO;
 import com.hutb.shopping.model.pojo.Order;
 import com.hutb.shopping.model.pojo.PageInfo;
+import com.hutb.shopping.model.pojo.ResultInfo;
 import com.hutb.shopping.service.OrderService;
 import com.hutb.shopping.utils.CommonValidate;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderMapper orderMapper;
 
+    @Autowired
+    private VolunteerServiceClient volunteerServiceClient;
+
     /**
      * 新增订单
      * @param orderCreateDTO 订单信息
@@ -39,37 +44,114 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void addOrder(OrderCreateDTO orderCreateDTO) {
-        log.info("添加订单: {}", orderCreateDTO);
-
+        log.info("添加订单：{}", orderCreateDTO);
+    
         // 1. 参数校验
         CommonValidate.validateOrder(orderCreateDTO);
+    
+        // 2. 获取用户 ID（如果未传入）
+        Long userId = orderCreateDTO.getUserId();
+        if (userId == null) {
+            userId = UserContext.getUserId();
+            if (userId == null) {
+                throw new CommonException("用户未登录");
+            }
+            orderCreateDTO.setUserId(userId);
+        }
+    
+        // 3. 查询用户积分余额并校验
+        Integer userPoints = getUserPointBalance(userId);
+        if (userPoints == null || userPoints < 0) {
+            throw new CommonException("用户积分查询失败");
+        }
 
-        //todo 判断用户积分余额
+        Integer orderTotalPoints = orderCreateDTO.getPrice();
+        if (orderTotalPoints == null || orderTotalPoints <= 0) {
+            throw new CommonException("订单积分必须大于 0");
+        }
 
-        // 2. 设置默认值
+        if (userPoints < orderTotalPoints) {
+            throw new CommonException("积分不足，当前积分：" + userPoints + ", 需要积分：" + orderTotalPoints);
+        }
+    
+        // 4. 设置订单默认值
         Order order = new Order();
         BeanUtils.copyProperties(orderCreateDTO, order);
-        order.setOrderNumber(generateOrderNumber()); // 生成订单号
-        order.setUserId(orderCreateDTO.getUserId());
+        order.setOrderNumber(generateOrderNumber());
+        order.setUserId(userId);
         order.setProductId(orderCreateDTO.getProductId());
         order.setProductName(orderCreateDTO.getProductName());
-        order.setTotalIntegral(orderCreateDTO.getPrice()); // 单商品，总积分等于单价
+        order.setTotalIntegral(orderTotalPoints);
         order.setStatus(orderCreateDTO.getStatus());
         order.setShippingAddress(orderCreateDTO.getShippingAddress());
         order.setCreateTime(new Date());
         order.setUpdateTime(new Date());
         order.setCreateUser(UserContext.getUsername());
         order.setUpdateUser(UserContext.getUsername());
-
-        // 3. 新增订单
+    
+        // 5. 新增订单
         int result = orderMapper.addOrder(order);
         if (result == 0) {
             throw new CommonException("添加订单信息失败");
         }
+
+        //todo 扣减库存
+            
+        // 6. 扣减用户积分
+        try {
+            deductUserPoints(userId, orderTotalPoints);
+            log.info("扣减积分成功：userId={}, 扣减积分={}", userId, orderTotalPoints);
+        } catch (Exception e) {
+            log.error("扣减积分失败：userId={}, 扣减积分={}", userId, orderTotalPoints, e);
+            // 积分扣减失败，抛出异常回滚订单
+            throw new CommonException("积分扣减失败，订单创建失败：" + e.getMessage());
+        }
+            
+        log.info("添加订单成功，订单号：{}, 消耗积分：{}", order.getOrderNumber(), orderTotalPoints);
+    }
+    
+    /**
+     * 查询用户积分余额
+     * @param userId 用户 ID
+     * @return 积分余额
+     */
+    private Integer getUserPointBalance(Long userId) {
+        ResultInfo<Integer> result = volunteerServiceClient.getPointBalance(userId);
         
-        // 4. 单商品购买，无需处理订单项
+        // 检查远程调用结果
+        if (result == null || !"1".equals(result.getCode())) {
+            log.error("查询积分余额失败：userId={}, message={}", userId, 
+                result != null ? result.getMsg() : "unknown error");
+            throw new CommonException("查询积分余额失败：" + 
+                (result != null ? result.getMsg() : "unknown error"));
+        }
         
-        log.info("添加订单成功，订单号: {}", order.getOrderNumber());
+        Integer balance = result.getData();
+        if (balance == null) {
+            balance = 0;
+        }
+        
+        log.info("查询积分余额成功：userId={}, balance={}", userId, balance);
+        return balance;
+    }
+    
+    /**
+     * 扣减用户积分
+     * @param userId 用户 ID
+     * @param points 积分数量
+     */
+    private void deductUserPoints(Long userId, Integer points) {
+        ResultInfo<Void> result = volunteerServiceClient.deductPoints(userId, points);
+        
+        // 检查远程调用结果
+        if (result == null || !"1".equals(result.getCode())) {
+            log.error("扣减积分失败：userId={}, points={}, message={}", userId, points,
+                result != null ? result.getMsg() : "unknown error");
+            throw new CommonException("扣减积分失败：" + 
+                (result != null ? result.getMsg() : "unknown error"));
+        }
+        
+        log.info("扣减积分成功：userId={}, points={}", userId, points);
     }
 
     /**

@@ -175,12 +175,7 @@ public class StockServiceImpl implements StockService {
                 }
 
                 // 5. 清除缓存
-                try {
-                    redisTemplate.delete(STOCK_LIST_KEY);
-                    log.info("更新库存信息成功，清除缓存");
-                } catch (Exception e) {
-                    log.error("缓存清除失败，不影响业务操作", e);
-                }
+                redisTemplate.delete(STOCK_LIST_KEY);
 
                 log.info("更新库存信息成功");
             } else {

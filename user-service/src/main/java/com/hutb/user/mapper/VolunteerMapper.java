@@ -73,10 +73,18 @@ public interface VolunteerMapper {
     Volunteer queryVolunteerByUsername(String username);
 
     /**
-     * 根据用户id查询志愿者信息
-     * @param userId 用户id
+     * 根据用户 id 查询志愿者信息
+     * @param userId 用户 id
      * @return 志愿者信息
      */
     @Select("select * from volunteer where user_id = #{userId} and status = '1'")
     Volunteer queryVolunteerByUserId(Long userId);
+
+    /**
+     * 更新用户积分
+     * @param volunteerDTO 志愿者信息（包含新的积分）
+     * @return 影响的行数
+     */
+    @Update("UPDATE volunteer SET activity_point = #{activityPoint}, update_user = #{updateUser}, update_time = now() WHERE id = #{id}")
+    int updateVolunteerPoints(VolunteerDTO volunteerDTO);
 }

@@ -5,8 +5,10 @@ com\hutb\volunteerActivity\mapper\VolunteerActivityMapper.class
 com\hutb\volunteerActivity\controller\VolunteerActivityController.class
 com\hutb\volunteerActivity\model\pojo\ResultInfo.class
 com\hutb\volunteerActivity\model\pojo\VolunteerActivity.class
+com\hutb\volunteerActivity\client\VolunteerServiceClient.class
 com\hutb\volunteerActivity\model\DTO\VolunteerActivityDTO.class
 com\hutb\volunteerActivity\model\pojo\PageInfo.class
+com\hutb\volunteerActivity\model\pojo\ActivityParticipant.class
 com\hutb\volunteerActivity\service\VolunteerActivityService.class
 com\hutb\volunteerActivity\constant\VolunteerActivityCommonConstant.class
 com\hutb\volunteerActivity\utils\CommonValidate.class

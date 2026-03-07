@@ -72,4 +72,48 @@ public class VolunteerActivityController {
             return ResultInfo.fail("系统错误: " + e.getMessage());
         }
     }
+
+    /**
+     *  参加志愿活动
+     */
+    @PostMapping("normalVolunteer/joinActivity")
+    public ResultInfo joinActivity(@RequestParam Long id) {
+        try {
+            volunteerActivityService.joinActivity(id);
+            return ResultInfo.success();
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误：" + e.getMessage());
+        }
+    }
+
+    /**
+     * 取消志愿活动
+     */
+    @PostMapping("normalVolunteer/cancelActivity")
+    public ResultInfo cancelActivity(@RequestParam Long id) {
+        try {
+            volunteerActivityService.cancelActivity(id);
+            return ResultInfo.success();
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误：" + e.getMessage());
+        }
+    }
+
+    /**
+     * 查询我的志愿活动
+     */
+    @PostMapping("normalVolunteer/myActivities")
+    public ResultInfo queryMyActivities(@RequestBody PageQueryListDTO pageQueryListDTO) {
+        try {
+            return ResultInfo.success(volunteerActivityService.queryMyActivities(pageQueryListDTO));
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误：" + e.getMessage());
+        }
+    }
 }

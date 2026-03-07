@@ -22,4 +22,17 @@
         </where>
         order by update_time desc
     </select>
+
+    <!-- 查询用户参与的活动列表 -->
+    <select id="queryMyActivities" resultType="com.hutb.volunteerActivity.model.pojo.VolunteerActivity">
+        SELECT activity.* FROM activity
+        INNER JOIN activity_participant ON activity.id = activity_participant.activity_id
+        WHERE activity_participant.user_id = #{userId}
+        AND activity_participant.status = '1'
+        AND activity.status != '-1'
+        <if test="status != null and status != ''">
+            AND activity.status = #{status}
+        </if>
+        ORDER BY activity.update_time DESC
+    </select>
 </mapper>

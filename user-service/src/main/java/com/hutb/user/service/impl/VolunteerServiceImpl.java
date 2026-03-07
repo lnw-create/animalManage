@@ -153,4 +153,113 @@ public class VolunteerServiceImpl implements VolunteerService {
         log.info("查询志愿者列表成功");
         return new PageInfo(pageInfo.getTotal(), pageInfo.getList());
     }
+
+    /**
+     * 增加用户积分
+     */
+    @Override
+    @Transactional
+    public void addPoints(Long userId, Integer points) {
+        log.info("增加用户积分：userId={}, points={}", userId, points);
+        
+        // 1. 参数校验
+        if (userId == null || userId <= 0) {
+            throw new CommonException("用户 ID 不能为空");
+        }
+        if (points == null || points <= 0) {
+            throw new CommonException("积分必须大于 0");
+        }
+        
+        // 2. 查询用户志愿者信息
+        Volunteer volunteer = volunteerMapper.queryVolunteerByUserId(userId);
+        if (volunteer == null) {
+            throw new CommonException("用户志愿者信息不存在");
+        }
+        
+        // 3. 更新积分余额
+        Integer currentPoints = volunteer.getActivityPoint();
+        if (currentPoints == null) {
+            currentPoints = 0;
+        }
+        
+        Integer newPoints = currentPoints + points;
+        
+        VolunteerDTO volunteerDTO = new VolunteerDTO();
+        volunteerDTO.setId(volunteer.getId());
+        volunteerDTO.setActivityPoint(newPoints);
+        volunteerDTO.setUpdateTime(new Date());
+        volunteerDTO.setUpdateUser(UserContext.getUsername());
+        
+        int updated = volunteerMapper.updateVolunteerPoints(volunteerDTO);
+        if (updated == 0) {
+            throw new CommonException("更新积分余额失败");
+        }
+        
+        log.info("增加积分成功：userId={}, 原积分={}, 增加={}, 新积分={}", 
+            userId, currentPoints, points, newPoints);
+    }
+    
+    /**
+     * 扣减用户积分
+     */
+    @Override
+    @Transactional
+    public void deductPoints(Long userId, Integer points) {
+        log.info("扣减用户积分：userId={}, points={}", userId, points);
+        
+        // 1. 参数校验
+        if (userId == null || userId <= 0) {
+            throw new CommonException("用户 ID 不能为空");
+        }
+        if (points == null || points <= 0) {
+            throw new CommonException("积分必须大于 0");
+        }
+        
+        // 2. 查询用户志愿者信息
+        Volunteer volunteer = volunteerMapper.queryVolunteerByUserId(userId);
+        if (volunteer == null) {
+            throw new CommonException("用户志愿者信息不存在");
+        }
+        
+        // 3. 检查积分余额
+        Integer currentPoints = volunteer.getActivityPoint();
+        if (currentPoints == null || currentPoints < points) {
+            throw new CommonException("积分余额不足，当前积分：" + (currentPoints == null ? 0 : currentPoints) + ", 需要积分：" + points);
+        }
+        
+        // 4. 更新积分余额
+        Integer newPoints = currentPoints - points;
+        
+        VolunteerDTO volunteerDTO = new VolunteerDTO();
+        volunteerDTO.setId(volunteer.getId());
+        volunteerDTO.setActivityPoint(newPoints);
+        volunteerDTO.setUpdateTime(new Date());
+        volunteerDTO.setUpdateUser(UserContext.getUsername());
+        
+        int updated = volunteerMapper.updateVolunteerPoints(volunteerDTO);
+        if (updated == 0) {
+            throw new CommonException("更新积分余额失败");
+        }
+        
+        log.info("扣减积分成功：userId={}, 原积分={}, 扣减={}, 新积分={}", 
+            userId, currentPoints, points, newPoints);
+    }
+    
+    /**
+     * 查询用户积分余额
+     */
+    @Override
+    public Integer getPointBalance(Long userId) {
+        if (userId == null || userId <= 0) {
+            return 0;
+        }
+        
+        Volunteer volunteer = volunteerMapper.queryVolunteerByUserId(userId);
+        if (volunteer == null) {
+            return 0;
+        }
+        
+        Integer points = volunteer.getActivityPoint();
+        return points != null ? points : 0;
+    }
 }
