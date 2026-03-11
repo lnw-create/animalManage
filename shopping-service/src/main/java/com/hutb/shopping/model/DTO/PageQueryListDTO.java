@@ -15,6 +15,7 @@ public class PageQueryListDTO {
     private String productName;
     // 分类名称
     private String name;
+    private Long categoryId;
     private String status;
     private Double minPrice;
     private Double maxPrice;

@@ -62,4 +62,12 @@ public interface OrderMapper {
      * @return 销量前10的商品列表
      */
     List<SalesTop10DTO> querySalesTop10(SalesTop10QueryDTO query);
+
+    /**
+     * 扣减库存
+     * @param productId 商品ID
+     * @return 影响行数
+     */
+    @Update("UPDATE stock SET quantity = quantity - 1 WHERE id = #{productId}")
+    int deductStock(Long productId);
 }

@@ -8,6 +8,7 @@ import com.hutb.shopping.constant.ShoppingConstant;
 import com.hutb.shopping.model.pojo.PageInfo;
 import com.hutb.shopping.model.DTO.PageQueryListDTO;
 import com.hutb.shopping.model.pojo.Category;
+import com.hutb.shopping.model.pojo.Stock;
 import com.hutb.shopping.utils.CommonValidate;
 import com.hutb.shopping.mapper.CategoryMapper;
 import com.hutb.shopping.model.DTO.CategoryDTO;
@@ -129,6 +130,19 @@ public class CategoryServiceImpl implements CategoryService {
         List<Category> categorys = categoryMapper.queryCategoryListWithPage(pageQueryListDTO);
         com.github.pagehelper.PageInfo<Category> pageInfo = new com.github.pagehelper.PageInfo<>(categorys);
         log.info("查询分类列表成功");
+        return new PageInfo(pageInfo.getTotal(), pageInfo.getList());
+    }
+
+    /**
+     * 查询分类下的商品列表
+     * @param pageQueryListDTO 分页查询参数
+     * @return 分类下的商品列表
+     */
+    @Override
+    public PageInfo queryCategoryGoodsList(PageQueryListDTO pageQueryListDTO) {
+        Page<Object> page = PageHelper.startPage(pageQueryListDTO.getPageNum(), pageQueryListDTO.getPageSize());
+        List<Stock> stocks = categoryMapper.queryCategoryGoodsList(pageQueryListDTO);
+        com.github.pagehelper.PageInfo<Stock> pageInfo = new com.github.pagehelper.PageInfo<>(stocks);
         return new PageInfo(pageInfo.getTotal(), pageInfo.getList());
     }
 }

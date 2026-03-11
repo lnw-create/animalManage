@@ -73,4 +73,19 @@ public class CategoryController {
             return ResultInfo.fail("系统错误: " + e.getMessage());
         }
     }
+
+
+    /**
+     * 查询分类下的商品列表
+     */
+    @PostMapping("allUser/queryCategoryGoodsList")
+    public ResultInfo queryCategoryGoodsList(@RequestBody PageQueryListDTO pageQueryListDTO) {
+        try {
+            return ResultInfo.success(categoryService.queryCategoryGoodsList(pageQueryListDTO));
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误: " + e.getMessage());
+        }
+    }
 }

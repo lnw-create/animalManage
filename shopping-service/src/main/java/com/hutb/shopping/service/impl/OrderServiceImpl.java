@@ -84,6 +84,7 @@ public class OrderServiceImpl implements OrderService {
         order.setTotalIntegral(orderTotalPoints);
         order.setStatus(orderCreateDTO.getStatus());
         order.setShippingAddress(orderCreateDTO.getShippingAddress());
+        order.setTotalIntegral(orderCreateDTO.getPrice());
         order.setCreateTime(new Date());
         order.setUpdateTime(new Date());
         order.setCreateUser(UserContext.getUsername());
@@ -95,7 +96,11 @@ public class OrderServiceImpl implements OrderService {
             throw new CommonException("添加订单信息失败");
         }
 
-        //todo 扣减库存
+        // 扣减库存
+        int deductResult = orderMapper.deductStock(orderCreateDTO.getProductId());
+        if (deductResult == 0) {
+            throw new CommonException("扣减库存失败");
+        }
             
         // 6. 扣减用户积分
         try {

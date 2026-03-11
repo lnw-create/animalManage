@@ -197,52 +197,10 @@ public class StockServiceImpl implements StockService {
     @Override
     public PageInfo queryStockList(PageQueryListDTO pageQueryListDTO) {
         log.info("查询库存列表：{}", pageQueryListDTO);
-
-        // 尝试从缓存获取
-        try {
-            PageInfo cachedPageInfo = (PageInfo) redisTemplate.opsForValue().get(STOCK_LIST_KEY);
-            if (cachedPageInfo != null) {
-                log.info("从缓存获取库存列表");
-                return cachedPageInfo;
-            }
-        } catch (Exception e) {
-            log.error("缓存读取失败，将从数据库查询", e);
-        }
-
-        // 缓存不存在或读取失败，尝试获取分布式锁
-        String lockKey = LOCK_KEY_PREFIX + "queryStockList";
-        try {
-            // 尝试获取分布式锁
-            Boolean lock = stringRedisTemplate.opsForValue().setIfAbsent(lockKey, "locked", LOCK_EXPIRE_TIME, TimeUnit.SECONDS);
-
-            if (lock) {
-                log.info("获取分布式锁成功，开始查询数据库");
-
-                // 从数据库查询
-                Page<Object> page = PageHelper.startPage(pageQueryListDTO.getPageNum(), pageQueryListDTO.getPageSize());
-                List<com.hutb.shopping.model.pojo.Stock> stocks = stockMapper.queryStockList(pageQueryListDTO);
-                com.github.pagehelper.PageInfo<Stock> pageInfo = new com.github.pagehelper.PageInfo<>(stocks);
-                PageInfo result = new PageInfo(pageInfo.getTotal(), pageInfo.getList());
-
-                // 将结果存入缓存
-                redisTemplate.opsForValue().set(STOCK_LIST_KEY, result, CACHE_EXPIRE_TIME + new Random().nextInt(10), TimeUnit.MINUTES);
-                log.info("库存列表存入缓存");
-
-                return result;
-            } else {
-                // 未获取到锁，等待重试
-                log.info("未获取到分布式锁，等待重试");
-                Thread.sleep(100);
-                // 递归调用，重新尝试从缓存获取
-                return queryStockList(pageQueryListDTO);
-            }
-        } catch (InterruptedException e) {
-            log.error("获取锁过程被中断", e);
-            Thread.currentThread().interrupt();
-            throw new CommonException("查询库存列表失败");
-        } finally {
-            // 释放锁
-            stringRedisTemplate.delete(lockKey);
-        }
+        Page<Object> page = PageHelper.startPage(pageQueryListDTO.getPageNum(), pageQueryListDTO.getPageSize());
+        List<com.hutb.shopping.model.pojo.Stock> stocks = stockMapper.queryStockList(pageQueryListDTO);
+        com.github.pagehelper.PageInfo<Stock> pageInfo = new com.github.pagehelper.PageInfo<>(stocks);
+        PageInfo result = new PageInfo(pageInfo.getTotal(), pageInfo.getList());
+        return result;
     }
 }

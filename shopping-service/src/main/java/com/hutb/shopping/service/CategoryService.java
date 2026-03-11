@@ -30,4 +30,11 @@ public interface CategoryService {
      * @return 分类列表
      */
     PageInfo queryCategoryList(PageQueryListDTO pageQueryListDTO);
+
+    /**
+     * 查询分类下的商品列表
+     * @param pageQueryListDTO 分页查询参数
+     * @return 分类下的商品列表
+     */
+    PageInfo queryCategoryGoodsList(PageQueryListDTO pageQueryListDTO);
 }

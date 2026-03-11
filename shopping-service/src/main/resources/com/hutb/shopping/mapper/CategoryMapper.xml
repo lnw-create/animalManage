@@ -15,4 +15,14 @@
         </where>
         order by sort asc
     </select>
+
+    <select id="queryCategoryGoodsList" resultType="com.hutb.shopping.model.pojo.Stock">
+        SELECT * FROM stock
+        <where>
+            AND status = 1
+            <if test="categoryId != null and categoryId != ''">
+                AND category_id = #{categoryId}
+            </if>
+        </where>
+    </select>
 </mapper>

@@ -3,6 +3,7 @@ package com.hutb.shopping.mapper;
 import com.hutb.shopping.model.DTO.CategoryDTO;
 import com.hutb.shopping.model.DTO.PageQueryListDTO;
 import com.hutb.shopping.model.pojo.Category;
+import com.hutb.shopping.model.pojo.Stock;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -64,4 +65,11 @@ public interface CategoryMapper {
      * @return 分类列表
      */
     List<Category> queryCategoryListWithPage(PageQueryListDTO pageQueryListDTO);
+
+    /**
+     * 查询分类下的商品列表
+     * @param pageQueryListDTO 分页查询参数
+     * @return 商品列表
+     */
+    List<Stock> queryCategoryGoodsList(PageQueryListDTO pageQueryListDTO);
 }
