@@ -5,17 +5,17 @@
 <select id="queryStockList" resultType="com.hutb.shopping.model.pojo.Stock">
     SELECT * FROM stock
     <where>
-        status != -1
+        AND status = 1
         <if test="productName != null and productName != ''">
             AND product_name LIKE CONCAT('%', #{productName}, '%')
         </if>
         <if test="status != null and status != ''">
             AND status = #{status}
         </if>
-        <if test="minPrice != null and minPrice != ''">
+        <if test="minPrice != null">
             AND price >= #{minPrice}
         </if>
-        <if test="maxPrice != null and maxPrice != ''">
+        <if test="maxPrice != null">
             AND price &lt;= #{maxPrice}
         </if>
     </where>
