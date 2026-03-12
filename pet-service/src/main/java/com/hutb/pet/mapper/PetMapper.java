@@ -119,7 +119,7 @@ public interface PetMapper {
     /**
      * ai分析宠物回访信息
      */
-    @Update("UPDATE pet_visit SET analysis_status = #{analysisStatus}, analysis_result = #{analysisResult}, " +
+    @Update("UPDATE pet_visit SET analysis_status = #{analysisStatus}, analysis_result = #{analysisResult}," +
             "WHERE id = #{id}")
     int aiAnalysisPetVisit(PetVisitDTO petVisitDTO);
 
