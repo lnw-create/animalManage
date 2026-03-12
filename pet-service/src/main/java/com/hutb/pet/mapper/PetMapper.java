@@ -117,6 +117,13 @@ public interface PetMapper {
     int updatePetVisit(PetVisitDTO petVisitDTO);
 
     /**
+     * ai分析宠物回访信息
+     */
+    @Update("UPDATE pet_visit SET analysis_status = #{analysisStatus}, analysis_result = #{analysisResult}, " +
+            "WHERE id = #{id}")
+    int aiAnalysisPetVisit(PetVisitDTO petVisitDTO);
+
+    /**
      * 删除宠物回访信息（物理删除）
      * @param id 回访记录 ID
      * @return 影响行数
