@@ -2,8 +2,10 @@ package com.hutb.pet;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication(scanBasePackages = {"com.hutb.pet", "com.hutb.commonUtils"})
+@EnableFeignClients(basePackages = {"com.hutb.pet.client"})
 public class PetApplication {
 
     public static void main(String[] args) {

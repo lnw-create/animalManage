@@ -98,4 +98,10 @@ public interface PetService {
      * @param id 回访记录 ID
      */
     void deletePetVisit(Long id);
+
+    /**
+     * AI 分析宠物回访信息
+     * @param visitId 回访记录 ID
+     */
+    void aiAnalyzePetVisit(Long visitId);
 }

@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.hutb.commonUtils.exception.CommonException;
 import com.hutb.commonUtils.utils.UserContext;
+import com.hutb.pet.client.AIChatClient;
 import com.hutb.pet.constant.PetConstant;
 import com.hutb.pet.mapper.PetMapper;
 import com.hutb.pet.model.DTO.*;
@@ -30,6 +31,9 @@ public class PetServiceImpl implements PetService {
     
     @Autowired
     private AdoptionApplicationMapper adoptionApplicationMapper;
+    
+    @Autowired
+    private AIChatClient aiChatClient;
 
     /**
      * 新增宠物
@@ -353,5 +357,48 @@ public class PetServiceImpl implements PetService {
         }
         
         log.info("宠物回访信息删除成功，ID: {}", id);
+    }
+
+    /**
+     * AI 分析宠物回访信息
+     * @param visitId 回访记录 ID
+     */
+    @Override
+    public void aiAnalyzePetVisit(Long visitId) {
+        log.info("开始 AI 分析宠物回访信息，ID: {}", visitId);
+        
+        try {
+            // 1. 查询回访记录
+            PetVisitDTO visit = petMapper.queryPetVisitById(visitId);
+            if (visit == null) {
+                throw new CommonException("回访记录不存在");
+            }
+            
+            // 2. 构造提示词
+            String prompt = "请分析以下宠物回访信息，判断此次回访的状态是正面还是负面。\n" +
+                           "请按以下 JSON 格式返回：{\"status\": \"positive 或 negative\", \"result\": \"详细分析结果\"}\n" +
+                           "回访信息：" + visit.getVisitInfo();
+            
+            // 3. 调用 AI 服务进行分析
+            AIAnalysisResponse response = aiChatClient.analyzeVisit(prompt);
+            
+            // 4. 更新数据库
+            visit.setAnalysisStatus(response.getStatus());
+            visit.setAnalysisResult(response.getResult());
+            
+            int result = petMapper.aiAnalysisPetVisit(visit);
+            if (result == 0) {
+                throw new CommonException("更新 AI 分析结果失败");
+            }
+            
+            log.info("AI 分析宠物回访信息完成，ID: {}, 状态：{}, 结果：{}", 
+                    visitId, response.getStatus(), response.getResult());
+            
+        } catch (CommonException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("AI 分析宠物回访信息失败，ID: {}", visitId, e);
+            throw new CommonException("AI 分析失败：" + e.getMessage());
+        }
     }
 }
