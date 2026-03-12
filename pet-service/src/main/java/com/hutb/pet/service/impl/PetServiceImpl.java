@@ -16,6 +16,7 @@ import com.hutb.pet.model.pojo.AdoptionApplication;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -227,6 +228,7 @@ public class PetServiceImpl implements PetService {
      * @param approved 是否批准
      */
     @Override
+    @Transactional
     public void approveAdoptionApplication(Long applicationId, Boolean approved) {
         log.info("审批领养申请: {}, 批准: {}", applicationId, approved);
 
@@ -242,9 +244,8 @@ public class PetServiceImpl implements PetService {
         }
 
         //3.若审批通过，批量拒绝同一宠物的其他申请
+        Long petId = adoptionApplicationMapper.getAdoptionApplicationById(applicationId).getPetId();
         if (approved) {
-            //获取宠物id
-            Long petId = adoptionApplicationMapper.getAdoptionApplicationById(applicationId).getPetId();
              int i1 = adoptionApplicationMapper.batchRejectOtherApplications(petId,applicationId,
                     PetConstant.ADOPTION_APPLICATION_STATUS_REJECTED,
                     UserContext.getUsername());
@@ -252,6 +253,9 @@ public class PetServiceImpl implements PetService {
                 throw new CommonException("批量拒绝其他申请失败");
             }
         }
+
+        //4. 修改宠物状态为"已领养", 领养用户
+        petMapper.adoptPetDetail(petId, UserContext.getUsername(),UserContext.getUserId(), PetConstant.ADOPTION_STATUS_ADOPTED);
         log.info("领养申请审批完成，申请ID: {}，结果: {}", applicationId, approved ? "批准" : "拒绝");
     }
 
@@ -280,7 +284,7 @@ public class PetServiceImpl implements PetService {
         if (pet == null) {
             throw new CommonException("宠物信息不存在");
         }
-        if (!pet.getStatus().equals(PetConstant.ADOPTION_STATUS_ADOPTED)){
+        if (!pet.getAdoptionStatus().equals(PetConstant.ADOPTION_STATUS_ADOPTED)){
             throw new CommonException("宠物未被领养");
         }
 

@@ -18,4 +18,14 @@
         </where>
         ORDER BY create_time DESC
     </select>
+
+    <select id="getPetVisitList" resultType="com.hutb.pet.model.DTO.PetVisitDTO">
+        SELECT * FROM pet_visit
+        <where>
+            <if test="petId != null">
+                AND pet_id = #{petId}
+            </if>
+        </where>
+        ORDER BY id DESC
+    </select>
 </mapper>

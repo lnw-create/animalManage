@@ -64,6 +64,14 @@ public interface PetMapper {
      */
     @Update("UPDATE pet SET adoption_status = #{adoptionStatus}, update_time = now(), update_user = #{username} WHERE id = #{id}")
     void adoptPet(Long id, String username, String adoptionStatus);
+
+    /**
+     * 宠物 adoption
+     * @param id 宠物ID
+     * @param username 用户名
+     */
+    @Update("UPDATE pet SET adoption_status = #{adoptionStatus}, owner_id = #{ownerId}, update_time = now(), update_user = #{username} WHERE id = #{id}")
+    void adoptPetDetail(Long id, String username, Long ownerId, String adoptionStatus);
     
     /**
      * 更新宠物领养人及状态
@@ -76,11 +84,11 @@ public interface PetMapper {
     void updatePetOwner(@Param("id") Long id, @Param("ownerId") Long ownerId, @Param("adoptionStatus") String adoptionStatus, @Param("username") String username);
 
     /**
-     * 宠物访问记录
+     * 宠物回访
      * @param petDTO 宠物信息
      * @return 影响行数
      */
-    @Insert("INSERT INTO pet_visit (pet_id,visit_info, visit_time,) VALUES (#{petId}, #{visit_info}, #{visitTime})")
+    @Insert("INSERT INTO pet_visit (pet_id,visit_info, visit_time) VALUES (#{petId}, #{visitInfo}, #{visitTime})")
     int petVisit(PetVisitDTO petDTO);
 
     /**
