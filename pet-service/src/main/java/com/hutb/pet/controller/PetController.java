@@ -3,6 +3,7 @@ package com.hutb.pet.controller;
 import com.hutb.commonUtils.exception.CommonException;
 import com.hutb.pet.model.DTO.PetDTO;
 import com.hutb.pet.model.DTO.PageQueryListDTO;
+import com.hutb.pet.model.DTO.PetVisitDTO;
 import com.hutb.pet.model.pojo.ResultInfo;
 import com.hutb.pet.service.PetService;
 import com.hutb.pet.model.DTO.AdoptPetRequestDTO;
@@ -160,6 +161,65 @@ public class PetController {
             return ResultInfo.fail(e.getMessage());
         } catch (Exception e) {
             return ResultInfo.fail("系统错误: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 宠物回访
+     */
+    @PostMapping("petVisit")
+    public ResultInfo petVisit(@RequestBody PetVisitDTO petDTO) {
+        try {
+            petService.petVisit(petDTO);
+            return ResultInfo.success();
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 获取宠物回访记录
+     */
+    @PostMapping("getPetVisitRecords")
+    public ResultInfo getPetVisitRecords(@RequestBody PageQueryListDTO queryDTO) {
+        try {
+            return ResultInfo.success(petService.getPetVisitRecords(queryDTO));
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误：" + e.getMessage());
+        }
+    }
+
+    /**
+     * 修改宠物回访信息
+     */
+    @PostMapping("updatePetVisit")
+    public ResultInfo updatePetVisit(@RequestBody PetVisitDTO petVisitDTO) {
+        try {
+            petService.updatePetVisit(petVisitDTO);
+            return ResultInfo.success();
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误：" + e.getMessage());
+        }
+    }
+
+    /**
+     * 删除宠物回访信息
+     */
+    @PostMapping("deletePetVisit")
+    public ResultInfo deletePetVisit(@RequestParam Long id) {
+        try {
+            petService.deletePetVisit(id);
+            return ResultInfo.success();
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误：" + e.getMessage());
         }
     }
 }

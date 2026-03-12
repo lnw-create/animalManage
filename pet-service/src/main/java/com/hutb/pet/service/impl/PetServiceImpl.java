@@ -6,16 +6,13 @@ import com.hutb.commonUtils.exception.CommonException;
 import com.hutb.commonUtils.utils.UserContext;
 import com.hutb.pet.constant.PetConstant;
 import com.hutb.pet.mapper.PetMapper;
-import com.hutb.pet.model.DTO.PetDTO;
+import com.hutb.pet.model.DTO.*;
 import com.hutb.pet.model.pojo.PageInfo;
 import com.hutb.pet.model.pojo.Pet;
 import com.hutb.pet.service.PetService;
 import com.hutb.pet.utils.CommonValidate;
-import com.hutb.pet.model.DTO.PageQueryListDTO;
 import com.hutb.pet.mapper.AdoptionApplicationMapper;
-import com.hutb.pet.model.DTO.AdoptionApplicationDTO;
 import com.hutb.pet.model.pojo.AdoptionApplication;
-import com.hutb.pet.model.DTO.AdoptPetRequestDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -269,5 +266,88 @@ public class PetServiceImpl implements PetService {
         List<AdoptionApplication> applications = adoptionApplicationMapper.getUserAdoptionApplicationList(userId);
         log.info("查询用户领养申请成功，共{}条", applications.size());
         return applications;
+    }
+
+    /**
+     * 宠物回访
+     * @param petDTO 宠物访问信息
+     */
+    @Override
+    public void petVisit(PetVisitDTO petDTO) {
+        log.info("宠物回访: {}", petDTO);
+        //1.判断宠物是否被领养
+        Pet pet = petMapper.queryPetById(petDTO.getPetId(), PetConstant.ADOPTION_STATUS_ADOPTED);
+        if (pet == null) {
+            throw new CommonException("宠物信息不存在");
+        }
+        if (!pet.getStatus().equals(PetConstant.ADOPTION_STATUS_ADOPTED)){
+            throw new CommonException("宠物未被领养");
+        }
+
+        //2.修改宠物回访信息
+        int i = petMapper.petVisit(petDTO);
+        if (i == 0) {
+            throw new CommonException("宠物回访信息修改失败");
+        }
+    }
+
+    /**
+     * 查询宠物回访记录
+     * @return 宠物回访记录
+     */
+    @Override
+    public PageInfo getPetVisitRecords(PageQueryListDTO queryDTO) {
+        log.info("查询宠物回访记录：{}", queryDTO);
+        Page<Object> page = PageHelper.startPage(queryDTO.getPageNum(), queryDTO.getPageSize());
+        List<PetVisitDTO> petVisitDTOList = petMapper.getPetVisitList(queryDTO);
+        com.github.pagehelper.PageInfo<PetVisitDTO> pageInfo = new com.github.pagehelper.PageInfo<>(petVisitDTOList);
+        log.info("查询宠物回访记录成功");
+        return new PageInfo(pageInfo.getTotal(), pageInfo.getList());
+    }
+
+    /**
+     * 修改宠物回访信息
+     * @param petVisitDTO 回访信息
+     */
+    @Override
+    public void updatePetVisit(PetVisitDTO petVisitDTO) {
+        log.info("修改宠物回访信息：{}", petVisitDTO);
+        
+        // 1. 验证回访记录是否存在
+        PetVisitDTO existingVisit = petMapper.queryPetVisitById(petVisitDTO.getId());
+        if (existingVisit == null) {
+            throw new CommonException("回访记录不存在");
+        }
+        
+        // 2. 执行更新
+        int result = petMapper.updatePetVisit(petVisitDTO);
+        if (result == 0) {
+            throw new CommonException("宠物回访信息修改失败");
+        }
+        
+        log.info("宠物回访信息修改成功，ID: {}", petVisitDTO.getId());
+    }
+
+    /**
+     * 删除宠物回访信息（物理删除）
+     * @param id 回访记录 ID
+     */
+    @Override
+    public void deletePetVisit(Long id) {
+        log.info("删除宠物回访信息，ID: {}", id);
+        
+        // 1. 验证回访记录是否存在
+        PetVisitDTO existingVisit = petMapper.queryPetVisitById(id);
+        if (existingVisit == null) {
+            throw new CommonException("回访记录不存在");
+        }
+        
+        // 2. 执行删除
+        int result = petMapper.deletePetVisit(id);
+        if (result == 0) {
+            throw new CommonException("宠物回访信息删除失败");
+        }
+        
+        log.info("宠物回访信息删除成功，ID: {}", id);
     }
 }

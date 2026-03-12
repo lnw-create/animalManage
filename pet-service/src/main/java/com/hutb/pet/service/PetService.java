@@ -1,10 +1,7 @@
 package com.hutb.pet.service;
 
-import com.hutb.pet.model.DTO.PetDTO;
+import com.hutb.pet.model.DTO.*;
 import com.hutb.pet.model.pojo.PageInfo;
-import com.hutb.pet.model.DTO.PageQueryListDTO;
-import com.hutb.pet.model.DTO.AdoptionApplicationDTO;
-import com.hutb.pet.model.DTO.AdoptPetRequestDTO;
 import com.hutb.pet.model.pojo.AdoptionApplication;
 
 import java.util.List;
@@ -76,4 +73,29 @@ public interface PetService {
      * @return 领养申请列表
      */
     List<AdoptionApplication> getUserAdoptionApplicationList(Long userId);
+
+    /**
+     * 宠物回访
+     * @param petDTO 宠物访问信息
+     */
+    void petVisit(PetVisitDTO petDTO);
+
+    /**
+     * 获取宠物访问记录
+     * @param queryDTO 查询参数
+     * @return 宠物访问记录
+     */
+    PageInfo getPetVisitRecords(PageQueryListDTO queryDTO);
+
+    /**
+     * 修改宠物回访信息
+     * @param petVisitDTO 回访信息（包含 id、petId、visitInfo、visitTime）
+     */
+    void updatePetVisit(PetVisitDTO petVisitDTO);
+
+    /**
+     * 删除宠物回访信息（物理删除）
+     * @param id 回访记录 ID
+     */
+    void deletePetVisit(Long id);
 }

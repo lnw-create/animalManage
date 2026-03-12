@@ -2,6 +2,7 @@ package com.hutb.pet.mapper;
 
 import com.hutb.pet.model.DTO.PageQueryListDTO;
 import com.hutb.pet.model.DTO.PetDTO;
+import com.hutb.pet.model.DTO.PetVisitDTO;
 import com.hutb.pet.model.pojo.Pet;
 import org.apache.ibatis.annotations.*;
 
@@ -73,4 +74,45 @@ public interface PetMapper {
      */
     @Update("UPDATE pet SET owner_id = #{ownerId}, adoption_status = #{adoptionStatus}, update_time = now(), update_user = #{username} WHERE id = #{id}")
     void updatePetOwner(@Param("id") Long id, @Param("ownerId") Long ownerId, @Param("adoptionStatus") String adoptionStatus, @Param("username") String username);
+
+    /**
+     * 宠物访问记录
+     * @param petDTO 宠物信息
+     * @return 影响行数
+     */
+    @Insert("INSERT INTO pet_visit (pet_id,visit_info, visit_time,) VALUES (#{petId}, #{visit_info}, #{visitTime})")
+    int petVisit(PetVisitDTO petDTO);
+
+    /**
+     * 查询宠物访问记录
+     * @param queryDTO 分页查询参数
+     * @return 宠物访问记录列表
+     */
+    List<PetVisitDTO> getPetVisitList(PageQueryListDTO queryDTO);
+
+    /**
+     * 根据 ID 查询回访记录
+     * @param id 回访记录 ID
+     * @return 回访记录
+     */
+    @Select("SELECT * FROM pet_visit WHERE id = #{id}")
+    PetVisitDTO queryPetVisitById(Long id);
+
+    /**
+     * 修改宠物回访信息
+     * @param petVisitDTO 回访信息
+     * @return 影响行数
+     */
+    @Update("UPDATE pet_visit SET visit_info = #{visitInfo}, visit_time = #{visitTime}, " +
+            "update_time = now(), update_user = #{updateUser} " +
+            "WHERE id = #{id}")
+    int updatePetVisit(PetVisitDTO petVisitDTO);
+
+    /**
+     * 删除宠物回访信息（物理删除）
+     * @param id 回访记录 ID
+     * @return 影响行数
+     */
+    @Delete("DELETE FROM pet_visit WHERE id = #{id}")
+    int deletePetVisit(Long id);
 }
