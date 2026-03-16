@@ -16,7 +16,7 @@ public interface PetService {
 
     /**
      * 删除宠物
-     * @param id 宠物id
+     * @param id 宠物 id
      */
     void removePet(Long id);
 
@@ -35,20 +35,20 @@ public interface PetService {
 
     /**
      * 领养宠物（提交领养申请，替代原有方法）
-     * @param adoptPetRequestDTO 领养宠物请求参数（用户信息从UserContext自动获取）
+     * @param adoptPetRequestDTO 领养宠物请求参数（用户信息从 UserContext 自动获取）
      */
     void adoptPet(AdoptPetRequestDTO adoptPetRequestDTO);
     
     /**
      * 获取领养申请详情
-     * @param id 申请ID
+     * @param id 申请 ID
      * @return 领养申请信息
      */
     AdoptionApplication getAdoptionApplicationById(Long id);
     
     /**
      * 获取宠物的所有申请记录
-     * @param petId 宠物ID
+     * @param petId 宠物 ID
      * @return 领养申请列表
      */
     java.util.List<AdoptionApplication> getAdoptionApplicationsByPetId(Long petId);
@@ -62,14 +62,14 @@ public interface PetService {
     
     /**
      * 审批领养申请
-     * @param applicationId 申请ID
-     * @param approved 是否批准(true-批准，false-拒绝)
+     * @param applicationId 申请 ID
+     * @param approved 是否批准 (true-批准，false-拒绝)
      */
     void approveAdoptionApplication(Long applicationId, Boolean approved);
 
     /**
      * 获取用户的所有领养申请记录
-     * @param userId 用户ID
+     * @param userId 用户 ID
      * @return 领养申请列表
      */
     List<AdoptionApplication> getUserAdoptionApplicationList(Long userId);
@@ -104,4 +104,11 @@ public interface PetService {
      * @param visitId 回访记录 ID
      */
     void aiAnalyzePetVisit(Long visitId);
+
+    /**
+     * 根据日期范围批量分析宠物回访记录
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     */
+    void analyzePetVisitsByDateRange(java.time.LocalDateTime startTime, java.time.LocalDateTime endTime);
 }

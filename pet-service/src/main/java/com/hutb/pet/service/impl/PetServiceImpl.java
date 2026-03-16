@@ -374,25 +374,7 @@ public class PetServiceImpl implements PetService {
                 throw new CommonException("回访记录不存在");
             }
             
-            // 2. 构造提示词
-            String prompt = "请分析以下宠物回访信息，判断此次回访的状态是正面还是负面。\n" +
-                           "请按以下 JSON 格式返回：{\"status\": \"positive 或 negative\", \"result\": \"详细分析结果\"}\n" +
-                           "回访信息：" + visit.getVisitInfo();
-            
-            // 3. 调用 AI 服务进行分析
-            AIAnalysisResponse response = aiChatClient.analyzeVisit(prompt);
-            
-            // 4. 更新数据库
-            visit.setAnalysisStatus(response.getStatus());
-            visit.setAnalysisResult(response.getResult());
-            
-            int result = petMapper.aiAnalysisPetVisit(visit);
-            if (result == 0) {
-                throw new CommonException("更新 AI 分析结果失败");
-            }
-            
-            log.info("AI 分析宠物回访信息完成，ID: {}, 状态：{}, 结果：{}", 
-                    visitId, response.getStatus(), response.getResult());
+            analyzeSingleVisit(visit);
             
         } catch (CommonException e) {
             throw e;
@@ -400,5 +382,77 @@ public class PetServiceImpl implements PetService {
             log.error("AI 分析宠物回访信息失败，ID: {}", visitId, e);
             throw new CommonException("AI 分析失败：" + e.getMessage());
         }
+    }
+
+    /**
+     * 根据日期范围批量分析宠物回访记录
+     */
+    @Override
+    public void analyzePetVisitsByDateRange(LocalDateTime startTime, LocalDateTime endTime) {
+        log.info("开始批量分析宠物回访记录，时间范围：{} 至 {}", startTime, endTime);
+        
+        try {
+            // 1. 查询指定时间范围内的所有未分析的回访记录
+            List<PetVisitDTO> visits = petMapper.queryPetVisitsByDateRange(startTime, endTime);
+            
+            if (visits == null || visits.isEmpty()) {
+                log.info("在指定时间范围内没有找到需要分析的回访记录");
+                return;
+            }
+            
+            log.info("找到 {} 条需要分析的回访记录", visits.size());
+            
+            // 2. 逐条分析
+            int successCount = 0;
+            int failCount = 0;
+            
+            for (PetVisitDTO visit : visits) {
+                try {
+                    analyzeSingleVisit(visit);
+                    successCount++;
+                } catch (Exception e) {
+                    log.error("分析回访记录失败，ID: {}", visit.getId(), e);
+                    failCount++;
+                }
+            }
+            
+            log.info("批量分析完成，成功：{}, 失败：{}", successCount, failCount);
+            
+        } catch (Exception e) {
+            log.error("批量分析宠物回访记录失败", e);
+            throw new CommonException("批量分析失败：" + e.getMessage());
+        }
+    }
+
+    /**
+     * 分析单条回访记录（提取原有逻辑）
+     */
+    private void analyzeSingleVisit(PetVisitDTO visit) {
+        log.info("开始 AI 分析宠物回访信息，ID: {}", visit.getId());
+        
+        // 1. 验证回访记录
+        if (visit == null) {
+            throw new CommonException("回访记录不存在");
+        }
+        
+        // 2. 构造提示词
+        String prompt = "请分析以下宠物回访信息，判断此次回访的状态是正面还是负面。\n" +
+                       "请按以下 JSON 格式返回：{\"status\": \"positive 或 negative\", \"result\": \"详细分析结果\"}\n" +
+                       "回访信息：" + visit.getVisitInfo();
+        
+        // 3. 调用 AI 服务进行分析
+        AIAnalysisResponse response = aiChatClient.analyzeVisit(prompt);
+        
+        // 4. 更新数据库
+        visit.setAnalysisStatus(response.getStatus());
+        visit.setAnalysisResult(response.getResult());
+        
+        int result = petMapper.aiAnalysisPetVisit(visit);
+        if (result == 0) {
+            throw new CommonException("更新 AI 分析结果失败");
+        }
+        
+        log.info("AI 分析宠物回访信息完成，ID: {}, 状态：{}, 结果：{}", 
+                visit.getId(), response.getStatus(), response.getResult());
     }
 }
