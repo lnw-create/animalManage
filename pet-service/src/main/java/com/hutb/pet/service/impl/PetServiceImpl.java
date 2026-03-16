@@ -21,6 +21,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @Service
 @Slf4j
@@ -34,6 +41,56 @@ public class PetServiceImpl implements PetService {
     
     @Autowired
     private AIChatClient aiChatClient;
+    
+    /**
+     * 宠物回访 AI 分析专用线程池
+     * 核心线程数：5，最大线程数：10，队列容量：100
+     */
+    private final Executor taskExecutor = createThreadPool();
+    
+    /**
+     * 创建线程池
+     * @return 线程池执行器
+     */
+    private Executor createThreadPool() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        
+        // 核心线程数：根据 CPU 核心数设置，建议为核心数*2
+        executor.setCorePoolSize(5);
+        
+        // 最大线程数：根据 AI 服务并发能力设置
+        executor.setMaxPoolSize(10);
+        
+        // 队列容量：控制内存占用
+        executor.setQueueCapacity(100);
+        
+        // 线程名称前缀：便于问题排查
+        executor.setThreadNamePrefix("pet-visit-analysis-");
+        
+        // 线程空闲存活时间（秒）
+        executor.setKeepAliveSeconds(60);
+        
+        // 拒绝策略：由调用线程处理，避免任务丢失
+        executor.setRejectedExecutionHandler(new RejectedExecutionHandler() {
+            @Override
+            public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+                log.warn("线程池已满，由当前线程执行任务。核心数：{}, 活跃数：{}, 队列大小：{}", 
+                        executor.getCorePoolSize(), executor.getActiveCount(), executor.getQueue().size());
+                // 直接在当前线程执行
+                r.run();
+            }
+        });
+        
+        // 等待任务全部完成后再关闭线程池
+        executor.setWaitForTasksToCompleteOnShutdown(true);
+        
+        // 等待时间（秒）
+        executor.setAwaitTerminationSeconds(60);
+        
+        log.info("宠物回访 AI 分析线程池初始化完成，核心线程数：5, 最大线程数：10, 队列容量：100");
+        
+        return executor;
+    }
 
     /**
      * 新增宠物
@@ -385,7 +442,7 @@ public class PetServiceImpl implements PetService {
     }
 
     /**
-     * 根据日期范围批量分析宠物回访记录
+     * 根据日期范围批量分析宠物回访记录（多线程并发）
      */
     @Override
     public void analyzePetVisitsByDateRange(LocalDateTime startTime, LocalDateTime endTime) {
@@ -402,22 +459,43 @@ public class PetServiceImpl implements PetService {
             
             log.info("找到 {} 条需要分析的回访记录", visits.size());
             
-            // 2. 逐条分析
-            int successCount = 0;
-            int failCount = 0;
+            // 2. 使用 CountDownLatch 等待所有任务完成
+            CountDownLatch latch = new CountDownLatch(visits.size());
             
+            // 3. 统计信息（使用原子类保证线程安全）
+            AtomicInteger successCount = new AtomicInteger(0);
+            AtomicInteger failCount = new AtomicInteger(0);
+            
+            // 4. 提交异步任务
             for (PetVisitDTO visit : visits) {
-                try {
-                    analyzeSingleVisit(visit);
-                    successCount++;
-                } catch (Exception e) {
-                    log.error("分析回访记录失败，ID: {}", visit.getId(), e);
-                    failCount++;
-                }
+                taskExecutor.execute(() -> {
+                    try {
+                        analyzeSingleVisit(visit);
+                        successCount.incrementAndGet();
+                        log.debug("分析成功，ID: {}, 当前成功：{}", visit.getId(), successCount.get());
+                    } catch (Exception e) {
+                        failCount.incrementAndGet();
+                        log.error("分析失败，ID: {}", visit.getId(), e);
+                    } finally {
+                        latch.countDown();
+                    }
+                });
             }
             
-            log.info("批量分析完成，成功：{}, 失败：{}", successCount, failCount);
+            // 5. 等待所有任务完成（最多等待 10 分钟）
+            boolean completed = latch.await(10, TimeUnit.MINUTES);
             
+            if (!completed) {
+                log.warn("部分分析任务未在规定时间内完成");
+            }
+            
+            log.info("批量分析完成，总数：{}, 成功：{}, 失败：{}", 
+                    visits.size(), successCount.get(), failCount.get());
+            
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            log.error("批量分析被中断", e);
+            throw new CommonException("批量分析被中断：" + e.getMessage());
         } catch (Exception e) {
             log.error("批量分析宠物回访记录失败", e);
             throw new CommonException("批量分析失败：" + e.getMessage());
