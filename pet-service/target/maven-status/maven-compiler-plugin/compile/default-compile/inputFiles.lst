@@ -1,9 +1,12 @@
+C:\Users\27932\Desktop\code\animalManage\pet-service\src\main\java\com\hutb\pet\model\DTO\PetVisitDTO.java
 C:\Users\27932\Desktop\code\animalManage\pet-service\src\main\java\com\hutb\pet\PetApplication.java
+C:\Users\27932\Desktop\code\animalManage\pet-service\src\main\java\com\hutb\pet\scheduler\PetVisitAnalysisScheduler.java
 C:\Users\27932\Desktop\code\animalManage\pet-service\src\main\java\com\hutb\pet\utils\CommonValidate.java
 C:\Users\27932\Desktop\code\animalManage\pet-service\src\main\java\com\hutb\pet\mapper\PetMapper.java
 C:\Users\27932\Desktop\code\animalManage\pet-service\src\main\java\com\hutb\pet\model\pojo\ResultInfo.java
 C:\Users\27932\Desktop\code\animalManage\pet-service\src\main\java\com\hutb\pet\model\pojo\Pet.java
 C:\Users\27932\Desktop\code\animalManage\pet-service\src\main\java\com\hutb\pet\controller\PetController.java
+C:\Users\27932\Desktop\code\animalManage\pet-service\src\main\java\com\hutb\pet\model\DTO\AIAnalysisResponse.java
 C:\Users\27932\Desktop\code\animalManage\pet-service\src\main\java\com\hutb\pet\model\DTO\PageQueryListDTO.java
 C:\Users\27932\Desktop\code\animalManage\pet-service\src\main\java\com\hutb\pet\service\PetService.java
 C:\Users\27932\Desktop\code\animalManage\pet-service\src\main\java\com\hutb\pet\service\impl\PetServiceImpl.java
@@ -14,3 +17,4 @@ C:\Users\27932\Desktop\code\animalManage\pet-service\src\main\java\com\hutb\pet\
 C:\Users\27932\Desktop\code\animalManage\pet-service\src\main\java\com\hutb\pet\model\DTO\PetDTO.java
 C:\Users\27932\Desktop\code\animalManage\pet-service\src\main\java\com\hutb\pet\mapper\AdoptionApplicationMapper.java
 C:\Users\27932\Desktop\code\animalManage\pet-service\src\main\java\com\hutb\pet\model\pojo\AdoptionApplication.java
+C:\Users\27932\Desktop\code\animalManage\pet-service\src\main\java\com\hutb\pet\client\AIChatClient.java
