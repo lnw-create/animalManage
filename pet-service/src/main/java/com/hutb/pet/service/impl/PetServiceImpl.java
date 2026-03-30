@@ -417,31 +417,6 @@ public class PetServiceImpl implements PetService {
     }
 
     /**
-     * AI 分析宠物回访信息
-     * @param visitId 回访记录 ID
-     */
-    @Override
-    public void aiAnalyzePetVisit(Long visitId) {
-        log.info("开始 AI 分析宠物回访信息，ID: {}", visitId);
-        
-        try {
-            // 1. 查询回访记录
-            PetVisitDTO visit = petMapper.queryPetVisitById(visitId);
-            if (visit == null) {
-                throw new CommonException("回访记录不存在");
-            }
-            
-            analyzeSingleVisit(visit);
-            
-        } catch (CommonException e) {
-            throw e;
-        } catch (Exception e) {
-            log.error("AI 分析宠物回访信息失败，ID: {}", visitId, e);
-            throw new CommonException("AI 分析失败：" + e.getMessage());
-        }
-    }
-
-    /**
      * 根据日期范围批量分析宠物回访记录（多线程并发）
      */
     @Override
@@ -503,7 +478,7 @@ public class PetServiceImpl implements PetService {
     }
 
     /**
-     * 分析单条回访记录（提取原有逻辑）
+     * 分析单条回访记录
      */
     private void analyzeSingleVisit(PetVisitDTO visit) {
         log.info("开始 AI 分析宠物回访信息，ID: {}", visit.getId());

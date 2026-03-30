@@ -100,12 +100,6 @@ public interface PetService {
     void deletePetVisit(Long id);
 
     /**
-     * AI 分析宠物回访信息
-     * @param visitId 回访记录 ID
-     */
-    void aiAnalyzePetVisit(Long visitId);
-
-    /**
      * 根据日期范围批量分析宠物回访记录
      * @param startTime 开始时间
      * @param endTime 结束时间
