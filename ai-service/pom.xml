@@ -17,10 +17,16 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
 
-        <!--spring-ai-->
+        <!--spring-ai remote api (dashscope/openai)-->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-model-openai</artifactId>
+        </dependency>
+
+        <!--spring-ai local ollama-->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-model-ollama</artifactId>
         </dependency>
 
         <!--web support-->

@@ -1,0 +1,41 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(setx MINIMAX_API_KEY *)",
+      "Bash(mysql *)",
+      "Bash(mvn compile *)",
+      "Bash(mvn install *)",
+      "Bash(java *)",
+      "Bash(export JAVA_HOME=\"/c/Program Files/Java/jdk-21\")",
+      "Bash(mvn clean *)",
+      "WebFetch(domain:images.unsplash.com)",
+      "WebSearch",
+      "WebFetch(domain:www.rawpixel.com)",
+      "WebFetch(domain:upload.wikimedia.org)",
+      "Bash(curl -sI \"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg\")",
+      "Bash(curl -sI \"https://img1.baidu.com/it/u=3893146502,314297687&fm=253&fmt=auto&app=138&f=JPEG\")",
+      "Bash(curl *)",
+      "Bash(python -m json.tool)",
+      "WebFetch(domain:www.pexels.com)",
+      "Bash(python3 -c ' *)",
+      "WebFetch(domain:m.360buyimg.com)",
+      "WebFetch(domain:img14.360buyimg.com)",
+      "Read(//c/Users/27932/Desktop/animalMange_front/AnimalManage-PC/**)",
+      "Read(//c/Users/27932/Desktop/animalMange_front/AnimalManage-PC/src/assets/**)",
+      "Bash(cp \"C:\\\\Users\\\\27932\\\\Desktop\\\\pic\\\\1.jpg\" \"C:\\\\Users\\\\27932\\\\Desktop\\\\animalMange_front\\\\AnimalManage-PC\\\\public\\\\images\\\\product_1.jpg\")",
+      "Bash(cp \"C:\\\\Users\\\\27932\\\\Desktop\\\\pic\\\\2.jpg\" \"C:\\\\Users\\\\27932\\\\Desktop\\\\animalMange_front\\\\AnimalManage-PC\\\\public\\\\images\\\\product_2.jpg\")",
+      "Bash(cp \"C:\\\\Users\\\\27932\\\\Desktop\\\\pic\\\\3.jpg\" \"C:\\\\Users\\\\27932\\\\Desktop\\\\animalMange_front\\\\AnimalManage-PC\\\\public\\\\images\\\\product_3.jpg\")",
+      "Bash(cp \"C:\\\\Users\\\\27932\\\\Desktop\\\\pic\\\\OIP-C.jpg\" \"C:\\\\Users\\\\27932\\\\Desktop\\\\animalMange_front\\\\AnimalManage-PC\\\\public\\\\images\\\\product_4.jpg\")",
+      "Bash(cp \"C:\\\\Users\\\\27932\\\\Desktop\\\\pic\\\\OIP-C \\(1\\).jpg\" \"C:\\\\Users\\\\27932\\\\Desktop\\\\animalMange_front\\\\AnimalManage-PC\\\\public\\\\images\\\\product_5.jpg\")",
+      "Bash(cp \"C:\\\\Users\\\\27932\\\\Desktop\\\\pic\\\\OIP-C \\(9\\).jpg\" \"C:\\\\Users\\\\27932\\\\Desktop\\\\animalMange_front\\\\AnimalManage-PC\\\\public\\\\images\\\\product_13.jpg\")",
+      "Bash(cp \"C:\\\\Users\\\\27932\\\\Desktop\\\\pic\\\\OIP-C \\(10\\).jpg\" \"C:\\\\Users\\\\27932\\\\Desktop\\\\animalMange_front\\\\AnimalManage-PC\\\\public\\\\images\\\\product_14.jpg\")",
+      "Bash(cp \"C:\\\\Users\\\\27932\\\\Desktop\\\\pic\\\\OIP-C \\(11\\).jpg\" \"C:\\\\Users\\\\27932\\\\Desktop\\\\animalMange_front\\\\AnimalManage-PC\\\\public\\\\images\\\\product_15.jpg\")",
+      "Bash(cp \"C:\\\\Users\\\\27932\\\\Desktop\\\\pic\\\\OIP-C \\(12\\).jpg\" \"C:\\\\Users\\\\27932\\\\Desktop\\\\animalMange_front\\\\AnimalManage-PC\\\\public\\\\images\\\\product_16.jpg\")",
+      "Bash(cp \"C:\\\\Users\\\\27932\\\\Desktop\\\\pic\\\\OIP-C \\(13\\).jpg\" \"C:\\\\Users\\\\27932\\\\Desktop\\\\animalMange_front\\\\AnimalManage-PC\\\\public\\\\images\\\\product_17.jpg\")",
+      "Bash(cp \"C:\\\\Users\\\\27932\\\\Desktop\\\\pic\\\\下载.jpg\" \"C:\\\\Users\\\\27932\\\\Desktop\\\\animalMange_front\\\\AnimalManage-PC\\\\public\\\\images\\\\product_25.jpg\")",
+      "Bash(cp \"C:\\\\Users\\\\27932\\\\Desktop\\\\pic\\\\下载 \\(1\\).jpg\" \"C:\\\\Users\\\\27932\\\\Desktop\\\\animalMange_front\\\\AnimalManage-PC\\\\public\\\\images\\\\product_26.jpg\")",
+      "Bash(cp \"C:\\\\Users\\\\27932\\\\Desktop\\\\pic\\\\下载 \\(2\\).jpg\" \"C:\\\\Users\\\\27932\\\\Desktop\\\\animalMange_front\\\\AnimalManage-PC\\\\public\\\\images\\\\product_27.jpg\")",
+      "Bash(cp \"C:\\\\Users\\\\27932\\\\Desktop\\\\pic\\\\下载 \\(3\\).jpg\" \"C:\\\\Users\\\\27932\\\\Desktop\\\\animalMange_front\\\\AnimalManage-PC\\\\public\\\\images\\\\product_28.jpg\")"
+    ]
+  }
+}
