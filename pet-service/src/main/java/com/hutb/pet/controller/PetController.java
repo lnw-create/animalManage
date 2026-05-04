@@ -222,16 +222,4 @@ public class PetController {
             return ResultInfo.fail("系统错误：" + e.getMessage());
         }
     }
-
-    @PostMapping("aiAnalyzePetVisit")
-    public ResultInfo aiAnalyzePetVisit(@RequestParam Long visitId) {
-        try {
-            petService.aiAnalyzePetVisit(visitId);
-            return ResultInfo.success();
-        } catch (CommonException e) {
-            return ResultInfo.fail(e.getMessage());
-        } catch (Exception e) {
-            return ResultInfo.fail("系统错误：" + e.getMessage());
-        }
-    }
 }

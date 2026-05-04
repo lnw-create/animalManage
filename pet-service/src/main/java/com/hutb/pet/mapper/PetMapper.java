@@ -6,6 +6,7 @@ import com.hutb.pet.model.DTO.PetVisitDTO;
 import com.hutb.pet.model.pojo.Pet;
 import org.apache.ibatis.annotations.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
@@ -107,6 +108,22 @@ public interface PetMapper {
     PetVisitDTO queryPetVisitById(Long id);
 
     /**
+     * 根据日期范围查询回访记录（只查询未分析的记录）
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     * @return 回访记录列表
+     */
+    @Select("<script>" +
+            "SELECT * FROM pet_visit " +
+            "WHERE visit_time >= #{startTime} " +
+            "AND visit_time &lt; #{endTime} " +
+            "AND (analysis_status IS NULL OR analysis_status = '') " +
+            "ORDER BY id" +
+            "</script>")
+    List<PetVisitDTO> queryPetVisitsByDateRange(@Param("startTime") LocalDateTime startTime, 
+                                                @Param("endTime") LocalDateTime endTime);
+
+    /**
      * 修改宠物回访信息
      * @param petVisitDTO 回访信息
      * @return 影响行数
@@ -117,9 +134,9 @@ public interface PetMapper {
     int updatePetVisit(PetVisitDTO petVisitDTO);
 
     /**
-     * ai分析宠物回访信息
+     * ai 分析宠物回访信息
      */
-    @Update("UPDATE pet_visit SET analysis_status = #{analysisStatus}, analysis_result = #{analysisResult}," +
+    @Update("UPDATE pet_visit SET analysis_status = #{analysisStatus}, analysis_result = #{analysisResult} " +
             "WHERE id = #{id}")
     int aiAnalysisPetVisit(PetVisitDTO petVisitDTO);
 
