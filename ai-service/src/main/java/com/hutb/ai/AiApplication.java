@@ -21,9 +21,13 @@ public class AiApplication {
     @Bean
     public ChatClient chatClient(OpenAiChatModel model, ChatMemory chatMemory) {
         return ChatClient.builder(model)
-                .defaultSystem("你是一个宠物专家，能根据图片准确识别宠物信息，同时针对图片分析该宠物的可见的健康状态，同时提出相关建议，" +
-                        "如果健康可以给出后续喂养建议，如果不健康可以给出对应建议，同时如果用户提问到一些确切内容时需要针对性给出回答且不需要额外给出其他不相关的建议，" +
-                        "如果没有从图片中识别到宠物信息，请如实回答，如果此时用户提问，也需要如实按照没有图片参考的条件进行回答并告知用户，为宠物主人提供服务")
+                .defaultSystem("你是一位专业的宠物健康顾问，具备丰富的宠物医学与养护知识。你的职责包括：\n" +
+                        "1. 根据用户提供的宠物健康信息分析健康状况，并给出专业的养护或治疗建议；\n" +
+                        "2. 直接、准确地回答用户关于宠物健康、饲养、行为等方面的问题；\n" +
+                        "3. 若宠物健康状况良好，提供科学的日常喂养与预防保健建议；\n" +
+                        "4. 若宠物存在健康问题，给出针对性的护理方案与就医指导；\n" +
+                        "5. 严格围绕用户提出的具体问题作答，避免输出无关信息；\n" +
+                        "回答要求：条理清晰、用词专业、言简意赅。")
                 .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
                 .build();
     }

@@ -40,7 +40,24 @@
       "Bash(jps -l)",
       "Bash(tasklist)",
       "Bash(powershell -Command \"[Environment]::GetEnvironmentVariable\\('DASHSCOPE_API_KEY', 'User'\\)\")",
-      "Bash(powershell -Command \"[Environment]::GetEnvironmentVariable\\('DASHSCOPE_API_KEY', 'Machine'\\)\")"
+      "Bash(powershell -Command \"[Environment]::GetEnvironmentVariable\\('DASHSCOPE_API_KEY', 'Machine'\\)\")",
+      "Bash(jar tf *)",
+      "Bash(grep -v \"/$\")",
+      "Bash(cd /tmp)",
+      "Bash(jar xf *)",
+      "Bash(javap -p 'org/springframework/ai/openai/api/OpenAiApi$ChatCompletionMessage$Role.class')",
+      "Read(//c/Users/27932/IdeaProjects/animalManage/ai-service/org/springframework/ai/openai/api/**)",
+      "Bash(javap -c -p org/springframework/ai/openai/OpenAiChatModel.class)",
+      "Bash(javap -p org/springframework/ai/openai/OpenAiChatModel.class)",
+      "Bash(grep -A80 'lambda$createRequest')",
+      "Bash(mvn -pl ai-service -am compile -q -DskipTests)",
+      "Bash(mvn -v)",
+      "Bash(where java *)",
+      "Read(//c/Users/27932/Desktop/code/java-jdk/**)",
+      "Read(//c/Program Files/Common Files/Oracle/Java/javapath//**)",
+      "Read(//c/Program Files/Java//**)",
+      "Read(//c/Program Files/Microsoft/**)",
+      "Bash(mvn -pl ai-service -am compile -DskipTests)"
     ]
   }
 }

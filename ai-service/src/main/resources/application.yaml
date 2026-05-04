@@ -11,11 +11,11 @@ spring:
       chat:
         model: qwen3.5:4b
     openai:
-      api-key: sk-cp-HwZD_OMAE8s-09PQGAZ_f5TM9K0_U6rxAZ8aSK4sTRHmRSW8rB1yz0GCoIJmhaJnlcAMqhyQjLoBppAXfpQ2n9nUsWJP74waTqQDCkakNXnsT1P8su_D5Jk
-      base-url: https://api.minimax.chat
+      api-key: sk-ecc92b353a4741df8b5889c0bfbaacc8
+      base-url: https://api.deepseek.com
       chat:
         options:
-          model: MiniMax-M2.7
-          temperature: 0.5
+          model: deepseek-v4-flash
+          temperature: 0.3
 server:
   port: 8085
