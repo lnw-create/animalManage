@@ -38,12 +38,14 @@ public class ChatController {
     }
 
     /**
-     * AI 分析宠物回访信息 —— 调用本地 Ollama 模型
+     * AI 分析宠物回访信息 —— 支持本地/远程模型切换
      * @param prompt 提示词
+     * @param useLocalModel true=本地Ollama，false=远程API（默认）
      * @return 分析结果，包含 status（0=负面，1=正面）和 result
      */
     @GetMapping("/analyze-visit")
-    public Map<String, String> analyzeVisit(@RequestParam String prompt) {
+    public Map<String, String> analyzeVisit(@RequestParam String prompt,
+                                            @RequestParam(defaultValue = "false") boolean useLocalModel) {
         String systemPrompt = """
                 你是一个宠物回访分析助手。请分析以下回访信息，判断此次回访的状态是正面还是负面。
 
@@ -59,7 +61,8 @@ public class ChatController {
                 3. 只返回 JSON 格式数据，不要其他内容
                 """;
 
-        String response = localChatClient.prompt()
+        ChatClient client = useLocalModel ? localChatClient : chatClient;
+        String response = client.prompt()
                 .system(systemPrompt)
                 .user(prompt)
                 .call()

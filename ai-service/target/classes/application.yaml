@@ -11,11 +11,11 @@ spring:
       chat:
         model: qwen3.5:4b
     openai:
-      api-key: ${DASHSCOPE_API_KEY}
-      base-url: https://dashscope.aliyuncs.com/compatible-mode
+      api-key: sk-cp-HwZD_OMAE8s-09PQGAZ_f5TM9K0_U6rxAZ8aSK4sTRHmRSW8rB1yz0GCoIJmhaJnlcAMqhyQjLoBppAXfpQ2n9nUsWJP74waTqQDCkakNXnsT1P8su_D5Jk
+      base-url: https://api.minimax.chat
       chat:
         options:
-          model: qwen3-vl-plus
+          model: MiniMax-M2.7
           temperature: 0.5
 server:
   port: 8085

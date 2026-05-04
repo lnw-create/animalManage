@@ -106,7 +106,15 @@ public class CategoryServiceImpl implements CategoryService {
             throw new CommonException("分类信息不存在");
         }
 
-        // 3. 更新分类
+        // 3. 如果状态变更为禁用，检查分类下是否有关联商品
+        if (ShoppingConstant.CATEGORY_STATUS_DISABLED.equals(categoryDTO.getStatus())) {
+            int goodsCount = categoryMapper.countGoodsByCategoryId(id);
+            if (goodsCount > 0) {
+                throw new CommonException("该分类下存在商品，无法禁用");
+            }
+        }
+
+        // 4. 更新分类
         categoryDTO.setUpdateTime(new Date());
         categoryDTO.setUpdateUser(UserContext.getUsername());
         long updated = categoryMapper.updateCategory(categoryDTO);

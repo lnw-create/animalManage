@@ -20,11 +20,11 @@ public class PetVisitAnalysisScheduler {
     private PetService petService;
     
     /**
-     * 每日凌晨 2 点执行，分析昨天的宠物回访记录
+     * 每分钟执行一次，分析昨天的宠物回访记录
      * Cron 表达式：秒 分 时 日 月 周
-     * 0 0 2 * * ? = 每天凌晨 2 点执行
+     * 0 * * * * ? = 每分钟执行一次
      */
-    @Scheduled(cron = "0 0 2 * * ?")
+    @Scheduled(cron = "0 * * * * ?")
     public void dailyPetVisitAnalysis() {
         log.info("开始执行每日宠物回访 AI 分析定时任务");
         

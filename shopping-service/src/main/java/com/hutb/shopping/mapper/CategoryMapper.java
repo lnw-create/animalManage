@@ -38,9 +38,17 @@ public interface CategoryMapper {
      * @param categoryDTO 分类信息
      * @return 影响行数
      */
-    @Update("UPDATE category SET name = #{name}, description = #{description}, sort = #{sort}, " +
+    @Update("UPDATE category SET name = #{name}, description = #{description}, sort = #{sort}, status = #{status}, " +
             "update_time = now(), update_user = #{updateUser} WHERE id = #{id}")
     int updateCategory(CategoryDTO categoryDTO);
+
+    /**
+     * 查询分类下有效商品数量
+     * @param categoryId 分类ID
+     * @return 商品数量
+     */
+    @Select("SELECT COUNT(*) FROM stock WHERE category_id = #{categoryId} AND status = 1")
+    int countGoodsByCategoryId(long categoryId);
 
     /**
      * 根据分类名称查询分类

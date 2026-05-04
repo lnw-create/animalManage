@@ -86,9 +86,12 @@ public class PetServiceImpl implements PetService {
         
         // 等待时间（秒）
         executor.setAwaitTerminationSeconds(60);
-        
+
+        // 手动初始化线程池
+        executor.initialize();
+
         log.info("宠物回访 AI 分析线程池初始化完成，核心线程数：5, 最大线程数：10, 队列容量：100");
-        
+
         return executor;
     }
 
@@ -494,7 +497,7 @@ public class PetServiceImpl implements PetService {
                        "回访信息：" + visit.getVisitInfo();
         
         // 3. 调用 AI 服务进行分析
-        AIAnalysisResponse response = aiChatClient.analyzeVisit(prompt);
+        AIAnalysisResponse response = aiChatClient.analyzeVisit(prompt, false);
         
         // 4. 更新数据库
         visit.setAnalysisStatus(response.getStatus());

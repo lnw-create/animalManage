@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @FeignClient(name = "ai-service")
 public interface AIChatClient {
-    
+
     /**
      * 调用 AI 对话接口进行分析
      * @param prompt 提示词
+     * @param useLocalModel true=本地Ollama，false=远程API（默认）
      * @return AI 分析响应
      */
     @GetMapping("/ai/analyze-visit")
-    AIAnalysisResponse analyzeVisit(@RequestParam String prompt);
+    AIAnalysisResponse analyzeVisit(@RequestParam String prompt,
+                                    @RequestParam(defaultValue = "false") boolean useLocalModel);
 }

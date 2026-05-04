@@ -35,7 +35,12 @@
       "Bash(cp \"C:\\\\Users\\\\27932\\\\Desktop\\\\pic\\\\下载.jpg\" \"C:\\\\Users\\\\27932\\\\Desktop\\\\animalMange_front\\\\AnimalManage-PC\\\\public\\\\images\\\\product_25.jpg\")",
       "Bash(cp \"C:\\\\Users\\\\27932\\\\Desktop\\\\pic\\\\下载 \\(1\\).jpg\" \"C:\\\\Users\\\\27932\\\\Desktop\\\\animalMange_front\\\\AnimalManage-PC\\\\public\\\\images\\\\product_26.jpg\")",
       "Bash(cp \"C:\\\\Users\\\\27932\\\\Desktop\\\\pic\\\\下载 \\(2\\).jpg\" \"C:\\\\Users\\\\27932\\\\Desktop\\\\animalMange_front\\\\AnimalManage-PC\\\\public\\\\images\\\\product_27.jpg\")",
-      "Bash(cp \"C:\\\\Users\\\\27932\\\\Desktop\\\\pic\\\\下载 \\(3\\).jpg\" \"C:\\\\Users\\\\27932\\\\Desktop\\\\animalMange_front\\\\AnimalManage-PC\\\\public\\\\images\\\\product_28.jpg\")"
+      "Bash(cp \"C:\\\\Users\\\\27932\\\\Desktop\\\\pic\\\\下载 \\(3\\).jpg\" \"C:\\\\Users\\\\27932\\\\Desktop\\\\animalMange_front\\\\AnimalManage-PC\\\\public\\\\images\\\\product_28.jpg\")",
+      "Bash(netstat -ano)",
+      "Bash(jps -l)",
+      "Bash(tasklist)",
+      "Bash(powershell -Command \"[Environment]::GetEnvironmentVariable\\('DASHSCOPE_API_KEY', 'User'\\)\")",
+      "Bash(powershell -Command \"[Environment]::GetEnvironmentVariable\\('DASHSCOPE_API_KEY', 'Machine'\\)\")"
     ]
   }
 }

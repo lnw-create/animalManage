@@ -12,6 +12,7 @@ com\hutb\pet\mapper\PetMapper.class
 com\hutb\pet\model\DTO\AdoptionApplicationDTO.class
 com\hutb\pet\model\pojo\ResultInfo.class
 com\hutb\pet\model\DTO\PetVisitDTO.class
+com\hutb\pet\service\impl\PetServiceImpl$1.class
 com\hutb\pet\service\PetService.class
 com\hutb\pet\model\DTO\AdoptPetRequestDTO.class
 com\hutb\pet\constant\PetConstant.class
