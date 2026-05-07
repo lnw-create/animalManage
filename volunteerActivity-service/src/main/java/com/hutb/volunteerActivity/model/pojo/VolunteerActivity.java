@@ -34,9 +34,12 @@ public class VolunteerActivity {
     //志愿时长
     private Double volunteerHours;
     
+    // 活动图片
+    private String photo;
+
     // 活动状态：1-正常 0-暂停 -1-结束
     private String status = "1";
-    
+
     private Date createTime;
     private Date updateTime;
     private String createUser;

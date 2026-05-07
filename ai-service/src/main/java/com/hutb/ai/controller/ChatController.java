@@ -1,7 +1,9 @@
 package com.hutb.ai.controller;
 
+import com.hutb.ai.service.ChatSessionService;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -15,6 +17,9 @@ public class ChatController {
     private final ChatClient chatClient;
     private final ChatClient localChatClient;
 
+    @Autowired
+    private ChatSessionService chatSessionService;
+
     public ChatController(@Qualifier("chatClient") ChatClient chatClient,
                           @Qualifier("localChatClient") ChatClient localChatClient) {
         this.chatClient = chatClient;
@@ -23,11 +28,11 @@ public class ChatController {
 
     /**
      * 文字聊天 —— 调用远程大模型 API
-     * @param prompt
-     * @return
+     * 流式调用前先校验 sessionId 归属，并刷新会话标题/活跃时间。
      */
     @GetMapping("allUser/chat")
-    public Flux<String> chat(@RequestParam String prompt,@RequestParam String sessionId) {
+    public Flux<String> chat(@RequestParam String prompt, @RequestParam String sessionId) {
+        chatSessionService.touchSession(sessionId, prompt);
         return chatClient.prompt()
                 .user(prompt)
                 .advisors(

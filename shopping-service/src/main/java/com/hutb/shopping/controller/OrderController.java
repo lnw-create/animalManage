@@ -67,6 +67,21 @@ public class OrderController {
     }
 
     /**
+     * 取消订单
+     */
+    @PostMapping("normalVolunteer/cancelOrder")
+    public ResultInfo cancelOrder(@RequestParam Long id) {
+        try {
+            orderService.cancelOrder(id);
+            return ResultInfo.success();
+        } catch (CommonException e) {
+            return ResultInfo.fail(e.getMessage());
+        } catch (Exception e) {
+            return ResultInfo.fail("系统错误: " + e.getMessage());
+        }
+    }
+
+    /**
      * 删除订单
      */
     @PostMapping("normalVolunteer/deleteOrder")

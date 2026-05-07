@@ -1,9 +1,11 @@
 
 package com.hutb.ai;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.chat.memory.ChatMemoryRepository;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.openai.OpenAiChatModel;
@@ -11,7 +13,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-@SpringBootApplication(scanBasePackages = {"com.hutb.ai"})
+@SpringBootApplication(scanBasePackages = {"com.hutb.ai", "com.hutb.commonUtils"})
+@MapperScan("com.hutb.ai.mapper")
 public class AiApplication {
 
     public static void main(String[] args) {
@@ -40,7 +43,10 @@ public class AiApplication {
     }
 
     @Bean
-    public ChatMemory chatMemory() {
-        return MessageWindowChatMemory.builder().build();
+    public ChatMemory chatMemory(ChatMemoryRepository chatMemoryRepository) {
+        return MessageWindowChatMemory.builder()
+                .chatMemoryRepository(chatMemoryRepository)
+                .maxMessages(20)
+                .build();
     }
 }

@@ -70,4 +70,12 @@ public interface OrderMapper {
      */
     @Update("UPDATE stock SET quantity = quantity - 1 WHERE id = #{productId}")
     int deductStock(Long productId);
+
+    /**
+     * 恢复库存
+     * @param productId 商品ID
+     * @return 影响行数
+     */
+    @Update("UPDATE stock SET quantity = quantity + 1 WHERE id = #{productId}")
+    int restoreStock(Long productId);
 }

@@ -25,6 +25,12 @@ public interface OrderService {
     void removeOrder(Long id);
 
     /**
+     * 取消订单
+     * @param id 订单id
+     */
+    void cancelOrder(Long id);
+
+    /**
      * 更新订单
      * @param orderUpdateDTO 订单信息
      */

@@ -34,8 +34,11 @@ public class VolunteerActivityDTO {
     //志愿时长
     private Double volunteerHours;
 
+    // 活动图片
+    private String photo;
+
     private String status = "1";
-    
+
     private Date createTime;
     private Date updateTime;
     private String createUser;

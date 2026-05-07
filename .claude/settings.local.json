@@ -57,7 +57,12 @@
       "Read(//c/Program Files/Common Files/Oracle/Java/javapath//**)",
       "Read(//c/Program Files/Java//**)",
       "Read(//c/Program Files/Microsoft/**)",
-      "Bash(mvn -pl ai-service -am compile -DskipTests)"
+      "Bash(mvn -pl ai-service -am compile -DskipTests)",
+      "Read(//c/Users/27932/.claude/**)",
+      "Bash(mkdir -p C:/Users/27932/.claude/plans)",
+      "Bash(MYSQL_PWD=041115 mysql -h 127.0.0.1 -P 3306 -u root animal_management)",
+      "Bash(MYSQL_PWD=041115 mysql -h 127.0.0.1 -P 3306 -u root animal_management -e \"SHOW TABLES LIKE 'chat_session'; DESC chat_session;\")",
+      "Bash(MYSQL_PWD=041115 mysql *)"
     ]
   }
 }

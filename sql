@@ -177,3 +177,15 @@ CREATE TABLE IF NOT EXISTS `activity_participant` (
   KEY `idx_activity_id` (`activity_id`),
   KEY `idx_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='志愿活动参与者表';
+
+-- AI 会话元数据表（消息体由 Spring AI 自动建表 SPRING_AI_CHAT_MEMORY 管理）
+CREATE TABLE IF NOT EXISTS `chat_session` (
+  `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+  `session_id` VARCHAR(64) NOT NULL UNIQUE COMMENT '业务会话ID，对应 SPRING_AI_CHAT_MEMORY.conversation_id',
+  `user_id` BIGINT NOT NULL COMMENT '所属用户ID',
+  `title` VARCHAR(100) DEFAULT '新会话' COMMENT '会话标题，首条用户消息发送后自动取前 20 字',
+  `status` VARCHAR(10) DEFAULT '1' COMMENT '状态：1-正常，-1-删除',
+  `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  KEY `idx_user_status_update` (`user_id`, `status`, `update_time` DESC)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='AI 会话元数据表';

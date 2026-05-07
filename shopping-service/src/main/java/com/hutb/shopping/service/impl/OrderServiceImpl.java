@@ -82,7 +82,7 @@ public class OrderServiceImpl implements OrderService {
         order.setProductId(orderCreateDTO.getProductId());
         order.setProductName(orderCreateDTO.getProductName());
         order.setTotalIntegral(orderTotalPoints);
-        order.setStatus(orderCreateDTO.getStatus());
+        order.setStatus(ShoppingConstant.ORDER_STATUS_PAID);
         order.setShippingAddress(orderCreateDTO.getShippingAddress());
         order.setTotalIntegral(orderCreateDTO.getPrice());
         order.setCreateTime(new Date());
@@ -185,6 +185,59 @@ public class OrderServiceImpl implements OrderService {
             throw new CommonException("删除订单信息失败");
         }
         log.info("删除订单信息成功");
+    }
+
+    /**
+     * 取消订单
+     * @param id 订单id
+     */
+    @Override
+    @Transactional
+    public void cancelOrder(Long id) {
+        log.info("取消订单:id-{}", id);
+
+        // 1. 参数校验
+        if (id == null || id <= 0) {
+            throw new CommonException("取消订单id不能为空");
+        }
+
+        // 2. 判断订单是否存在
+        Order order = orderMapper.queryOrderById(id);
+        if (order == null) {
+            throw new CommonException("订单信息不存在");
+        }
+
+        // 3. 判断订单状态是否允许取消（已取消/已删除/已签收的不能取消）
+        if (ShoppingConstant.ORDER_STATUS_CANCELLED.equals(order.getStatus()) ||
+            ShoppingConstant.ORDER_STATUS_DELETED.equals(order.getStatus()) ||
+            ShoppingConstant.ORDER_STATUS_DELIVERED.equals(order.getStatus())) {
+            throw new CommonException("订单已取消、已删除或已签收，无法取消");
+        }
+
+        // 4. 恢复库存
+        int restoreResult = orderMapper.restoreStock(order.getProductId());
+        if (restoreResult == 0) {
+            throw new CommonException("恢复库存失败");
+        }
+
+        // 5. 恢复用户积分
+        try {
+            ResultInfo<Void> result = volunteerServiceClient.addPoints(order.getUserId(), order.getTotalIntegral());
+            if (result == null || !"1".equals(result.getCode())) {
+                throw new CommonException("恢复积分失败：" + (result != null ? result.getMsg() : "unknown error"));
+            }
+            log.info("恢复积分成功：userId={}, 恢复积分={}", order.getUserId(), order.getTotalIntegral());
+        } catch (Exception e) {
+            log.error("恢复积分失败：userId={}, 恢复积分={}", order.getUserId(), order.getTotalIntegral(), e);
+            throw new CommonException("恢复积分失败，订单取消失败：" + e.getMessage());
+        }
+
+        // 6. 更新订单状态为已取消
+        long cancelled = orderMapper.removeOrder(id, ShoppingConstant.ORDER_STATUS_CANCELLED, UserContext.getUsername());
+        if (cancelled == 0) {
+            throw new CommonException("取消订单失败");
+        }
+        log.info("取消订单成功");
     }
 
     /**

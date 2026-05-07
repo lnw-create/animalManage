@@ -5,7 +5,17 @@ spring:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
+  datasource:
+    url: jdbc:mysql://localhost:3306/animal_management
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: "041115"
   ai:
+    chat:
+      memory:
+        repository:
+          jdbc:
+            initialize-schema: always
     ollama:
       base-url: http://localhost:11434
       chat:
@@ -17,5 +27,9 @@ spring:
         options:
           model: deepseek-v4-flash
           temperature: 0.3
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 server:
   port: 8085

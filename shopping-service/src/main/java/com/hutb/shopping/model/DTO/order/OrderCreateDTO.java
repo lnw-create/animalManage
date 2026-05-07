@@ -8,7 +8,7 @@ public class OrderCreateDTO {
     private Long userId;
 
     // 订单状态
-    private String status = "pending_payment";
+    private String status = "paid";
 
     // 收货地址
     private String shippingAddress;
