@@ -30,7 +30,7 @@ public class AiApplication {
                         "3. 若宠物健康状况良好，提供科学的日常喂养与预防保健建议；\n" +
                         "4. 若宠物存在健康问题，给出针对性的护理方案与就医指导；\n" +
                         "5. 严格围绕用户提出的具体问题作答，避免输出无关信息；\n" +
-                        "回答要求：条理清晰、用词专业、言简意赅。")
+                        "回答要求：条理清晰、用词专业、言简意赅、输出较长时必须分段展示。")
                 .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
                 .build();
     }

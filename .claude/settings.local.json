@@ -62,7 +62,12 @@
       "Bash(mkdir -p C:/Users/27932/.claude/plans)",
       "Bash(MYSQL_PWD=041115 mysql -h 127.0.0.1 -P 3306 -u root animal_management)",
       "Bash(MYSQL_PWD=041115 mysql -h 127.0.0.1 -P 3306 -u root animal_management -e \"SHOW TABLES LIKE 'chat_session'; DESC chat_session;\")",
-      "Bash(MYSQL_PWD=041115 mysql *)"
+      "Bash(MYSQL_PWD=041115 mysql *)",
+      "Bash(ollama list *)",
+      "Bash(mvn dependency:tree -Dincludes=org.springframework.ai)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\([m['name'] for m in d.get\\('models',[]\\)]\\)\")",
+      "Bash(ollama ps *)",
+      "Bash(timeout 30 ollama run *)"
     ]
   }
 }
