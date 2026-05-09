@@ -17,7 +17,7 @@
                 and start_time >= #{startTime}
             </if>
             <if test="endTime != null and endTime != ''">
-                and end_time >= #{endTime}
+                and end_time &lt;= #{endTime}
             </if>
         </where>
         order by update_time desc
