@@ -19,7 +19,7 @@ spring:
     ollama:
       base-url: http://localhost:11434
       chat:
-        model: qwen3.5:4b
+        model: qwen2.5:1.5b
     openai:
       api-key: sk-ecc92b353a4741df8b5889c0bfbaacc8
       base-url: https://api.deepseek.com
