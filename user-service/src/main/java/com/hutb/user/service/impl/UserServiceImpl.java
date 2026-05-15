@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
         //3.判断是否注册志愿者
         if (user.getRole().equals(UserCommonConstant.USER_ROLE_VOLUNTEER)){
             //删除志愿者信息
-            long l = volunteerMapper.removeVolunteer(id, UserContext.getUsername(), UserCommonConstant.VOLUNTEER_STATUS_DELETE);
+            long l = volunteerMapper.removeVolunteerByUserId(id, UserContext.getUsername(), UserCommonConstant.VOLUNTEER_STATUS_DELETE);
             if (l == 0){
                 throw new CommonException("删除志愿者信息失败");
             }
@@ -224,8 +224,8 @@ public class UserServiceImpl implements UserService {
      * @param user 用户信息
      */
     private void queryUserByUsernameAndPhone(UserDTO user){
-        User userAnother = userMapper.queryUserByUsername(user.getUsername());
-        User userAnotherAnother = userMapper.queryUserByPhone(user.getPhone());
+        User userAnother = userMapper.queryUserByUsernameAll(user.getUsername());
+        User userAnotherAnother = userMapper.queryUserByPhoneAll(user.getPhone());
         if (userAnother != null && !userAnother.getId().equals(user.getId())){
             throw new CommonException("用户名已存在");
         }
@@ -239,13 +239,13 @@ public class UserServiceImpl implements UserService {
      * @param user 用户信息
      */
     private void checkUserByUsernameAndPhone(UserDTO user){
-        User userByUsername = userMapper.queryUserByUsername(user.getUsername());
-        User userByPhone = userMapper.queryUserByPhone(user.getPhone());
-        
+        User userByUsername = userMapper.queryUserByUsernameAll(user.getUsername());
+        User userByPhone = userMapper.queryUserByPhoneAll(user.getPhone());
+
         if (userByUsername != null) {
             throw new CommonException("用户名已存在");
         }
-        
+
         if (userByPhone != null) {
             throw new CommonException("手机号已存在");
         }

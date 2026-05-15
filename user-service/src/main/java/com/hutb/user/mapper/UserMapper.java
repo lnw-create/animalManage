@@ -73,4 +73,16 @@ public interface UserMapper {
      */
     @Update("update user set role = #{role},update_user = #{updateUser}, update_time = now() where id = #{userId}")
     int updateUserById(Long userId, String role, String updateUser);
+
+    /**
+     * 根据用户名查询用户信息（含已删除）
+     */
+    @Select("select * from user where username = #{username}")
+    User queryUserByUsernameAll(String username);
+
+    /**
+     * 根据手机号查询用户信息（含已删除）
+     */
+    @Select("select * from user where phone = #{phone}")
+    User queryUserByPhoneAll(String phone);
 }

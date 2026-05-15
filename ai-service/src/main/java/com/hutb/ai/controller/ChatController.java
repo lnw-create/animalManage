@@ -1,5 +1,7 @@
 package com.hutb.ai.controller;
 
+import com.hutb.ai.mapper.PetMapper;
+import com.hutb.ai.model.Pet;
 import com.hutb.ai.service.ChatSessionService;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -20,6 +23,9 @@ public class ChatController {
     @Autowired
     private ChatSessionService chatSessionService;
 
+    @Autowired
+    private PetMapper petMapper;
+
     public ChatController(@Qualifier("chatClient") ChatClient chatClient,
                           @Qualifier("localChatClient") ChatClient localChatClient) {
         this.chatClient = chatClient;
@@ -29,17 +35,56 @@ public class ChatController {
     /**
      * 文字聊天 —— 调用远程大模型 API
      * 流式调用前先校验 sessionId 归属，并刷新会话标题/活跃时间。
+     * 自动查询宠物列表作为上下文提供给 AI。
      */
     @GetMapping("allUser/chat")
     public Flux<String> chat(@RequestParam String prompt, @RequestParam String sessionId) {
         chatSessionService.touchSession(sessionId, prompt);
+
+        List<Pet> pets = petMapper.queryActivePets();
+        String petContext = buildPetContext(pets);
+
         return chatClient.prompt()
+                .system("你是动物管理系统的智能助手。以下是当前系统中可领养的宠物信息，请基于这些信息回答用户问题：\n\n" + petContext)
                 .user(prompt)
                 .advisors(
                         a -> a.param(ChatMemory.CONVERSATION_ID, sessionId)
                 )
                 .stream()
                 .content();
+    }
+
+    private String buildPetContext(List<Pet> pets) {
+        if (pets == null || pets.isEmpty()) {
+            return "当前系统中暂无宠物信息。";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < pets.size(); i++) {
+            Pet p = pets.get(i);
+            sb.append(i + 1).append(". ");
+            sb.append("名称:").append(p.getName())
+              .append(", 种类:").append(p.getSpecies())
+              .append(", 品种:").append(p.getBreed())
+              .append(", 年龄:").append(p.getAge())
+              .append(", 性别:").append("1".equals(p.getGender()) ? "雄性" : "雌性")
+              .append(", 健康状态:").append(p.getHealthStatus())
+              .append(", 绝育:").append("1".equals(p.getIsNeutered()) ? "是" : "否")
+              .append(", 疫苗:").append("1".equals(p.getIsVaccinated()) ? "已接种" : "未接种")
+              .append(", 领养状态:").append(adoptionStatusLabel(p.getAdoptionStatus()))
+              .append(", 描述:").append(p.getDescription());
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
+    private String adoptionStatusLabel(String status) {
+        if (status == null) return "未知";
+        return switch (status) {
+            case "0" -> "待领养";
+            case "1" -> "已申请";
+            case "2" -> "已领养";
+            default -> "未知";
+        };
     }
 
     /**

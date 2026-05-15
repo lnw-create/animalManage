@@ -32,7 +32,7 @@ public interface VolunteerMapper {
      * @param updateUser 修改人
      * @param status 状态
      */
-    @Update("update volunteer set status = #{status},update_user = #{updateUser}, update_time = now() where userId = #{userId}")
+    @Update("update volunteer set status = #{status},update_user = #{updateUser}, update_time = now() where user_id = #{userId}")
     long removeVolunteerByUserId(Long userId, String updateUser, String status);
 
     /**
